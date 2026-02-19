@@ -2,7 +2,9 @@ import React from 'react'
 
 const App = () => {
 	return (
-		<div>App</div>
+		<div className='bg-background min-h-screen'>
+			App
+		</div>
 	)
 }
 
