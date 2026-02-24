@@ -1,5 +1,5 @@
-export type AuthFieldError = {
-    field: "email" | "password" | "confirmPassword";
+export type FieldError = {
+    field: string;
     message: string;
 };
 
@@ -8,7 +8,7 @@ export class ApiResponse<T = unknown> {
         public success: boolean,
         public message: string,
         public data?: T,
-        public errors?: AuthFieldError[]
+        public errors?: FieldError[]
     ) { }
 
     // Success response
@@ -18,7 +18,7 @@ export class ApiResponse<T = unknown> {
 
     // Failure response
     // errors ONLY used for auth validation
-    static failure(message: string, errors?: AuthFieldError[]) {
-        return new ApiResponse<null>(false, message, undefined, errors);
+    static failure(message: string, errors?: FieldError[]) {
+        return new ApiResponse<never>(false, message, undefined, errors);
     }
 }
