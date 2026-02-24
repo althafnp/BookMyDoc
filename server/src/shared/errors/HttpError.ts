@@ -1,12 +1,12 @@
 import { HttpStatus } from "../constants/httpStatus";
-import { AuthFieldError } from "../utils/ApiResponse";
+import { FieldError } from "../utils/ApiResponse";
 
 
 export class HttpError extends Error {
     constructor(
         public statusCode: number,
         message: string,
-        public details?: AuthFieldError[] // Only used for auth
+        public details?: FieldError[] // Only used for auth
     ) {
         super(message);
         Object.setPrototypeOf(this, new.target.prototype);
@@ -20,7 +20,7 @@ export class HttpError extends Error {
 
 // 400
 export class BadRequestError extends HttpError {
-    constructor(message = "Bad Request", details?: AuthFieldError[]) {
+    constructor(message = "Bad Request", details?: FieldError[]) {
         super(HttpStatus.BAD_REQUEST, message, details);
     }
 }
