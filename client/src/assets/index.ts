@@ -4,7 +4,7 @@ import Doc1 from './doc1.png'
 import Doc2 from './doc2.png'
 import Doc3 from './doc3.png'
 import Doc4 from './doc4.png'
-import Doc5 from './doc5.png'
+
 
 export {
     Logo,
@@ -13,5 +13,4 @@ export {
     Doc2,
     Doc3,
     Doc4,
-    Doc5
 }

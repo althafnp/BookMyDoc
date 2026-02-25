@@ -1,10 +1,14 @@
 import React from 'react'
+import AppRoutes from './routes/AppRoutes'
+import { Toaster } from 'sonner'
 
 const App = () => {
 	return (
-		<div className='bg-background min-h-screen'>
-			App
-		</div>
+		<>
+			<AppRoutes />
+
+			<Toaster />
+		</>
 	)
 }
 
