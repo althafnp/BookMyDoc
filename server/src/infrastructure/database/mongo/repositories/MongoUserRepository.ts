@@ -21,4 +21,16 @@ export class MongoUserRepository implements IUserRepository{
         const doc = await UserModel.findOne({ email });
         return doc ? UserMapper.toDomain(doc) : null;
     }
+
+    async update(user: User): Promise<User | null> {
+        const persistence = UserMapper.toPersistence(user);
+
+        const doc = await UserModel.findByIdAndUpdate(
+            user.id,
+            persistence,
+            { returnDocument: 'after' }
+        );
+
+        return doc ? UserMapper.toDomain(doc) : null;
+    }
 }

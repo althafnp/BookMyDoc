@@ -10,6 +10,7 @@ const router = express.Router();
 const authController = container.get<AuthController>(TYPES.AuthController);
 
 router.post('/auth/signup', authController.signupUser);
+router.get('/auth/verify-email/:token', authController.verifyEmail);
 
 
 export default router

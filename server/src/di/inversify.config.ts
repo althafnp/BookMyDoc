@@ -21,8 +21,11 @@ import { NodeMailerService } from "../infrastructure/services/email/NodeMailerSe
 
 import { ISignupUser } from "../application/ports/auth/ISignupUser";
 import { SignupUserUseCase } from "../application/use-cases/auth/signup-user.usecase";
+
 import { AuthController } from "../interface-adapters/controllers/AuthController";
 
+import { IVerifyEmail } from "../application/ports/auth/IVerifyEmail";
+import { VerifyEmailUseCase } from "../application/use-cases/auth/verify-email.usecase";
 
 
 
@@ -49,6 +52,15 @@ container.bind<ISignupUser>(TYPES.SignupUser).toDynamicValue((ctx) => {
         ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.IEmailVerificationTokenService),
         ctx.get(TYPES.IEmailService),
+        ctx.get(TYPES.ILogger),
+    )
+})
+
+
+container.bind<IVerifyEmail>(TYPES.VerifyEmail).toDynamicValue((ctx) => {
+    return new VerifyEmailUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IEmailVerificationTokenService),
         ctx.get(TYPES.ILogger),
     )
 })

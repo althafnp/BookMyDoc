@@ -12,6 +12,7 @@ export const TYPES = {
 
     //use-cases
     SignupUser: Symbol.for("SignupUser"),
+    VerifyEmail: Symbol.for("VerifyEmail"),
 
 
     //controllers
