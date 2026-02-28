@@ -20,4 +20,5 @@ export interface LoginUserResponseDTO {
         profileImage?: string
     },
     accessToken: string;
+    refreshToken: string;
 }

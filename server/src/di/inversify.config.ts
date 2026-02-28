@@ -19,6 +19,14 @@ import { MongoUserRepository } from "../infrastructure/database/mongo/repositori
 import { IEmailService } from "../application/interfaces/IEmailService";
 import { NodeMailerService } from "../infrastructure/services/email/NodeMailerService";
 
+import { IGoogleAuthService } from "../application/interfaces/IGoogleAuthService";
+import { GoogleOAuthService } from "../infrastructure/services/google/GoogleOAuthService";
+
+
+import { IAppConfig } from "../application/interfaces/IAppConfig";
+import { AppConfig } from "../infrastructure/config/AppConfig";
+
+
 import { ISignupUser } from "../application/ports/auth/ISignupUser";
 import { SignupUserUseCase } from "../application/use-cases/auth/signup-user.usecase";
 
@@ -26,12 +34,14 @@ import { AuthController } from "../interface-adapters/controllers/AuthController
 
 import { IVerifyEmail } from "../application/ports/auth/IVerifyEmail";
 import { VerifyEmailUseCase } from "../application/use-cases/auth/verify-email.usecase";
+
 import { ILoginUser } from "../application/ports/auth/ILoginUser";
 import { LoginUserUseCase } from "../application/use-cases/auth/login-user.usecase";
+
 import { IGoogleAuth } from "../application/ports/auth/IGoogleAuth";
 import { GoogleAuthUseCase } from "../application/use-cases/auth/google-auth.usecase";
-import { IGoogleAuthService } from "../application/interfaces/IGoogleAuthService";
-import { GoogleOAuthService } from "../infrastructure/services/google/GoogleOAuthService";
+
+
 
 
 
@@ -44,6 +54,7 @@ container.bind<IPasswordService>(TYPES.IPasswordService).to(BcryptService);
 container.bind<ILogger>(TYPES.ILogger).to(WinstonLogger);
 container.bind<IEmailService>(TYPES.IEmailService).to(NodeMailerService);
 container.bind<IGoogleAuthService>(TYPES.IGoogleAuthService).to(GoogleOAuthService);
+container.bind<IAppConfig>(TYPES.IAppConfig).to(AppConfig);
 
 
 
@@ -59,6 +70,7 @@ container.bind<ISignupUser>(TYPES.SignupUser).toDynamicValue((ctx) => {
         ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.IEmailVerificationTokenService),
         ctx.get(TYPES.IEmailService),
+        ctx.get(TYPES.IAppConfig),
         ctx.get(TYPES.ILogger),
     )
 })

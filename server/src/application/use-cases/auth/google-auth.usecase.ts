@@ -51,10 +51,12 @@ export class GoogleAuthUseCase implements IGoogleAuth{
         }
 
         const accessToken = this.authTokenService.generateAccessToken({ id: user.id, role: user.role });
+        const refreshToken = this.authTokenService.generateAccessToken({ id: user.id, role: user.role });
 
         return { 
             user: UserResponseMapper.toDTO(user),
-            accessToken
+            accessToken,
+            refreshToken
         }
     }
 }

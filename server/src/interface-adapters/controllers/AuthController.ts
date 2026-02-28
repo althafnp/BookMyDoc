@@ -10,8 +10,6 @@ import { LoginUserRequestDTO, SignupUserRequestDTO } from "../../application/dto
 import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
 import { BadRequestError } from "../../shared/errors/HttpError";
 import { ILoginUser } from "../../application/ports/auth/ILoginUser";
-import { IAuthTokenService } from "../../application/interfaces/IAuthTokenService";
-import { Role } from "../../domain/enums/Auth";
 import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";
 import { env } from "../../infrastructure/config/env";
 
@@ -29,9 +27,6 @@ export class AuthController {
 
         @inject(TYPES.GoogleAuth)
         private googleAuthUseCase: IGoogleAuth,
-
-        @inject(TYPES.IAuthTokenService)
-        private authTokenService: IAuthTokenService,
     ) { }
 
     signupUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -67,9 +62,7 @@ export class AuthController {
         try {
             const dto = parseWithZod<LoginUserRequestDTO>(loginSchema, req.body);
 
-            const { user, accessToken } = await this.loginUserUseCase.execute(dto);
-
-            const refreshToken = this.authTokenService.generateRefreshToken({ id: user.id, role: user.role as Role });
+            const { user, accessToken, refreshToken } = await this.loginUserUseCase.execute(dto);
 
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
@@ -97,9 +90,8 @@ export class AuthController {
         try {
             const { token } = req.body;
             
-            const { user, accessToken } = await this.googleAuthUseCase.execute(token);
+            const { user, accessToken, refreshToken } = await this.googleAuthUseCase.execute(token);
 
-            const refreshToken = this.authTokenService.generateRefreshToken({ id: user.id, role: user.role as Role });
 
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,

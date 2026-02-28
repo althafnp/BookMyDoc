@@ -6,6 +6,7 @@ export const TYPES = {
     ILogger: Symbol.for("ILogger"),
     IEmailService: Symbol.for("IEmailService"),
     IGoogleAuthService: Symbol.for("IGoogleAuthService"),
+    IAppConfig: Symbol.for("IAppConfig"),
 
     //repositories
     IUserRepository: Symbol.for("IUserRepository"),

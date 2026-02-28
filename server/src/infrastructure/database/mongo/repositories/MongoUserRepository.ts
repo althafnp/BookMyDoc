@@ -1,8 +1,11 @@
+import { injectable } from "inversify";
 import { User } from "../../../../domain/entities/User";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
-import { UserMapper } from "../../../../interface-adapters/mappers/UserMapper";
+import { UserMapper } from "../mappers/UserMapper";
 import { UserModel } from "../models/user.schema";
 
+
+@injectable()
 export class MongoUserRepository implements IUserRepository{
     async create(user: User): Promise<User> {
         const persistence = UserMapper.toPersistence(user);

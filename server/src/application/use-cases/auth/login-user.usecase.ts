@@ -45,12 +45,14 @@ export class LoginUserUseCase implements ILoginUser {
         }
 
         const accessToken = this.authTokenService.generateAccessToken({ id: user.id, role: user.role });
+        const refreshToken = this.authTokenService.generateRefreshToken({ id: user.id, role: user.role });
 
         this.logger.info("User logged in", { user })
 
         return {
             user: UserResponseMapper.toDTO(user),
-            accessToken
+            accessToken,
+            refreshToken
         }
     }
 }

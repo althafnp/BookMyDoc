@@ -7,7 +7,7 @@ import { ILogger } from "../../interfaces/ILogger";
 import { BadRequestError } from "../../../shared/errors/HttpError";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { User } from "../../../domain/entities/User";
-import { env } from "../../../infrastructure/config/env";
+import { IAppConfig } from "../../interfaces/IAppConfig";
 
 
 export class SignupUserUseCase implements ISignupUser {
@@ -15,7 +15,8 @@ export class SignupUserUseCase implements ISignupUser {
         private userRepository: IUserRepository,
         private passwordService: IPasswordService,
         private emailVerificationTokenService: IEmailVerificationTokenService,
-        private emailService: IEmailService, 
+        private emailService: IEmailService,
+        private appConfig: IAppConfig,
         private logger: ILogger
     ) {}
 
@@ -44,7 +45,7 @@ export class SignupUserUseCase implements ISignupUser {
 
         const emailVerificationToken = this.emailVerificationTokenService.generateEmailVerificationToken(user.email);
 
-        const emailVerificationLink = `${env.FRONTEND_URL}/auth/verify-email/${emailVerificationToken}`;
+        const emailVerificationLink = `${this.appConfig.frontendUrl}/auth/verify-email/${emailVerificationToken}`;
 
         await this.emailService.sendVerificationEmail(user.email, emailVerificationLink);
 

@@ -1,5 +1,5 @@
-import { User } from "../../domain/entities/User"
-import { IUser } from "../../infrastructure/database/mongo/models/user.schema"
+import { User } from "../../../../domain/entities/User"
+import { IUser } from "../models/user.schema"
 import { BaseMapper } from "./BaseMapper"
 
 export class UserMapper extends BaseMapper<User, IUser> {
