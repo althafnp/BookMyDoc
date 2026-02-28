@@ -27,15 +27,15 @@ export class BadRequestError extends HttpError {
 
 // 401
 export class UnauthorizedError extends HttpError {
-    constructor(message = "Unauthorized") {
-        super(HttpStatus.UNAUTHORIZED, message);
+    constructor(message = "Unauthorized", details?: FieldError[]) {
+        super(HttpStatus.UNAUTHORIZED, message, details);
     }
 }
 
 // 404
 export class NotFoundError extends HttpError {
-    constructor(message = "Resource not found") {
-        super(HttpStatus.NOT_FOUND, message);
+    constructor(message = "Resource not found", details?: FieldError[]) {
+        super(HttpStatus.NOT_FOUND, message, details);
     }
 }
 

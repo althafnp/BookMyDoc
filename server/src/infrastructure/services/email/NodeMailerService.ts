@@ -1,7 +1,10 @@
 import { IEmailService } from "../../../application/interfaces/IEmailService";
 import nodemailer, { Transporter} from "nodemailer"
 import { env } from "../../config/env";
+import { injectable } from "inversify";
 
+
+@injectable()
 export class NodeMailerService implements IEmailService{
     private transporter: Transporter;
 

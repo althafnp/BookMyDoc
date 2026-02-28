@@ -26,6 +26,12 @@ import { AuthController } from "../interface-adapters/controllers/AuthController
 
 import { IVerifyEmail } from "../application/ports/auth/IVerifyEmail";
 import { VerifyEmailUseCase } from "../application/use-cases/auth/verify-email.usecase";
+import { ILoginUser } from "../application/ports/auth/ILoginUser";
+import { LoginUserUseCase } from "../application/use-cases/auth/login-user.usecase";
+import { IGoogleAuth } from "../application/ports/auth/IGoogleAuth";
+import { GoogleAuthUseCase } from "../application/use-cases/auth/google-auth.usecase";
+import { IGoogleAuthService } from "../application/interfaces/IGoogleAuthService";
+import { GoogleOAuthService } from "../infrastructure/services/google/GoogleOAuthService";
 
 
 
@@ -37,6 +43,7 @@ container.bind<IEmailVerificationTokenService>(TYPES.IEmailVerificationTokenServ
 container.bind<IPasswordService>(TYPES.IPasswordService).to(BcryptService);
 container.bind<ILogger>(TYPES.ILogger).to(WinstonLogger);
 container.bind<IEmailService>(TYPES.IEmailService).to(NodeMailerService);
+container.bind<IGoogleAuthService>(TYPES.IGoogleAuthService).to(GoogleOAuthService);
 
 
 
@@ -62,6 +69,23 @@ container.bind<IVerifyEmail>(TYPES.VerifyEmail).toDynamicValue((ctx) => {
         ctx.get(TYPES.IUserRepository),
         ctx.get(TYPES.IEmailVerificationTokenService),
         ctx.get(TYPES.ILogger),
+    )
+});
+
+container.bind<ILoginUser>(TYPES.LoginUser).toDynamicValue((ctx) => {
+    return new LoginUserUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IAuthTokenService),
+        ctx.get(TYPES.IPasswordService),
+        ctx.get(TYPES.ILogger),
+    )
+})
+
+container.bind<IGoogleAuth>(TYPES.GoogleAuth).toDynamicValue((ctx) => {
+    return new GoogleAuthUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IAuthTokenService),
+        ctx.get(TYPES.IGoogleAuthService),
     )
 })
 

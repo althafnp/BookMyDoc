@@ -13,6 +13,7 @@ export const env = {
     AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME!,
     EMAIL_USER: process.env.EMAIL_USER!,
     EMAIL_PASS: process.env.EMAIL_PASS!,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
     FRONTEND_URL: process.env.FRONTEND_URL!,
     NODE_ENV: process.env.NODE_ENV
 };

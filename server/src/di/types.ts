@@ -5,6 +5,7 @@ export const TYPES = {
     IPasswordService: Symbol.for("IPasswordService"),
     ILogger: Symbol.for("ILogger"),
     IEmailService: Symbol.for("IEmailService"),
+    IGoogleAuthService: Symbol.for("IGoogleAuthService"),
 
     //repositories
     IUserRepository: Symbol.for("IUserRepository"),
@@ -13,6 +14,8 @@ export const TYPES = {
     //use-cases
     SignupUser: Symbol.for("SignupUser"),
     VerifyEmail: Symbol.for("VerifyEmail"),
+    LoginUser: Symbol.for("LoginUser"),
+    GoogleAuth: Symbol.for("GoogleAuth"),
 
 
     //controllers

@@ -4,3 +4,20 @@ export interface SignupUserRequestDTO {
     password: string;
     confirmPassword: string;
 }
+
+
+export interface LoginUserRequestDTO {
+    email: string;
+    password: string;
+}
+
+export interface LoginUserResponseDTO {
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+        profileImage?: string
+    },
+    accessToken: string;
+}

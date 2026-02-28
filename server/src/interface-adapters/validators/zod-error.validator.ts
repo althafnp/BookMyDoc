@@ -1,4 +1,4 @@
-import { BadRequestError } from "../../../../shared/errors/HttpError";
+import { BadRequestError } from "../../shared/errors/HttpError";
 
 export const parseWithZod = <T>(
     schema: any,

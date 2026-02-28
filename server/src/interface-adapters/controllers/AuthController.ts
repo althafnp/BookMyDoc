@@ -2,13 +2,18 @@ import { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../di/types";
 import { ISignupUser } from "../../application/ports/auth/ISignupUser";
-import { signupSchema } from "../validators/auth.validator";
+import { loginSchema, signupSchema } from "../validators/auth.validator";
 import { HttpStatus } from "../../shared/constants/httpStatus";
 import { ApiResponse } from "../../shared/utils/ApiResponse";
-import { parseWithZod } from "../../infrastructure/web/express/middlewares/zod-error.middleware";
-import { SignupUserRequestDTO } from "../../application/dtos/auth";
+import { parseWithZod } from "../validators/zod-error.validator";
+import { LoginUserRequestDTO, SignupUserRequestDTO } from "../../application/dtos/auth";
 import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
 import { BadRequestError } from "../../shared/errors/HttpError";
+import { ILoginUser } from "../../application/ports/auth/ILoginUser";
+import { IAuthTokenService } from "../../application/interfaces/IAuthTokenService";
+import { Role } from "../../domain/enums/Auth";
+import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";
+import { env } from "../../infrastructure/config/env";
 
 @injectable()
 export class AuthController {
@@ -17,7 +22,16 @@ export class AuthController {
         private signupUserUseCase: ISignupUser,
 
         @inject(TYPES.VerifyEmail)
-        private verifyEmailUseCase: IVerifyEmail
+        private verifyEmailUseCase: IVerifyEmail,
+
+        @inject(TYPES.LoginUser)
+        private loginUserUseCase: ILoginUser,
+
+        @inject(TYPES.GoogleAuth)
+        private googleAuthUseCase: IGoogleAuth,
+
+        @inject(TYPES.IAuthTokenService)
+        private authTokenService: IAuthTokenService,
     ) { }
 
     signupUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -47,5 +61,71 @@ export class AuthController {
         } catch (err) {
             next(err)
         }
+    }
+
+    loginUser = async(req: Request, res: Response, next: NextFunction) => {
+        try {
+            const dto = parseWithZod<LoginUserRequestDTO>(loginSchema, req.body);
+
+            const { user, accessToken } = await this.loginUserUseCase.execute(dto);
+
+            const refreshToken = this.authTokenService.generateRefreshToken({ id: user.id, role: user.role as Role });
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+            });
+
+            const data = {
+                user,
+                accessToken
+            }
+
+            res.status(HttpStatus.OK).json(ApiResponse.success(
+                "User logged in successfully",
+                data
+            ))
+
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    googleAuth = async(req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { token } = req.body;
+            
+            const { user, accessToken } = await this.googleAuthUseCase.execute(token);
+
+            const refreshToken = this.authTokenService.generateRefreshToken({ id: user.id, role: user.role as Role });
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
+            const data = {
+                user,
+                accessToken
+            };
+
+            res.status(HttpStatus.OK).json(ApiResponse.success(
+                "User logged in with Google",
+                data
+            ));
+
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    logout = async(req: Request, res: Response) => {
+        res.clearCookie("refreshToken");
+
+        res.status(HttpStatus.OK).json(ApiResponse.success("Logged out successfully"));
     }
 }

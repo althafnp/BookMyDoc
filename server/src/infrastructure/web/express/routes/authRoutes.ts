@@ -11,6 +11,10 @@ const authController = container.get<AuthController>(TYPES.AuthController);
 
 router.post('/auth/signup', authController.signupUser);
 router.get('/auth/verify-email/:token', authController.verifyEmail);
+router.post('/auth/login', authController.loginUser);
+router.post('/auth/google', authController.googleAuth);
+
+router.post('/auth/logout', authController.logout)
 
 
 export default router

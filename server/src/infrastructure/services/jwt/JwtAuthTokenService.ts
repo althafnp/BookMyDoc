@@ -1,7 +1,10 @@
 import { AuthTokenPayload, IAuthTokenService } from "../../../application/interfaces/IAuthTokenService";
 import jwt from "jsonwebtoken"
 import { env } from "../../config/env";
+import { injectable } from "inversify";
 
+
+@injectable()
 export class JwtAuthTokenService implements IAuthTokenService{
     private accessSecret = env.JWT_ACCESS_SECRET;
     private refreshSecret = env.JWT_REFRESH_SECRET;
