@@ -5,6 +5,8 @@ import AuthLayout from '@/layouts/AuthLayout'
 import UserLayout from '@/layouts/UserLayout'
 import HomePage from '@/pages/Home'
 import { Route, Routes } from 'react-router-dom'
+import UserProtectedRoute from './UserProtectedRoute'
+import AllDoctors from '@/features/user/pages/AllDoctors'
 
 const AppRoutes = () => {
     return (
@@ -13,6 +15,13 @@ const AppRoutes = () => {
             {/* Public routes */}
             <Route path='/' element={<UserLayout />} >
                 <Route index element={<HomePage />} />
+            </Route>
+
+            {/* User protected routes */}
+            <Route element={<UserProtectedRoute />}>
+                <Route element={<UserLayout />}>
+                    <Route path='/doctors' element={<AllDoctors />} />
+                </Route>
             </Route>
 
             {/* Auth Routes */}

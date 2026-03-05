@@ -22,3 +22,14 @@ export interface LoginUserResponseDTO {
     accessToken: string;
     refreshToken: string;
 }
+
+export interface RefreshTokenResponseDTO {
+    accessToken: string;
+    user: {
+        id: string;
+        name?: string;
+        email: string;
+        role: string;
+        profileImage?: string
+    },
+}

@@ -1,0 +1,37 @@
+import { Doctor } from "../../../../domain/entities/Doctor";
+import { IDoctor } from "../models/doctor.schema";
+import { BaseMapper } from "./BaseMapper";
+
+export class DoctorMapper extends BaseMapper<Doctor, IDoctor> {
+    
+    static toDomain(raw: IDoctor): Doctor {
+        return new Doctor(
+            BaseMapper.toStringId(raw._id),
+            raw.name,
+            raw.email,
+            raw.password,
+            BaseMapper.toStringId(raw.categoryId),
+            raw.image,
+            raw.qualification,
+            raw.experience,
+            raw.consultationFee,
+            raw.isActive,
+            raw.role
+        )
+    }
+
+    static toPersistence(domain: Doctor): Partial<IDoctor> {
+        return {
+            name: domain.name,
+            email: domain.email,
+            password: domain.getPassword(),
+            categoryId: BaseMapper.toObjectId(domain.categoryId),
+            image: domain.image,
+            qualification: domain.qualification,
+            experience: domain.experience,
+            consultationFee: domain.consultationFee,
+            isActive: domain.isActive,
+            role: domain.role
+        }
+    }
+}

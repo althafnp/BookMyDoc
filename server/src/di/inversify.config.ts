@@ -41,6 +41,16 @@ import { LoginUserUseCase } from "../application/use-cases/auth/login-user.useca
 import { IGoogleAuth } from "../application/ports/auth/IGoogleAuth";
 import { GoogleAuthUseCase } from "../application/use-cases/auth/google-auth.usecase";
 
+import { IRefreshToken } from "../application/ports/auth/IRefreshToken";
+import { RefreshTokenUseCase } from "../application/use-cases/auth/refresh-token.usecase";
+
+import { IUserLookupService } from "../application/interfaces/IUserLookupService";
+import { UserLookupService } from "../infrastructure/services/UserLookupService";
+import { IDoctorRepository } from "../domain/repositories/IDoctorRepository";
+import { MongoDoctorRepository } from "../infrastructure/database/mongo/repositories/MongoDoctorRepository";
+import { IAdminRepository } from "../domain/repositories/IAdminRepository";
+import { MongoAdminRepository } from "../infrastructure/database/mongo/repositories/MongoAdminRepository";
+
 
 
 
@@ -55,11 +65,15 @@ container.bind<ILogger>(TYPES.ILogger).to(WinstonLogger);
 container.bind<IEmailService>(TYPES.IEmailService).to(NodeMailerService);
 container.bind<IGoogleAuthService>(TYPES.IGoogleAuthService).to(GoogleOAuthService);
 container.bind<IAppConfig>(TYPES.IAppConfig).to(AppConfig);
+container.bind<IUserLookupService>(TYPES.IUserLookupService).to(UserLookupService);
 
 
 
 //repositories
 container.bind<IUserRepository>(TYPES.IUserRepository).to(MongoUserRepository);
+container.bind<IDoctorRepository>(TYPES.IDoctorRepository).to(MongoDoctorRepository);
+container.bind<IAdminRepository>(TYPES.IAdminRepository).to(MongoAdminRepository);
+
 
 
 
@@ -98,6 +112,13 @@ container.bind<IGoogleAuth>(TYPES.GoogleAuth).toDynamicValue((ctx) => {
         ctx.get(TYPES.IUserRepository),
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IGoogleAuthService),
+    )
+})
+
+container.bind<IRefreshToken>(TYPES.RefreshToken).toDynamicValue((ctx) => {
+    return new RefreshTokenUseCase(
+        ctx.get(TYPES.IAuthTokenService),
+        ctx.get(TYPES.IUserLookupService)
     )
 })
 

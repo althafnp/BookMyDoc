@@ -15,6 +15,7 @@ router.post('/auth/login', authController.loginUser);
 router.post('/auth/google', authController.googleAuth);
 
 router.post('/auth/logout', authController.logout)
+router.post('/auth/refresh', authController.refreshToken)
 
 
 export default router

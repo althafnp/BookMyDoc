@@ -11,6 +11,7 @@ import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
 import { BadRequestError } from "../../shared/errors/HttpError";
 import { ILoginUser } from "../../application/ports/auth/ILoginUser";
 import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";
+import { IRefreshToken } from "../../application/ports/auth/IRefreshToken";
 import { env } from "../../infrastructure/config/env";
 
 @injectable()
@@ -27,6 +28,9 @@ export class AuthController {
 
         @inject(TYPES.GoogleAuth)
         private googleAuthUseCase: IGoogleAuth,
+
+        @inject(TYPES.RefreshToken)
+        private refreshTokenUseCase: IRefreshToken,
     ) { }
 
     signupUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -41,12 +45,12 @@ export class AuthController {
             next(err)
         }
     }
-    
+
     verifyEmail = async (req: Request<{ token: string }>, res: Response, next: NextFunction) => {
         try {
             const { token } = req.params;
 
-            if(!token) {
+            if (!token) {
                 throw new BadRequestError("Token is required");
             }
 
@@ -58,7 +62,7 @@ export class AuthController {
         }
     }
 
-    loginUser = async(req: Request, res: Response, next: NextFunction) => {
+    loginUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const dto = parseWithZod<LoginUserRequestDTO>(loginSchema, req.body);
 
@@ -86,10 +90,10 @@ export class AuthController {
         }
     }
 
-    googleAuth = async(req: Request, res: Response, next: NextFunction) => {
+    googleAuth = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { token } = req.body;
-            
+
             const { user, accessToken, refreshToken } = await this.googleAuthUseCase.execute(token);
 
 
@@ -115,9 +119,24 @@ export class AuthController {
         }
     }
 
-    logout = async(req: Request, res: Response) => {
+    logout = async (req: Request, res: Response) => {
         res.clearCookie("refreshToken");
 
         res.status(HttpStatus.OK).json(ApiResponse.success("Logged out successfully"));
+    }
+
+    refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const token = req.cookies.refreshToken;
+
+            const { accessToken, user } = await this.refreshTokenUseCase.execute(token);
+
+            res.status(HttpStatus.OK).json(ApiResponse.success(
+                "Token refreshed",
+                { accessToken, user }
+            ));
+        } catch (err) {
+            next(err);
+        }
     }
 }

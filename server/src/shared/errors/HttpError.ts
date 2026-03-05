@@ -32,6 +32,13 @@ export class UnauthorizedError extends HttpError {
     }
 }
 
+// 403
+export class ForbiddenError extends HttpError {
+    constructor(message = "Forbidden", details?: FieldError[]) {
+        super(HttpStatus.FORBIDDEN, message, details);
+    }
+}
+
 // 404
 export class NotFoundError extends HttpError {
     constructor(message = "Resource not found", details?: FieldError[]) {
