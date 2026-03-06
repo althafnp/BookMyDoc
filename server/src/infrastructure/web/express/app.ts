@@ -2,8 +2,12 @@ import express from'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser'
 import authRoutes from './routes/authRoutes'
-import { errorMiddleware } from './middlewares/error.middleware';
+import { createErrorMiddleware } from './middlewares/error.middleware';
 import { env } from '../../config/env';
+import { container } from '../../../di/inversify.config';
+import { ILogger } from '../../../application/interfaces/ILogger';
+import { TYPES } from '../../../di/types';
+
 
 const app = express();
 
@@ -20,7 +24,7 @@ app.use('/api', authRoutes)
 
 
 
-
-app.use(errorMiddleware);
+const logger = container.get<ILogger>(TYPES.ILogger);
+app.use(createErrorMiddleware(logger));
 
 export default app;

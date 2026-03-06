@@ -66,3 +66,11 @@ export const logout = async () => {
         store.dispatch(clearUser());
     }
 }
+
+
+
+//Admin
+export const loginAdmin = async (data: LoginFormValues) => {
+    const response = await api.post('/admin/auth/login', data);
+    return response.data;
+}

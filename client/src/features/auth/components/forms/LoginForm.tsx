@@ -1,8 +1,8 @@
 import { type LoginFormValues } from '@/features/auth/schemas/loginSchema'
 import { useFormContext } from 'react-hook-form'
-import FormField from '../FormFields';
-import FormPasswordField from '../FormPasswordField';
-import { Button } from '../ui/button';
+import FormField from '../../../../components/FormFields';
+import FormPasswordField from '../../../../components/FormPasswordField';
+import { Button } from '../../../../components/ui/button';
 import { Link } from 'react-router-dom';
 
 type LoginFormProps = {

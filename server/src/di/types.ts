@@ -22,6 +22,8 @@ export const TYPES = {
     GoogleAuth: Symbol.for("GoogleAuth"),
     RefreshToken: Symbol.for("RefreshToken"),
 
+    LoginAdmin: Symbol.for("LoginAdmin"),
+
 
     //controllers
     AuthController: Symbol.for("AuthController"),

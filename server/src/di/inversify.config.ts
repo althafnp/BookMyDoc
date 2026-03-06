@@ -46,10 +46,15 @@ import { RefreshTokenUseCase } from "../application/use-cases/auth/refresh-token
 
 import { IUserLookupService } from "../application/interfaces/IUserLookupService";
 import { UserLookupService } from "../infrastructure/services/UserLookupService";
+
 import { IDoctorRepository } from "../domain/repositories/IDoctorRepository";
 import { MongoDoctorRepository } from "../infrastructure/database/mongo/repositories/MongoDoctorRepository";
+
 import { IAdminRepository } from "../domain/repositories/IAdminRepository";
 import { MongoAdminRepository } from "../infrastructure/database/mongo/repositories/MongoAdminRepository";
+
+import { ILoginAdmin } from "../application/ports/auth/ILoginAdmin";
+import { LoginAdminUseCase } from "../application/use-cases/auth/login-admin.usecase";
 
 
 
@@ -119,6 +124,15 @@ container.bind<IRefreshToken>(TYPES.RefreshToken).toDynamicValue((ctx) => {
     return new RefreshTokenUseCase(
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IUserLookupService)
+    )
+});
+
+
+container.bind<ILoginAdmin>(TYPES.LoginAdmin).toDynamicValue((ctx) => {
+    return new LoginAdminUseCase(
+        ctx.get(TYPES.IAdminRepository),
+        ctx.get(TYPES.IAuthTokenService),
+        ctx.get(TYPES.ILogger)
     )
 })
 

@@ -1,8 +1,9 @@
 import { useFormContext } from 'react-hook-form'
 import type { SignupFormValues } from '@/features/auth/schemas/signupSchema'
-import { Button } from '../ui/button'
-import FormField from '../FormFields';
-import FormPasswordField from '../FormPasswordField';
+import FormField from '@/components/FormFields';
+import FormPasswordField from '@/components/FormPasswordField';
+import { Button } from '@/components/ui/button';
+
 
 type SignupFormProps = {
     onSubmit: (data: SignupFormValues) => void;

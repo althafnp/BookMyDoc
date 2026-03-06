@@ -7,6 +7,7 @@ import HomePage from '@/pages/Home'
 import { Route, Routes } from 'react-router-dom'
 import UserProtectedRoute from './UserProtectedRoute'
 import AllDoctors from '@/features/user/pages/AllDoctors'
+import LoginAdmin from '@/features/auth/pages/LoginAdmin'
 
 const AppRoutes = () => {
     return (
@@ -29,6 +30,8 @@ const AppRoutes = () => {
                 <Route path='/auth/signup' element={<Signup />} />
                 <Route path='/auth/verify-email/:token' element={<VerifyEmail />} />
                 <Route path='/auth/login' element={<Login />} />
+
+                <Route path='/admin/auth/login' element={<LoginAdmin /> } />
             </Route>
         </Routes>
     )

@@ -33,3 +33,16 @@ export interface RefreshTokenResponseDTO {
         profileImage?: string
     },
 }
+
+
+
+//Admin
+export interface LoginAdminRequestDTO {
+    email: string;
+    password: string;
+}
+
+export interface LoginAdminResponseDTO {
+    accessToken: string;
+    refreshToken: string;
+}

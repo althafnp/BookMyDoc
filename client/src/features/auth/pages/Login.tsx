@@ -11,7 +11,7 @@ import { setAccessToken } from "@/core/http/authToken";
 import { setUser } from "@/store/reducers/authSlice";
 import { useDispatch } from "react-redux";
 import { GoogleLogin } from "@react-oauth/google";
-import LoginForm from "@/components/forms/LoginForm";
+import LoginForm from "@/features/auth/components/forms/LoginForm";
 
 
 const Login = () => {

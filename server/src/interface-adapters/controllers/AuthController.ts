@@ -6,13 +6,14 @@ import { loginSchema, signupSchema } from "../validators/auth.validator";
 import { HttpStatus } from "../../shared/constants/httpStatus";
 import { ApiResponse } from "../../shared/utils/ApiResponse";
 import { parseWithZod } from "../validators/zod-error.validator";
-import { LoginUserRequestDTO, SignupUserRequestDTO } from "../../application/dtos/auth";
+import { LoginAdminRequestDTO, LoginUserRequestDTO, SignupUserRequestDTO } from "../../application/dtos/auth";
 import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
 import { BadRequestError } from "../../shared/errors/HttpError";
 import { ILoginUser } from "../../application/ports/auth/ILoginUser";
 import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";
 import { IRefreshToken } from "../../application/ports/auth/IRefreshToken";
 import { env } from "../../infrastructure/config/env";
+import { ILoginAdmin } from "../../application/ports/auth/ILoginAdmin";
 
 @injectable()
 export class AuthController {
@@ -31,6 +32,9 @@ export class AuthController {
 
         @inject(TYPES.RefreshToken)
         private refreshTokenUseCase: IRefreshToken,
+
+        @inject(TYPES.LoginAdmin)
+        private loginAdminUseCase: ILoginAdmin
     ) { }
 
     signupUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -137,6 +141,30 @@ export class AuthController {
             ));
         } catch (err) {
             next(err);
+        }
+    }
+
+
+    //Admin
+    loginAdmin = async(req: Request, res: Response, next: NextFunction) => {
+        try {
+            const dto = parseWithZod<LoginAdminRequestDTO>(loginSchema, req.body);
+
+            const { accessToken, refreshToken } = await this.loginAdminUseCase.execute(dto);
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
+            res.status(HttpStatus.OK).json(ApiResponse.success(
+                "Admin logged in",
+                { accessToken }
+            ))
+        } catch (err) {
+            next(err)
         }
     }
 }

@@ -9,8 +9,7 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { signupUser } from '../api/authApi'
-import SignupForm from '@/components/forms/SignupForm'
-
+import SignupForm from '../components/forms/SignupForm'
 
 
 const Signup = () => {

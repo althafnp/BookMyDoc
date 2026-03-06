@@ -18,4 +18,9 @@ router.post('/auth/logout', authController.logout)
 router.post('/auth/refresh', authController.refreshToken)
 
 
+//Admin
+router.post('/admin/auth/login', authController.loginAdmin);
+
+
+
 export default router
