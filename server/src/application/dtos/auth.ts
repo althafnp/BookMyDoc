@@ -46,3 +46,23 @@ export interface LoginAdminResponseDTO {
     accessToken: string;
     refreshToken: string;
 }
+
+
+
+//Doctor
+export interface LoginDoctorRequestDTO {
+    email: string;
+    password: string;
+}
+
+export interface LoginDoctorResponseDTO {
+    doctor: {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+        profileImage: string
+    }
+    accessToken: string;
+    refreshToken: string
+}

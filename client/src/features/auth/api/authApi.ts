@@ -74,3 +74,11 @@ export const loginAdmin = async (data: LoginFormValues) => {
     const response = await api.post('/admin/auth/login', data);
     return response.data;
 }
+
+
+
+//Doctor
+export const loginDoctor = async (data: LoginFormValues) => {
+    const response = await api.post('/doctor/auth/login', data);
+    return response.data;
+}

@@ -27,7 +27,7 @@ export class UserLookupService implements IUserLookupService {
                 const doctor = await this.doctorRepository.findById(id);
                 if(!doctor) return null;
 
-                return { id: doctor.id, name: doctor.name, email: doctor.email, role: "DOCTOR", profileImage: doctor.image }
+                return { id: doctor.id, name: doctor.name, email: doctor.email, role: "DOCTOR", profileImage: doctor.profileImage }
             }
             case "ADMIN": {
                 const admin = await this.adminRepository.findById(id);

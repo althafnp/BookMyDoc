@@ -21,6 +21,9 @@ router.post('/auth/refresh', authController.refreshToken)
 //Admin
 router.post('/admin/auth/login', authController.loginAdmin);
 
+//Doctor
+router.post('/doctor/auth/login', authController.loginDoctor);
+
 
 
 export default router

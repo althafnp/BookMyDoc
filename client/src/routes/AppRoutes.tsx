@@ -8,6 +8,11 @@ import { Route, Routes } from 'react-router-dom'
 import UserProtectedRoute from './UserProtectedRoute'
 import AllDoctors from '@/features/user/pages/AllDoctors'
 import LoginAdmin from '@/features/auth/pages/LoginAdmin'
+import LoginDoctor from '@/features/auth/pages/LoginDoctor'
+import AdminProtectedRoute from './AdminProtectedRoute'
+import AdminLayout from '@/layouts/AdminLayout'
+import DoctorProtectedRoute from './DoctorProtectedRoute'
+import DoctorLayout from '@/layouts/DoctorLayout'
 
 const AppRoutes = () => {
     return (
@@ -32,6 +37,27 @@ const AppRoutes = () => {
                 <Route path='/auth/login' element={<Login />} />
 
                 <Route path='/admin/auth/login' element={<LoginAdmin /> } />
+
+                <Route path='/doctor/auth/login' element={<LoginDoctor />} />
+            </Route>
+
+
+            {/* Admin routes */}
+            <Route element={<AdminProtectedRoute />}>
+                <Route element={<AdminLayout />}>
+                    <Route path='/admin/dashboard' element={<div>admin</div>} />
+                    {/* <Route path='/admin/categories' element={<CategoriesPage />} />
+                    <Route path='/admin/doctors' element={<DoctorsPage />} />
+                    <Route path='/admin/users' element={<UsersPage />} /> */}
+                </Route>
+            </Route>
+
+            
+            {/* Doctor routes */}
+            <Route element={<DoctorProtectedRoute />}>  
+                <Route element={<DoctorLayout />}>
+                    <Route path='/doctor/dashboard' element={<div>doctor</div>} />
+                </Route>
             </Route>
         </Routes>
     )

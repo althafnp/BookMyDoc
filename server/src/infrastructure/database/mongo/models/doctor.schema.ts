@@ -6,7 +6,7 @@ export interface IDoctor extends Document {
     name: string;
     email: string;
     password: string;
-    image: string,
+    profileImage: string,
     categoryId: Types.ObjectId;
     experience: string;
     qualification: string;
@@ -30,7 +30,7 @@ const DoctorSchema: Schema = new Schema<IDoctor>(
             type: String,
             required: true
         },
-        image: {
+        profileImage: {
             type: String,
             required: true
         },

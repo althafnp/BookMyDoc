@@ -7,7 +7,7 @@ export class Doctor {
         public email: string,
         private password: string,
         public categoryId: string,
-        public image: string,
+        public profileImage: string,
         public qualification: string,
         public experience: string,
         public consultationFee: number,

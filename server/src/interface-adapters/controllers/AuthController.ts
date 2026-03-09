@@ -6,7 +6,7 @@ import { loginSchema, signupSchema } from "../validators/auth.validator";
 import { HttpStatus } from "../../shared/constants/httpStatus";
 import { ApiResponse } from "../../shared/utils/ApiResponse";
 import { parseWithZod } from "../validators/zod-error.validator";
-import { LoginAdminRequestDTO, LoginUserRequestDTO, SignupUserRequestDTO } from "../../application/dtos/auth";
+import { LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, SignupUserRequestDTO } from "../../application/dtos/auth";
 import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
 import { BadRequestError } from "../../shared/errors/HttpError";
 import { ILoginUser } from "../../application/ports/auth/ILoginUser";
@@ -14,6 +14,7 @@ import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";
 import { IRefreshToken } from "../../application/ports/auth/IRefreshToken";
 import { env } from "../../infrastructure/config/env";
 import { ILoginAdmin } from "../../application/ports/auth/ILoginAdmin";
+import { ILoginDoctor } from "../../application/ports/auth/ILoginDoctor";
 
 @injectable()
 export class AuthController {
@@ -34,7 +35,10 @@ export class AuthController {
         private refreshTokenUseCase: IRefreshToken,
 
         @inject(TYPES.LoginAdmin)
-        private loginAdminUseCase: ILoginAdmin
+        private loginAdminUseCase: ILoginAdmin,
+
+        @inject(TYPES.LoginDoctor)
+        private loginDoctorUseCase: ILoginDoctor
     ) { }
 
     signupUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -163,6 +167,35 @@ export class AuthController {
                 "Admin logged in",
                 { accessToken }
             ))
+        } catch (err) {
+            next(err)
+        }
+    }
+
+
+    //Doctor
+    loginDoctor = async(req: Request, res: Response, next: NextFunction) => {
+        try {
+            const dto = parseWithZod<LoginDoctorRequestDTO>(loginSchema, req.body);
+
+            const { doctor, accessToken, refreshToken } = await this.loginDoctorUseCase.execute(dto);
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
+            const data = {
+                doctor,
+                accessToken
+            }
+
+            res.status(HttpStatus.OK).json(ApiResponse.success(
+                "Doctor logged in",
+                data
+            ));
         } catch (err) {
             next(err)
         }

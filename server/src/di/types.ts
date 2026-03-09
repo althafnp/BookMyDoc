@@ -24,6 +24,8 @@ export const TYPES = {
 
     LoginAdmin: Symbol.for("LoginAdmin"),
 
+    LoginDoctor: Symbol.for("LoginDoctor"),
+
 
     //controllers
     AuthController: Symbol.for("AuthController"),

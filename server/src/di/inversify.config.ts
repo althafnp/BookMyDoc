@@ -55,6 +55,8 @@ import { MongoAdminRepository } from "../infrastructure/database/mongo/repositor
 
 import { ILoginAdmin } from "../application/ports/auth/ILoginAdmin";
 import { LoginAdminUseCase } from "../application/use-cases/auth/login-admin.usecase";
+import { ILoginDoctor } from "../application/ports/auth/ILoginDoctor";
+import { LoginDoctorUseCase } from "../application/use-cases/auth/login-doctor.usecase";
 
 
 
@@ -136,6 +138,15 @@ container.bind<ILoginAdmin>(TYPES.LoginAdmin).toDynamicValue((ctx) => {
     )
 })
 
+
+container.bind<ILoginDoctor>(TYPES.LoginDoctor).toDynamicValue((ctx) => {
+    return new LoginDoctorUseCase(
+        ctx.get(TYPES.IDoctorRepository),
+        ctx.get(TYPES.IAuthTokenService),
+        ctx.get(TYPES.IPasswordService),
+        ctx.get(TYPES.ILogger)
+    )
+})
 
 
 //controllers
