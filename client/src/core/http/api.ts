@@ -1,5 +1,6 @@
 import axios from "axios";
 import { clearAccessToken, getAccessToken } from "./authToken";
+import { refreshSession } from "@/features/auth/api/authApi";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -50,16 +51,16 @@ api.interceptors.response.use(
             isRefreshing = true
 
             try {
-                // const newAccessToken = await refreshSession();
+                const newAccessToken = await refreshSession();
 
-                // if(!newAccessToken) {
-                //     clearAccessToken();
-                //     return Promise.reject(error);
-                // }
+                if(!newAccessToken) {
+                    clearAccessToken();
+                    return Promise.reject(error);
+                }
 
-                // processQueue(newAccessToken);
+                processQueue(newAccessToken);
 
-                // originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 return api(originalRequest);
             } finally {
                 isRefreshing = false;
