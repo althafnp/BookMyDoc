@@ -13,6 +13,9 @@ import AdminProtectedRoute from './AdminProtectedRoute'
 import AdminLayout from '@/layouts/AdminLayout'
 import DoctorProtectedRoute from './DoctorProtectedRoute'
 import DoctorLayout from '@/layouts/DoctorLayout'
+import ForgotDoctorPassword from '@/features/auth/pages/ForgotDoctorPassword'
+import ResetDoctorPassword from '@/features/auth/pages/ResetDoctorPassword'
+import GuestRoutes from './GuestRoutes'
 
 const AppRoutes = () => {
     return (
@@ -31,14 +34,18 @@ const AppRoutes = () => {
             </Route>
 
             {/* Auth Routes */}
-            <Route element={<AuthLayout />}>
-                <Route path='/auth/signup' element={<Signup />} />
-                <Route path='/auth/verify-email/:token' element={<VerifyEmail />} />
-                <Route path='/auth/login' element={<Login />} />
+            <Route element={<GuestRoutes />}>
+                <Route element={<AuthLayout />}>
+                    <Route path='/auth/signup' element={<Signup />} />
+                    <Route path='/auth/verify-email/:token' element={<VerifyEmail />} />
+                    <Route path='/auth/login' element={<Login />} />
 
-                <Route path='/admin/auth/login' element={<LoginAdmin /> } />
+                    <Route path='/admin/auth/login' element={<LoginAdmin />} />
 
-                <Route path='/doctor/auth/login' element={<LoginDoctor />} />
+                    <Route path='/doctor/auth/login' element={<LoginDoctor />} />
+                    <Route path='/doctor/auth/forgot-password' element={<ForgotDoctorPassword />} />
+                    <Route path='/doctor/auth/reset-password/:token' element={<ResetDoctorPassword />} />
+                </Route>
             </Route>
 
 
@@ -52,9 +59,9 @@ const AppRoutes = () => {
                 </Route>
             </Route>
 
-            
+
             {/* Doctor routes */}
-            <Route element={<DoctorProtectedRoute />}>  
+            <Route element={<DoctorProtectedRoute />}>
                 <Route element={<DoctorLayout />}>
                     <Route path='/doctor/dashboard' element={<div>doctor</div>} />
                 </Route>

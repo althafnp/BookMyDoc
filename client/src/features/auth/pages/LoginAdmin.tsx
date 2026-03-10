@@ -7,10 +7,13 @@ import { setAccessToken } from '@/core/http/authToken'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useLoginAdmin } from '../hooks/useLoginAdmin'
+import { useDispatch } from 'react-redux'
+import { setUser } from '@/store/reducers/authSlice'
 
 const LoginAdmin = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const methods = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -19,24 +22,19 @@ const LoginAdmin = () => {
 
     const { setError } = methods;
 
-    const onSuccessLogin = (res: any) => {
-        setAccessToken(res.data.accessToken);
 
-        localStorage.setItem('auth:hadSession', 'true');
+    const loginMutation = useLoginAdmin({ setError });
+
+    const handleSubmit = async (data: LoginFormValues) => {
+        const res = await loginMutation.mutateAsync(data);
+
+        setAccessToken(res.data.accessToken);
+        dispatch(setUser(res.data.admin))
+        localStorage.setItem("auth:hadSession", "true");
 
         toast.success(res.message);
-
-        navigate('/admin/dashboard');
-    };
-
-    const loginMutation = useLoginAdmin({
-        setError,
-        onSuccessLogin
-    });
-
-    const handleSubmit = (data: LoginFormValues) => {
-        loginMutation.mutate(data)
-    };
+        navigate("/admin/dashboard");
+    }
 
     return (
         <Card className="w-full max-w-sm">

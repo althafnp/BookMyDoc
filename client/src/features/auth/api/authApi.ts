@@ -5,6 +5,7 @@ import { clearAccessToken, setAccessToken } from "@/core/http/authToken";
 import store from "@/store/store";
 import { clearUser, setInitialized, setLoading, setUser } from "@/store/reducers/authSlice";
 import { toast } from "sonner";
+import type { ForgotPasswordFormValues, ResetPasswordFormValues } from "../schemas/resetPassword";
 
 export const signupUser = async (data: SignupFormValues) => {
     const response = await api.post("/auth/signup", data);
@@ -80,5 +81,15 @@ export const loginAdmin = async (data: LoginFormValues) => {
 //Doctor
 export const loginDoctor = async (data: LoginFormValues) => {
     const response = await api.post('/doctor/auth/login', data);
+    return response.data;
+}
+
+export const forgotDoctorPassword = async (data: ForgotPasswordFormValues) => {
+    const response = await api.post('/doctor/auth/forgot-password', data);
+    return response.data
+}
+
+export const resetDoctorPassword = async(token: string, data: ResetPasswordFormValues) => {
+    const response = await api.post(`/doctor/auth/reset-password/${token}`, data);
     return response.data;
 }

@@ -1,5 +1,4 @@
 import { Doctor } from "../../domain/entities/Doctor";
-import { User } from "../../domain/entities/User";
 import { LoginDoctorResponseDTO, LoginUserResponseDTO } from "../dtos/auth";
 
 export class DoctorResponseMapper {

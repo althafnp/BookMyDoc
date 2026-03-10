@@ -23,25 +23,17 @@ const LoginDoctor = () => {
 
     const { setError } = methods;
 
-    const onSuccessLogin = (res: any) => {
+    const loginMutation = useLoginDoctor({ setError })
+
+    const handleSubmit = async (data: LoginFormValues) => {
+        const res = await loginMutation.mutateAsync(data);
+
         setAccessToken(res.data.accessToken);
-
-        dispatch(setUser(res.data.user))
-
-        localStorage.setItem('auth:hadSession', 'true');
+        dispatch(setUser(res.data.doctor));
+        localStorage.setItem("auth:hadSession", "true");
 
         toast.success(res.message);
-
-        navigate('/doctor/dashboard');
-    }
-
-    const loginMutation = useLoginDoctor({
-        setError,
-        onSuccessLogin
-    })
-    
-    const handleSubmit = (data: LoginFormValues) => {
-        loginMutation.mutate(data)
+        navigate("/doctor/dashboard");
     }
 
     return (
@@ -52,7 +44,7 @@ const LoginDoctor = () => {
 
             <CardContent>
                 <FormProvider {...methods}>
-                    <LoginDoctorForm onSubmit={handleSubmit} loading={loginMutation.isPending}/>
+                    <LoginDoctorForm onSubmit={handleSubmit} loading={loginMutation.isPending} />
                 </FormProvider>
             </CardContent>
         </Card>

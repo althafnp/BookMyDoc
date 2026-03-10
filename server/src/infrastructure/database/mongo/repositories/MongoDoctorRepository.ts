@@ -16,4 +16,16 @@ export class MongoDoctorRepository implements IDoctorRepository{
         const doc = await DoctorModel.findOne({ email });
         return doc ? DoctorMapper.toDomain(doc) : null;
     }
+
+    async update(doctor: Doctor): Promise<Doctor | null> {
+        const persistence = DoctorMapper.toPersistence(doctor);
+
+        const doc = await DoctorModel.findByIdAndUpdate(
+            doctor.id,
+            persistence,
+            { returnDocument: "after" }
+        );
+
+        return doc ? DoctorMapper.toDomain(doc) : null;
+    }
 }

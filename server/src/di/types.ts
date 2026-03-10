@@ -8,6 +8,7 @@ export const TYPES = {
     IGoogleAuthService: Symbol.for("IGoogleAuthService"),
     IAppConfig: Symbol.for("IAppConfig"),
     IUserLookupService: Symbol.for("IUserLookupService"),
+    IPasswordTokenService: Symbol.for("IPasswordTokenService"),
 
     //repositories
     IUserRepository: Symbol.for("IUserRepository"),
@@ -16,17 +17,15 @@ export const TYPES = {
 
 
     //use-cases
-    SignupUser: Symbol.for("SignupUser"),
-    VerifyEmail: Symbol.for("VerifyEmail"),
-    LoginUser: Symbol.for("LoginUser"),
-    GoogleAuth: Symbol.for("GoogleAuth"),
-    RefreshToken: Symbol.for("RefreshToken"),
+    ISignupUser: Symbol.for("ISignupUser"),
+    IVerifyEmail: Symbol.for("IVerifyEmail"),
+    ILoginUser: Symbol.for("ILoginUser"),
+    IGoogleAuth: Symbol.for("IGoogleAuth"),
+    IRefreshToken: Symbol.for("IRefreshToken"),
 
-    LoginAdmin: Symbol.for("LoginAdmin"),
+    ILoginAdmin: Symbol.for("ILoginAdmin"),
 
-    LoginDoctor: Symbol.for("LoginDoctor"),
-
-
-    //controllers
-    AuthController: Symbol.for("AuthController"),
+    ILoginDoctor: Symbol.for("ILoginDoctor"),
+    IForgotDoctorPassword: Symbol.for("IForgotDoctorPassword"),
+    IResetDoctorPassword: Symbol.for("IResetDoctorPassword"),
 }

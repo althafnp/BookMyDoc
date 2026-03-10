@@ -3,6 +3,7 @@ import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpErr
 import { LoginAdminRequestDTO, LoginAdminResponseDTO } from "../../dtos/auth";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { ILogger } from "../../interfaces/ILogger";
+import { AdminResponseMapper } from "../../mappers/AdminResponseMapper";
 import { ILoginAdmin } from "../../ports/auth/ILoginAdmin";
 
 export class LoginAdminUseCase implements ILoginAdmin {
@@ -30,6 +31,10 @@ export class LoginAdminUseCase implements ILoginAdmin {
 
         this.logger.info("Admin logged in", { admin });
 
-        return { accessToken, refreshToken }
+        return {
+            admin: AdminResponseMapper.toDTO(admin),
+            accessToken,
+            refreshToken 
+        }
     }
 }

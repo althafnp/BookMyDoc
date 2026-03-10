@@ -5,17 +5,12 @@ import axios from "axios";
 
 type UseLoginDoctorProps = {
     setError: any;
-    onSuccessLogin: (data: any) => void;
 }
 
 
-export const useLoginDoctor = ({ setError, onSuccessLogin }: UseLoginDoctorProps) => {
+export const useLoginDoctor = ({ setError }: UseLoginDoctorProps) => {
     return useMutation({
         mutationFn: (data: LoginFormValues) => loginDoctor(data),
-
-        onSuccess: (data) => {
-            onSuccessLogin(data)
-        },
 
         onError: (err: any) => {
             console.log(err);

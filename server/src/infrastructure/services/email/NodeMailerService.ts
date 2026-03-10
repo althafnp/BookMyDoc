@@ -56,4 +56,41 @@ export class NodeMailerService implements IEmailService{
 
         await this.transporter.sendMail(mailOptions)
     }
+
+
+    async sendPasswordResetVerificationEmail(email: string, link: string): Promise<void> {
+        const mailOptions = {
+            from: env.EMAIL_USER,
+            to: email,
+            subject: "Reset your password",
+            html: `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+                    <h2>Reset Password 👋</h2>
+                    <p>
+                        Please reset your password by clicking the button below:
+                    </p>
+
+                    <a 
+                        href="${link}"
+                        style="
+                            display: inline-block;
+                            padding: 12px 20px;
+                            margin: 16px 0;
+                            background-color: #2563eb;
+                            color: #ffffff;
+                            text-decoration: none;
+                            border-radius: 6px;
+                            font-weight: bold;
+                        "
+                    >
+                        Reset password
+                    </a>
+
+                    <p>If you did not request this, you can safely ignore this email.</p>
+                </div>
+            `
+        };
+
+        await this.transporter.sendMail(mailOptions)
+    }
 }

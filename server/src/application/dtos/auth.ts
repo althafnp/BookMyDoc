@@ -43,6 +43,13 @@ export interface LoginAdminRequestDTO {
 }
 
 export interface LoginAdminResponseDTO {
+    admin: {
+        id: string;
+        name?: string;
+        email: string;
+        role: string;
+        profileImage?: string
+    },
     accessToken: string;
     refreshToken: string;
 }
@@ -65,4 +72,9 @@ export interface LoginDoctorResponseDTO {
     }
     accessToken: string;
     refreshToken: string
+}
+
+export interface ResetPasswordRequestDTO {
+    token: string;
+    password: string;
 }
