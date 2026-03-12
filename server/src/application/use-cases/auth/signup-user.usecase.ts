@@ -37,7 +37,7 @@ export class SignupUserUseCase implements ISignupUser {
             hashedPassword,
             ['LOCAL'],
             "USER",
-            false,
+            "ACTIVE",
             false,
         );
 

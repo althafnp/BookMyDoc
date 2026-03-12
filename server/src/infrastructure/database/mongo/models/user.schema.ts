@@ -1,4 +1,5 @@
 import { Schema, Document, model, Types } from "mongoose";
+import { UserStatus } from "../../../../domain/enums/Auth";
 
 export interface IUser extends Document {
     _id: Types.ObjectId;
@@ -9,7 +10,7 @@ export interface IUser extends Document {
     googleId?: string;
     profileImage?: string;
     role: "USER";
-    isBlocked: boolean;
+    status: UserStatus;
     emailVerified: boolean;
 }
 
@@ -51,9 +52,10 @@ const UserSchema = new Schema<IUser>(
             default: false
         },
 
-        isBlocked: {
-            type: Boolean,
-            default: false
+        status: {
+            type: String,
+            enum: ["ACTIVE", "BLOCKED"],
+            default: "ACTIVE"
         },
         role: {
             type: String,
