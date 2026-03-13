@@ -122,18 +122,20 @@ const Navbar = () => {
                                     </button>
                             
                                     {/* Profile Dropdown (simplified for demo) */}
-                                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                                    <div className="absolute right-0 mt-2 w-48 bg-background rounded-lg shadow-lg border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                                         <div className="py-2">
-                                            <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                                                <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</p>
+                                            <div className="px-4 py-2 border-b border-border">
+                                                <p className="text-sm font-medium text-foreground">{user?.name}</p>
+                                                <p className="text-xs text-muted-foreground">{user?.email}</p>
                                             </div>
-                                            <button 
-                                                onClick={() => setIsModalOpen(true)}
-                                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                            >
-                                                Sign Out
-                                            </button>
+                                            <div className='w-full px-2 pt-2'>
+                                                <button 
+                                                    onClick={() => setIsModalOpen(true)}
+                                                    className="w-full p-2 font-medium text-left text-sm text-foreground hover:text-destructive hover:bg-destructive/20 hover:rounded-sm transition-all duration-200 ease-in-out active:scale-98"
+                                                >
+                                                    Sign Out
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -227,7 +229,7 @@ const Navbar = () => {
                                     
                                     <button 
                                         onClick={() => setIsModalOpen(true)}
-                                        className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                                        className="text-sm text-foreground hover:text-destructive transition-colors duration-200 ease-in-out active:scale-98"
                                     >
                                         Sign Out
                                     </button>

@@ -1,14 +1,12 @@
-import { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../di/types";
 import { ISignupUser } from "../../application/ports/auth/ISignupUser";
-import { loginSchema, resetPasswordSchema, signupSchema } from "../validators/auth.validator";
+import { forgotPasswordSchema, loginSchema, resetPasswordSchema, signupSchema, verifyEmailSchema } from "../validators/auth.validator";
 import { HttpStatus } from "../../shared/constants/httpStatus";
 import { ApiResponse } from "../../shared/utils/ApiResponse";
 import { parseWithZod } from "../validators/zod-error.validator";
-import { LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, ResetPasswordRequestDTO, SignupUserRequestDTO } from "../../application/dtos/auth";
+import { ForgotPasswordRequestDTO, LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, ResetPasswordRequestDTO, SignupUserRequestDTO, VerifyEmailRequestDTO } from "../../application/dtos/auth";
 import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
-import { BadRequestError } from "../../shared/errors/HttpError";
 import { ILoginUser } from "../../application/ports/auth/ILoginUser";
 import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";
 import { IRefreshToken } from "../../application/ports/auth/IRefreshToken";
@@ -17,6 +15,7 @@ import { ILoginAdmin } from "../../application/ports/auth/ILoginAdmin";
 import { ILoginDoctor } from "../../application/ports/auth/ILoginDoctor";
 import { IForgotDoctorPassword } from "../../application/ports/auth/IForgotDoctorPassword";
 import { IResetDoctorPassword } from "../../application/ports/auth/IResetDoctorPassword";
+import { asyncHandler } from "../../shared/utils/asyncHandler";
 
 @injectable()
 export class AuthController {
@@ -49,206 +48,166 @@ export class AuthController {
         private resetDoctorPasswordUseCase: IResetDoctorPassword,
     ) { }
 
-    signupUser = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const dto = parseWithZod<SignupUserRequestDTO>(signupSchema, req.body);
+    signupUser = asyncHandler(async (req, res) => {
+        const dto = parseWithZod<SignupUserRequestDTO>(signupSchema, req.body);
 
-            await this.signupUserUseCase.execute(dto);
+        await this.signupUserUseCase.execute(dto);
 
-            res.status(HttpStatus.CREATED).json(ApiResponse.success("Registration successfull"));
-        } catch (err) {
+        res.status(HttpStatus.CREATED).json(ApiResponse.success("Registration successfull"));
+    })
 
-            next(err)
+    verifyEmail = asyncHandler(async (req, res) => {
+        const dto = parseWithZod<VerifyEmailRequestDTO>(verifyEmailSchema, req.params);
+        
+        await this.verifyEmailUseCase.execute(dto);
+        
+        res.status(HttpStatus.OK).json(ApiResponse.success("Email verified successfully, login to access account"))
+    })
+        
+
+    loginUser = asyncHandler(async (req, res,) => {
+        const dto = parseWithZod<LoginUserRequestDTO>(loginSchema, req.body);
+
+        const { user, accessToken, refreshToken } = await this.loginUserUseCase.execute(dto);
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        const data = {
+            user,
+            accessToken
         }
-    }
 
-    verifyEmail = async (req: Request<{ token: string }>, res: Response, next: NextFunction) => {
-        try {
-            const { token } = req.params;
-
-            if (!token) {
-                throw new BadRequestError("Token is required");
-            }
-
-            await this.verifyEmailUseCase.execute(token);
-
-            res.status(HttpStatus.OK).json(ApiResponse.success("Email verified successfully, login to access account"))
-        } catch (err) {
-            next(err)
-        }
-    }
-
-    loginUser = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const dto = parseWithZod<LoginUserRequestDTO>(loginSchema, req.body);
-
-            const { user, accessToken, refreshToken } = await this.loginUserUseCase.execute(dto);
-
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                secure: env.NODE_ENV === "production",
-                sameSite: "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            });
-
-            const data = {
-                user,
-                accessToken
-            }
-
-            res.status(HttpStatus.OK).json(ApiResponse.success(
-                "User logged in successfully",
-                data
-            ))
-
-        } catch (err) {
-            next(err)
-        }
-    }
-
-    googleAuth = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { token } = req.body;
-
-            const { user, accessToken, refreshToken } = await this.googleAuthUseCase.execute(token);
+        res.status(HttpStatus.OK).json(ApiResponse.success(
+            "User logged in successfully",
+            data
+        ))
+    })
 
 
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                secure: env.NODE_ENV === "production",
-                sameSite: "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
 
-            const data = {
-                user,
-                accessToken
-            };
 
-            res.status(HttpStatus.OK).json(ApiResponse.success(
-                "User logged in with Google",
-                data
-            ));
+    googleAuth = asyncHandler(async (req, res) => {
+        const { token } = req.body;
+        
+        const { user, accessToken, refreshToken } = await this.googleAuthUseCase.execute(token);
+        
+        
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        
+        const data = {
+            user,
+            accessToken
+        };
+        
+        res.status(HttpStatus.OK).json(ApiResponse.success(
+            "User logged in with Google",
+            data
+        ));
+    })
 
-        } catch (err) {
-            next(err)
-        }
-    }
-
-    logout = async (req: Request, res: Response) => {
+    logout = asyncHandler(async (req, res) => {
         res.clearCookie("refreshToken");
-
+        
         res.status(HttpStatus.OK).json(ApiResponse.success("Logged out successfully"));
-    }
+    })
 
-    refreshToken = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const token = req.cookies.refreshToken;
 
-            const { accessToken, user } = await this.refreshTokenUseCase.execute(token);
-
-            res.status(HttpStatus.OK).json(ApiResponse.success(
-                "Token refreshed",
-                { accessToken, user }
-            ));
-        } catch (err) {
-            next(err);
-        }
-    }
+    refreshToken = asyncHandler(async (req, res) => {
+        const token = req.cookies.refreshToken;
+        
+        const { accessToken, user } = await this.refreshTokenUseCase.execute(token);
+        
+        res.status(HttpStatus.OK).json(ApiResponse.success(
+            "Token refreshed",
+            { accessToken, user }
+        ));
+    })
 
 
     //Admin
-    loginAdmin = async(req: Request, res: Response, next: NextFunction) => {
-        try {
-            const dto = parseWithZod<LoginAdminRequestDTO>(loginSchema, req.body);
+    loginAdmin = asyncHandler(async (req, res) => {
+        const dto = parseWithZod<LoginAdminRequestDTO>(loginSchema, req.body);
 
-            const { admin, accessToken, refreshToken } = await this.loginAdminUseCase.execute(dto);
+        const { admin, accessToken, refreshToken } = await this.loginAdminUseCase.execute(dto);
 
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                secure: env.NODE_ENV === "production",
-                sameSite: "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
-            const data = {
-                admin,
-                accessToken
-            }
-
-            res.status(HttpStatus.OK).json(ApiResponse.success(
-                "Admin logged in",
-                data
-            ))
-        } catch (err) {
-            next(err)
+        const data = {
+            admin,
+            accessToken
         }
-    }
+
+        res.status(HttpStatus.OK).json(ApiResponse.success(
+            "Admin logged in",
+            data
+        ))
+    })
 
 
     //Doctor
-    loginDoctor = async(req: Request, res: Response, next: NextFunction) => {
-        try {
-            const dto = parseWithZod<LoginDoctorRequestDTO>(loginSchema, req.body);
+    loginDoctor = asyncHandler(async (req, res) => {
+        const dto = parseWithZod<LoginDoctorRequestDTO>(loginSchema, req.body);
+        
+        const { doctor, accessToken, refreshToken } = await this.loginDoctorUseCase.execute(dto);
 
-            const { doctor, accessToken, refreshToken } = await this.loginDoctorUseCase.execute(dto);
-
-            res.cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                secure: env.NODE_ENV === "production",
-                sameSite: "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
-
-            const data = {
-                doctor,
-                accessToken
-            }
-
-            res.status(HttpStatus.OK).json(ApiResponse.success(
-                "Doctor logged in",
-                data
-            ));
-        } catch (err) {
-            next(err)
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        
+        const data = {
+            doctor,
+            accessToken
         }
-    }
+        
+        res.status(HttpStatus.OK).json(ApiResponse.success(
+            "Doctor logged in",
+            data
+        ));
+    })
 
-    forgotDoctorPassword = async(req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { email } = req.body;
-            if(!email) {
-                throw new BadRequestError('Email is required')
-            };
 
-            await this.forgotDoctorPasswordUseCase.execute(email);
+    forgotDoctorPassword = asyncHandler(async (req, res) => {
+        const dto = parseWithZod<ForgotPasswordRequestDTO>(forgotPasswordSchema, req.body);
+        
+        await this.forgotDoctorPasswordUseCase.execute(dto);
+        
+        res.status(HttpStatus.OK).json(ApiResponse.success(
+            "Please check your email to reset the password",
+        ));
+    })
 
-            res.status(HttpStatus.OK).json(ApiResponse.success(
-                "Please check your email to reset the password",
-            ));
-        } catch (err) {
-            next(err)
-        }
-    }
+    resetDoctorPassword = asyncHandler(async (req, res) => {
+        const parsed = parseWithZod<ResetPasswordRequestDTO>(resetPasswordSchema, {
+            token: req.params.token,
+            ...req.body
+        });
+        
+        await this.resetDoctorPasswordUseCase.execute({
+            token: parsed.token,
+            password: parsed.password
+        });
+        
+        res.status(HttpStatus.OK).json(
+            ApiResponse.success("Password reset successful")
+        );
+    })
 
-    resetDoctorPassword = async(req: Request, res: Response, next: NextFunction) => {
-        try {
-            const parsed = parseWithZod<ResetPasswordRequestDTO>(resetPasswordSchema, {
-                token: req.params.token,
-                ...req.body
-            });
-
-            await this.resetDoctorPasswordUseCase.execute({
-                token: parsed.token,
-                password: parsed.password
-            });
-
-            res.status(HttpStatus.OK).json(
-                ApiResponse.success("Password reset successful")
-            );
-
-        } catch (err) {
-            next(err)
-        }
-    }
 }

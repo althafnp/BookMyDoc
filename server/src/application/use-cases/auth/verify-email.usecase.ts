@@ -1,5 +1,6 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
+import { VerifyEmailRequestDTO } from "../../dtos/auth";
 import { IEmailVerificationTokenService } from "../../interfaces/IEmailVerificationTokenService";
 import { ILogger } from "../../interfaces/ILogger";
 import { IVerifyEmail } from "../../ports/auth/IVerifyEmail";
@@ -11,7 +12,8 @@ export class VerifyEmailUseCase implements IVerifyEmail {
         private logger: ILogger
     ) {}
 
-    async execute(token: string): Promise<void> {
+    async execute(dto: VerifyEmailRequestDTO): Promise<void> {
+        const { token } = dto;
         let decoded: { email: string };
 
         try {

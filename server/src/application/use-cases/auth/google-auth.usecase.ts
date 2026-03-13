@@ -1,7 +1,7 @@
 import { User } from "../../../domain/entities/User";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { BadRequestError } from "../../../shared/errors/HttpError";
-import { LoginUserResponseDTO } from "../../dtos/auth";
+import { GoogleAuthRequestDTO, LoginUserResponseDTO } from "../../dtos/auth";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { IGoogleAuthService } from "../../interfaces/IGoogleAuthService";
 import { UserResponseMapper } from "../../mappers/UserResponseMapper";
@@ -14,8 +14,10 @@ export class GoogleAuthUseCase implements IGoogleAuth{
         private googleAuthService: IGoogleAuthService
     ) {}
 
-    async execute(googleToken: string): Promise<LoginUserResponseDTO> {
-        const googleUser = await this.googleAuthService.verifyIdToken(googleToken);
+    async execute(dto: GoogleAuthRequestDTO): Promise<LoginUserResponseDTO> {
+        const { token } = dto;
+        
+        const googleUser = await this.googleAuthService.verifyIdToken(token);
         // console.log('user: ', googleUser)
 
         let user = await this.userRepository.findByEmail(googleUser.email);
@@ -25,7 +27,7 @@ export class GoogleAuthUseCase implements IGoogleAuth{
                 user.addProvider("GOOGLE", googleUser.googleId);
             }
 
-            if(user.isBlocked) {
+            if(user.status === "BLOCKED") {
                 throw new BadRequestError("User is currenty blocked")
             };
 
@@ -41,7 +43,7 @@ export class GoogleAuthUseCase implements IGoogleAuth{
                 undefined,
                 ["GOOGLE"],
                 "USER",
-                false,
+                "ACTIVE",
                 true,
                 googleUser.googleId,
                 googleUser.picture
