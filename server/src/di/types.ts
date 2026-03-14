@@ -14,6 +14,7 @@ export const TYPES = {
     IUserRepository: Symbol.for("IUserRepository"),
     IDoctorRepository: Symbol.for("IDoctorRepository"),
     IAdminRepository: Symbol.for("IAdminRepository"),
+    IWalletRepository: Symbol.for("IWalletRepository"),
 
 
     //use-cases

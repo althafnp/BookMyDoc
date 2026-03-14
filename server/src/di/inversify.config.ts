@@ -68,6 +68,9 @@ import { ForgotDoctorPasswordUseCase } from "../application/use-cases/auth/forgo
 import { IResetDoctorPassword } from "../application/ports/auth/IResetDoctorPassword";
 import { ResetDoctorPasswordUseCase } from "../application/use-cases/auth/reset-doctor-password.usecase";
 
+import { IWalletRepository } from "../domain/repositories/IWalletRepository";
+import { MongoWalletRepository } from "../infrastructure/database/mongo/repositories/MongoWalletRepository";
+
 
 
 
@@ -91,6 +94,7 @@ container.bind<IPasswordTokenService>(TYPES.IPasswordTokenService).to(JwtPasswor
 container.bind<IUserRepository>(TYPES.IUserRepository).to(MongoUserRepository);
 container.bind<IDoctorRepository>(TYPES.IDoctorRepository).to(MongoDoctorRepository);
 container.bind<IAdminRepository>(TYPES.IAdminRepository).to(MongoAdminRepository);
+container.bind<IWalletRepository>(TYPES.IWalletRepository).to(MongoWalletRepository);
 
 
 
@@ -100,6 +104,7 @@ container.bind<ISignupUser>(TYPES.ISignupUser).toDynamicValue((ctx) => {
     return new SignupUserUseCase(
         ctx.get(TYPES.IUserRepository),
         ctx.get(TYPES.IPasswordService),
+        ctx.get(TYPES.IWalletRepository),
         ctx.get(TYPES.IEmailVerificationTokenService),
         ctx.get(TYPES.IEmailService),
         ctx.get(TYPES.IAppConfig),
@@ -128,6 +133,7 @@ container.bind<ILoginUser>(TYPES.ILoginUser).toDynamicValue((ctx) => {
 container.bind<IGoogleAuth>(TYPES.IGoogleAuth).toDynamicValue((ctx) => {
     return new GoogleAuthUseCase(
         ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IWalletRepository),
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IGoogleAuthService),
     )

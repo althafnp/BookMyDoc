@@ -7,9 +7,9 @@ import { IVerifyEmail } from "../../ports/auth/IVerifyEmail";
 
 export class VerifyEmailUseCase implements IVerifyEmail {
     constructor(
-        private userRepository: IUserRepository,
-        private emailVerificationTokenService: IEmailVerificationTokenService,
-        private logger: ILogger
+        private _userRepository: IUserRepository,
+        private _emailVerificationTokenService: IEmailVerificationTokenService,
+        private _logger: ILogger
     ) {}
 
     async execute(dto: VerifyEmailRequestDTO): Promise<void> {
@@ -17,12 +17,12 @@ export class VerifyEmailUseCase implements IVerifyEmail {
         let decoded: { email: string };
 
         try {
-            decoded = this.emailVerificationTokenService.verifyEmailVerificationToken(token);
+            decoded = this._emailVerificationTokenService.verifyEmailVerificationToken(token);
         } catch {
             throw new UnauthorizedError("Invalid or expired verification token");
         }
 
-        const user = await this.userRepository.findByEmail(decoded.email);
+        const user = await this._userRepository.findByEmail(decoded.email);
 
         if (!user) {
             throw new NotFoundError("User not found");
@@ -34,8 +34,8 @@ export class VerifyEmailUseCase implements IVerifyEmail {
 
         user.emailVerified = true;
 
-        await this.userRepository.update(user);
+        await this._userRepository.update(user);
 
-        this.logger.info("User verified successfully", { userId: user.id, email: user.email });
+        this._logger.info("User verified successfully", { userId: user.id, email: user.email });
     }
 }

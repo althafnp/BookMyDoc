@@ -6,13 +6,13 @@ import { injectable } from "inversify";
 
 @injectable()
 export class JwtPasswordTokenService implements IPasswordTokenService {
-    private secret = env.JWT_PASSWORD_SECRET;
+    private _secret = env.JWT_PASSWORD_SECRET;
 
     generatePasswordResetToken(email: string): string {
-        return jwt.sign({ email }, this.secret, { expiresIn: '30m' })
+        return jwt.sign({ email }, this._secret, { expiresIn: '30m' })
     };
 
     verifyPasswordResetToken(token: string): PasswordTokenPayload {
-        return jwt.verify(token, this.secret) as PasswordTokenPayload
+        return jwt.verify(token, this._secret) as PasswordTokenPayload
     }
 }

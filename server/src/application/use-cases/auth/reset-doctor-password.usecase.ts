@@ -8,10 +8,10 @@ import { IResetDoctorPassword } from "../../ports/auth/IResetDoctorPassword";
 
 export class ResetDoctorPasswordUseCase implements IResetDoctorPassword {
     constructor(
-        private doctorRepository: IDoctorRepository,
-        private passwordTokenService: IPasswordTokenService,
-        private passwordService: IPasswordService,
-        private logger: ILogger
+        private _doctorRepository: IDoctorRepository,
+        private _passwordTokenService: IPasswordTokenService,
+        private _passwordService: IPasswordService,
+        private _logger: ILogger
     ) {}
 
     async execute(dto: ResetPasswordRequestDTO): Promise<void> {
@@ -20,22 +20,22 @@ export class ResetDoctorPasswordUseCase implements IResetDoctorPassword {
         let decoded: { email: string };
 
         try {
-            decoded = this.passwordTokenService.verifyPasswordResetToken(token);
+            decoded = this._passwordTokenService.verifyPasswordResetToken(token);
         } catch (error) {
             throw new UnauthorizedError("Invalid or expired verification token");
         }
 
-        const doctor = await this.doctorRepository.findByEmail(decoded.email);
+        const doctor = await this._doctorRepository.findByEmail(decoded.email);
         if(!doctor) {
             throw new NotFoundError("Doctor not found");
         }
 
-        const hashedPassword = await this.passwordService.hash(password);
+        const hashedPassword = await this._passwordService.hash(password);
 
         doctor.changePassword(hashedPassword);
 
-        await this.doctorRepository.update(doctor);
+        await this._doctorRepository.update(doctor);
 
-        this.logger.info("Doctor's password changed", { doctorId: doctor.id, email: doctor.email })
+        this._logger.info("Doctor's password changed", { doctorId: doctor.id, email: doctor.email })
     }
 }

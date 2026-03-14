@@ -6,11 +6,11 @@ import { injectable } from "inversify";
 
 @injectable()
 export class GoogleOAuthService implements IGoogleAuthService {
-    private client = new OAuth2Client(env.GOOGLE_CLIENT_ID);
+    private _client = new OAuth2Client(env.GOOGLE_CLIENT_ID);
 
 
     async verifyIdToken(token: string): Promise<GoogleAuthPayload> {
-        const ticket = await this.client.verifyIdToken({
+        const ticket = await this._client.verifyIdToken({
             idToken: token,
             audience: process.env.GOOGLE_CLIENT_ID
         })

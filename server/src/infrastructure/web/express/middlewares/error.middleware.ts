@@ -1,6 +1,6 @@
 import { ErrorRequestHandler } from "express";
 import { HttpError } from "../../../../shared/errors/HttpError";
-import { HttpStatus } from "../../../../shared/constants/httpStatus";
+import { HttpStatus } from "../../../../shared/constants/HttpStatus";
 import { ILogger } from "../../../../application/interfaces/ILogger";
 
 

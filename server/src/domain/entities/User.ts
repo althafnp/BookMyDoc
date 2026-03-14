@@ -19,11 +19,11 @@ export class User {
     // -------------------------
 
     // Block / unblock user 
-    block() {
-        this.status = "BLOCKED";
+    deactivate() {
+        this.status = "INACTIVE";
     }
 
-    unblock() {
+    activate() {
         this.status = "ACTIVE";
     }
 

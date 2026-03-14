@@ -8,27 +8,30 @@ import { BadRequestError } from "../../../shared/errors/HttpError";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { User } from "../../../domain/entities/User";
 import { IAppConfig } from "../../interfaces/IAppConfig";
+import { IWalletRepository } from "../../../domain/repositories/IWalletRepository";
+import { Wallet } from "../../../domain/entities/Wallet";
 
 
 export class SignupUserUseCase implements ISignupUser {
     constructor(
-        private userRepository: IUserRepository,
-        private passwordService: IPasswordService,
-        private emailVerificationTokenService: IEmailVerificationTokenService,
-        private emailService: IEmailService,
-        private appConfig: IAppConfig,
-        private logger: ILogger
+        private _userRepository: IUserRepository,
+        private _passwordService: IPasswordService,
+        private _walletRepository: IWalletRepository,
+        private _emailVerificationTokenService: IEmailVerificationTokenService,
+        private _emailService: IEmailService,
+        private _appConfig: IAppConfig,
+        private _logger: ILogger
     ) {}
 
     async execute(dto: SignupUserRequestDTO): Promise<void> {
         const { name, email, password } = dto;
 
-        const existingUser = await this.userRepository.findByEmail(email);
+        const existingUser = await this._userRepository.findByEmail(email);
         if(existingUser) {
             throw new BadRequestError('Validation failed', [{ field: 'email', message: 'User with this email already exists' }]);
         }
 
-        const hashedPassword = await this.passwordService.hash(password);
+        const hashedPassword = await this._passwordService.hash(password);
 
         const user = new User(
             '',
@@ -41,14 +44,21 @@ export class SignupUserUseCase implements ISignupUser {
             false,
         );
 
-        await this.userRepository.create(user);
+        const savedUser = await this._userRepository.create(user);
 
-        const emailVerificationToken = this.emailVerificationTokenService.generateEmailVerificationToken(user.email);
+        //Wallet creation for user
+        const wallet = new Wallet(
+            "",
+            savedUser.id
+        );
+        await this._walletRepository.create(wallet);
 
-        const emailVerificationLink = `${this.appConfig.frontendUrl}/auth/verify-email/${emailVerificationToken}`;
+        const emailVerificationToken = this._emailVerificationTokenService.generateEmailVerificationToken(user.email);
 
-        await this.emailService.sendVerificationEmail(user.email, emailVerificationLink);
+        const emailVerificationLink = `${this._appConfig.frontendUrl}/auth/verify-email/${emailVerificationToken}`;
 
-        this.logger.info("User registered successfully", { email })
+        await this._emailService.sendVerificationEmail(user.email, emailVerificationLink);
+
+        this._logger.info("User registered successfully", { email })
     }
 }

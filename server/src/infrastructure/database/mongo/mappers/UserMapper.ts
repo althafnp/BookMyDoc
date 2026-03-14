@@ -12,7 +12,7 @@ export class UserMapper extends BaseMapper<User, IUser> {
             raw.password,
             raw.providers,
             raw.role,
-            raw.isBlocked,
+            raw.status,
             raw.emailVerified,
             raw.googleId,
             raw.profileImage
@@ -26,7 +26,7 @@ export class UserMapper extends BaseMapper<User, IUser> {
             password: domain.getPassword(),
             providers: domain.providers,
             role: domain.role,
-            isBlocked: domain.isBlocked,
+            status: domain.status,
             emailVerified: domain.emailVerified,
             googleId: domain.googleId,
             profileImage: domain.profileImage

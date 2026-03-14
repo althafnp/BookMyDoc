@@ -15,7 +15,7 @@ export class DoctorMapper extends BaseMapper<Doctor, IDoctor> {
             raw.qualification,
             raw.experience,
             raw.consultationFee,
-            raw.isActive,
+            raw.status,
             raw.role
         )
     }
@@ -30,7 +30,7 @@ export class DoctorMapper extends BaseMapper<Doctor, IDoctor> {
             qualification: domain.qualification,
             experience: domain.experience,
             consultationFee: domain.consultationFee,
-            isActive: domain.isActive,
+            status: domain.status,
             role: domain.role
         }
     }

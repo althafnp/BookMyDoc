@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../../di/types";
 import { ISignupUser } from "../../application/ports/auth/ISignupUser";
 import { forgotPasswordSchema, loginSchema, resetPasswordSchema, signupSchema, verifyEmailSchema } from "../validators/auth.validator";
-import { HttpStatus } from "../../shared/constants/httpStatus";
+import { HttpStatus } from "../../shared/constants/HttpStatus";
 import { ApiResponse } from "../../shared/utils/ApiResponse";
 import { parseWithZod } from "../validators/zod-error.validator";
 import { ForgotPasswordRequestDTO, LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, ResetPasswordRequestDTO, SignupUserRequestDTO, VerifyEmailRequestDTO } from "../../application/dtos/auth";
@@ -21,37 +21,37 @@ import { asyncHandler } from "../../shared/utils/asyncHandler";
 export class AuthController {
     constructor(
         @inject(TYPES.ISignupUser)
-        private signupUserUseCase: ISignupUser,
+        private _signupUserUseCase: ISignupUser,
 
         @inject(TYPES.IVerifyEmail)
-        private verifyEmailUseCase: IVerifyEmail,
+        private _verifyEmailUseCase: IVerifyEmail,
 
         @inject(TYPES.ILoginUser)
-        private loginUserUseCase: ILoginUser,
+        private _loginUserUseCase: ILoginUser,
 
         @inject(TYPES.IGoogleAuth)
-        private googleAuthUseCase: IGoogleAuth,
+        private _googleAuthUseCase: IGoogleAuth,
 
         @inject(TYPES.IRefreshToken)
-        private refreshTokenUseCase: IRefreshToken,
+        private _refreshTokenUseCase: IRefreshToken,
 
         @inject(TYPES.ILoginAdmin)
-        private loginAdminUseCase: ILoginAdmin,
+        private _loginAdminUseCase: ILoginAdmin,
 
         @inject(TYPES.ILoginDoctor)
-        private loginDoctorUseCase: ILoginDoctor,
+        private _loginDoctorUseCase: ILoginDoctor,
 
         @inject(TYPES.IForgotDoctorPassword)
-        private forgotDoctorPasswordUseCase: IForgotDoctorPassword,
+        private _forgotDoctorPasswordUseCase: IForgotDoctorPassword,
 
         @inject(TYPES.IResetDoctorPassword)
-        private resetDoctorPasswordUseCase: IResetDoctorPassword,
+        private _resetDoctorPasswordUseCase: IResetDoctorPassword,
     ) { }
 
     signupUser = asyncHandler(async (req, res) => {
         const dto = parseWithZod<SignupUserRequestDTO>(signupSchema, req.body);
 
-        await this.signupUserUseCase.execute(dto);
+        await this._signupUserUseCase.execute(dto);
 
         res.status(HttpStatus.CREATED).json(ApiResponse.success("Registration successfull"));
     })
@@ -59,7 +59,7 @@ export class AuthController {
     verifyEmail = asyncHandler(async (req, res) => {
         const dto = parseWithZod<VerifyEmailRequestDTO>(verifyEmailSchema, req.params);
         
-        await this.verifyEmailUseCase.execute(dto);
+        await this._verifyEmailUseCase.execute(dto);
         
         res.status(HttpStatus.OK).json(ApiResponse.success("Email verified successfully, login to access account"))
     })
@@ -68,7 +68,7 @@ export class AuthController {
     loginUser = asyncHandler(async (req, res,) => {
         const dto = parseWithZod<LoginUserRequestDTO>(loginSchema, req.body);
 
-        const { user, accessToken, refreshToken } = await this.loginUserUseCase.execute(dto);
+        const { user, accessToken, refreshToken } = await this._loginUserUseCase.execute(dto);
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
@@ -94,7 +94,7 @@ export class AuthController {
     googleAuth = asyncHandler(async (req, res) => {
         const { token } = req.body;
         
-        const { user, accessToken, refreshToken } = await this.googleAuthUseCase.execute(token);
+        const { user, accessToken, refreshToken } = await this._googleAuthUseCase.execute(token);
         
         
         res.cookie("refreshToken", refreshToken, {
@@ -125,7 +125,7 @@ export class AuthController {
     refreshToken = asyncHandler(async (req, res) => {
         const token = req.cookies.refreshToken;
         
-        const { accessToken, user } = await this.refreshTokenUseCase.execute(token);
+        const { accessToken, user } = await this._refreshTokenUseCase.execute(token);
         
         res.status(HttpStatus.OK).json(ApiResponse.success(
             "Token refreshed",
@@ -138,7 +138,7 @@ export class AuthController {
     loginAdmin = asyncHandler(async (req, res) => {
         const dto = parseWithZod<LoginAdminRequestDTO>(loginSchema, req.body);
 
-        const { admin, accessToken, refreshToken } = await this.loginAdminUseCase.execute(dto);
+        const { admin, accessToken, refreshToken } = await this._loginAdminUseCase.execute(dto);
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
@@ -163,7 +163,7 @@ export class AuthController {
     loginDoctor = asyncHandler(async (req, res) => {
         const dto = parseWithZod<LoginDoctorRequestDTO>(loginSchema, req.body);
         
-        const { doctor, accessToken, refreshToken } = await this.loginDoctorUseCase.execute(dto);
+        const { doctor, accessToken, refreshToken } = await this._loginDoctorUseCase.execute(dto);
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
@@ -187,7 +187,7 @@ export class AuthController {
     forgotDoctorPassword = asyncHandler(async (req, res) => {
         const dto = parseWithZod<ForgotPasswordRequestDTO>(forgotPasswordSchema, req.body);
         
-        await this.forgotDoctorPasswordUseCase.execute(dto);
+        await this._forgotDoctorPasswordUseCase.execute(dto);
         
         res.status(HttpStatus.OK).json(ApiResponse.success(
             "Please check your email to reset the password",
@@ -200,7 +200,7 @@ export class AuthController {
             ...req.body
         });
         
-        await this.resetDoctorPasswordUseCase.execute({
+        await this._resetDoctorPasswordUseCase.execute({
             token: parsed.token,
             password: parsed.password
         });

@@ -6,8 +6,8 @@ import { IRefreshToken } from "../../ports/auth/IRefreshToken";
 
 export class RefreshTokenUseCase implements IRefreshToken {
     constructor(
-        private authTokenService: IAuthTokenService,
-        private userLookupService: IUserLookupService,
+        private _authTokenService: IAuthTokenService,
+        private _userLookupService: IUserLookupService,
     ) { }
 
     async execute(token: string): Promise<RefreshTokenResponseDTO> {
@@ -16,14 +16,14 @@ export class RefreshTokenUseCase implements IRefreshToken {
         }
 
         try {
-            const payload = this.authTokenService.verifyRefreshToken(token);
+            const payload = this._authTokenService.verifyRefreshToken(token);
 
-            const user = await this.userLookupService.findByIdAndRole(payload.id, payload.role);
+            const user = await this._userLookupService.findByIdAndRole(payload.id, payload.role);
             if(!user) {
                 throw new UnauthorizedError('User not found');
             };
 
-            const accessToken = this.authTokenService.generateAccessToken({ id: payload.id, role: payload.role });
+            const accessToken = this._authTokenService.generateAccessToken({ id: payload.id, role: payload.role });
 
             return { accessToken, user };
         } catch {

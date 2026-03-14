@@ -9,16 +9,16 @@ import { ILoginUser } from "../../ports/auth/ILoginUser";
 
 export class LoginUserUseCase implements ILoginUser {
     constructor(
-        private userRepository: IUserRepository,
-        private authTokenService: IAuthTokenService,
-        private passwordService: IPasswordService,
-        private logger: ILogger
+        private _userRepository: IUserRepository,
+        private _authTokenService: IAuthTokenService,
+        private _passwordService: IPasswordService,
+        private _logger: ILogger
     ) { }
 
     async execute(dto: LoginUserRequestDTO): Promise<LoginUserResponseDTO> {
         const { email, password } = dto;
 
-        const user = await this.userRepository.findByEmail(email);
+        const user = await this._userRepository.findByEmail(email);
         if (!user) {
             throw new NotFoundError('Validation failed', [{ field: 'email', message: 'User not found' }])
         };
@@ -31,7 +31,7 @@ export class LoginUserUseCase implements ILoginUser {
             throw new BadRequestError('Invalid credentials')
         }
 
-        const isMatch = await this.passwordService.compare(password, user.getPassword()!)
+        const isMatch = await this._passwordService.compare(password, user.getPassword()!)
         if (!isMatch) {
             throw new UnauthorizedError('Validation failed', [{ field: 'password', message: 'Incorrect password' }])
         };
@@ -40,14 +40,14 @@ export class LoginUserUseCase implements ILoginUser {
             throw new BadRequestError('Validation failed', [{ field: 'email', message: 'Verify your email to log in' }])
         }
 
-        if (user.isBlocked) {
+        if (user.status === "INACTIVE") {
             throw new BadRequestError('Validation failed', [{ field: 'email', message: 'User is currently blocked' }])
         }
 
-        const accessToken = this.authTokenService.generateAccessToken({ id: user.id, role: user.role });
-        const refreshToken = this.authTokenService.generateRefreshToken({ id: user.id, role: user.role });
+        const accessToken = this._authTokenService.generateAccessToken({ id: user.id, role: user.role });
+        const refreshToken = this._authTokenService.generateRefreshToken({ id: user.id, role: user.role });
 
-        this.logger.info("User logged in", { user })
+        this._logger.info("User logged in", { user })
 
         return {
             user: UserResponseMapper.toDTO(user),

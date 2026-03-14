@@ -24,7 +24,7 @@ export class Doctor {
     }
 
     deactivate() {
-        this.status = "BLOCKED";
+        this.status = "INACTIVE";
     }
 
     activate() {
