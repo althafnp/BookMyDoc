@@ -24,7 +24,7 @@ const AdminSchema = new Schema<IAdmin>(
             default: 'ADMIN'
         },
     }
-)
+);
 
 
 export const AdminModel = model<IAdmin>('Admin', AdminSchema);

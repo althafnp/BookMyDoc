@@ -1,4 +1,5 @@
 import { IAdminRepository } from "../../../domain/repositories/IAdminRepository";
+import { ADMIN_ERRORS, AUTH_ERRORS, LOG_MESSAGES, VALIDATION } from "../../../shared/constants/Messages";
 import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
 import { LoginAdminRequestDTO, LoginAdminResponseDTO } from "../../dtos/auth";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
@@ -18,23 +19,23 @@ export class LoginAdminUseCase implements ILoginAdmin {
 
         const admin = await this._adminRepository.findByEmail(email);
         if(!admin) {
-            throw new NotFoundError('Validation failed', [{ field: 'email', message: 'Admin not found' }]);
+            throw new NotFoundError(VALIDATION.VALIDATION_FAILED, [{ field: 'email', message: ADMIN_ERRORS.ADMIN_NOT_FOUND }]);
         }
 
 
         if(password !== admin.getPassword()) {
-            throw new UnauthorizedError('Validation failed', [{ field: 'password', message: 'Incorrect password' }])
+            throw new UnauthorizedError(VALIDATION.VALIDATION_FAILED, [{ field: 'password', message: AUTH_ERRORS.INCORRECT_PASSWORD }]);
         };
 
         const accessToken = this._authTokenService.generateAccessToken({ id: admin.id, role: admin.role });
         const refreshToken = this._authTokenService.generateRefreshToken({ id: admin.id, role: admin.role });
 
-        this._logger.info("Admin logged in", { admin });
+        this._logger.info(LOG_MESSAGES.ADMIN_LOGGED_IN, { admin });
 
         return {
             admin: AdminResponseMapper.toDTO(admin),
             accessToken,
             refreshToken 
-        }
+        };
     }
 }

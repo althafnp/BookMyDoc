@@ -7,6 +7,6 @@ export class AdminResponseMapper {
             id: admin.id,
             email: admin.email,
             role: admin.role,
-        }
+        };
     }
 }

@@ -2,6 +2,7 @@ import { ErrorRequestHandler } from "express";
 import { HttpError } from "../../../../shared/errors/HttpError";
 import { HttpStatus } from "../../../../shared/constants/HttpStatus";
 import { ILogger } from "../../../../application/interfaces/ILogger";
+import { SERVER_ERRORS } from "../../../../shared/constants/Messages";
 
 
 export const createErrorMiddleware = (logger: ILogger): ErrorRequestHandler => {
@@ -9,7 +10,7 @@ export const createErrorMiddleware = (logger: ILogger): ErrorRequestHandler => {
     return (err, req, res, next) => {
 
         if(err instanceof HttpError) {
-            console.log('from middleware', err)
+            console.log('from middleware', err);
             const response: any = {
                 success: false,
                 message: err.message,
@@ -25,23 +26,23 @@ export const createErrorMiddleware = (logger: ILogger): ErrorRequestHandler => {
                 method: req.method,
                 path: req.originalUrl,
                 errors: err.details
-            })
+            });
     
-            res.status(err.statusCode).json(response)
-            return
+            res.status(err.statusCode).json(response);
+            return;
         }
     
 
         // console.error("Unexpected Error:", err);
         // Unknown / unexpected errors
-        logger.error("Unexpected server error", {
+        logger.error(SERVER_ERRORS.SERVER_ERROR, {
             message: err.message,
             stack: err.stack,
             method: req.method,
             path: req.originalUrl,
         });
     
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ success: false, message: "Internal Server Error"})
-    }
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ success: false, message: SERVER_ERRORS.UNEXPECTED_ERROR});
+    };
 
-}
+};

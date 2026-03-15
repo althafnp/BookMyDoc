@@ -1,5 +1,5 @@
 import { AuthTokenPayload, IAuthTokenService } from "../../../application/interfaces/IAuthTokenService";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { env } from "../../config/env";
 import { injectable } from "inversify";
 
@@ -11,7 +11,7 @@ export class JwtAuthTokenService implements IAuthTokenService{
 
 
     generateAccessToken(payload: AuthTokenPayload): string {
-        return jwt.sign(payload, this._accessSecret, { expiresIn: '15m' })
+        return jwt.sign(payload, this._accessSecret, { expiresIn: '15m' });
     }
 
     verifyAccessToken(token: string): AuthTokenPayload {

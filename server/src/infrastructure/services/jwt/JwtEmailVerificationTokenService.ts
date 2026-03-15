@@ -9,10 +9,10 @@ export class JwtEmailVerificationTokenService implements IEmailVerificationToken
     private _secret = env.JWT_EMAIL_SECRET;
 
     generateEmailVerificationToken(email: string): string {
-        return jwt.sign({ email }, this._secret, { expiresIn: '30m' })
+        return jwt.sign({ email }, this._secret, { expiresIn: '30m' });
     }
 
     verifyEmailVerificationToken(token: string): EmailVerificationTokenPayload {
-        return jwt.verify(token, this._secret) as EmailVerificationTokenPayload
+        return jwt.verify(token, this._secret) as EmailVerificationTokenPayload;
     }
 }

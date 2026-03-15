@@ -6,7 +6,7 @@ export class Wallet {
         public userId: string,
         balance: number = 0
     ) {
-        this._balance = balance
+        this._balance = balance;
     }
 
     get balance(): number {

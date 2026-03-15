@@ -29,4 +29,4 @@ export const TYPES = {
     ILoginDoctor: Symbol.for("ILoginDoctor"),
     IForgotDoctorPassword: Symbol.for("IForgotDoctorPassword"),
     IResetDoctorPassword: Symbol.for("IResetDoctorPassword"),
-}
+};

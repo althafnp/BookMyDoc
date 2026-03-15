@@ -10,6 +10,7 @@ import { User } from "../../../domain/entities/User";
 import { IAppConfig } from "../../interfaces/IAppConfig";
 import { IWalletRepository } from "../../../domain/repositories/IWalletRepository";
 import { Wallet } from "../../../domain/entities/Wallet";
+import { LOG_MESSAGES, USER_ERRORS, VALIDATION } from "../../../shared/constants/Messages";
 
 
 export class SignupUserUseCase implements ISignupUser {
@@ -28,7 +29,7 @@ export class SignupUserUseCase implements ISignupUser {
 
         const existingUser = await this._userRepository.findByEmail(email);
         if(existingUser) {
-            throw new BadRequestError('Validation failed', [{ field: 'email', message: 'User with this email already exists' }]);
+            throw new BadRequestError(VALIDATION.VALIDATION_FAILED, [{ field: 'email', message: USER_ERRORS.EMAIL_ALREADY_EXISTS }]);
         }
 
         const hashedPassword = await this._passwordService.hash(password);
@@ -59,6 +60,6 @@ export class SignupUserUseCase implements ISignupUser {
 
         await this._emailService.sendVerificationEmail(user.email, emailVerificationLink);
 
-        this._logger.info("User registered successfully", { email })
+        this._logger.info(LOG_MESSAGES.USER_REGISTERED, { email });
     }
 }

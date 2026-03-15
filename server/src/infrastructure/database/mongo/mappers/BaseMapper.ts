@@ -6,6 +6,6 @@ export abstract class BaseMapper<Domain, Persistence> {
     }
 
     public static toObjectId(id: string): Types.ObjectId {
-        return new Types.ObjectId(id)
+        return new Types.ObjectId(id);
     }
 }

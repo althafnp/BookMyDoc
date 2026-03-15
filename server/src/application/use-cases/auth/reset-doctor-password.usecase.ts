@@ -1,4 +1,5 @@
 import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
+import { AUTH_ERRORS, DOCTOR_ERRORS, LOG_MESSAGES } from "../../../shared/constants/Messages";
 import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
 import { ResetPasswordRequestDTO } from "../../dtos/auth";
 import { ILogger } from "../../interfaces/ILogger";
@@ -21,13 +22,13 @@ export class ResetDoctorPasswordUseCase implements IResetDoctorPassword {
 
         try {
             decoded = this._passwordTokenService.verifyPasswordResetToken(token);
-        } catch (error) {
-            throw new UnauthorizedError("Invalid or expired verification token");
+        } catch {
+            throw new UnauthorizedError(AUTH_ERRORS.INVALID_OR_EXPIRED_TOKEN);
         }
 
         const doctor = await this._doctorRepository.findByEmail(decoded.email);
         if(!doctor) {
-            throw new NotFoundError("Doctor not found");
+            throw new NotFoundError(DOCTOR_ERRORS.DOCTOR_NOT_FOUND);
         }
 
         const hashedPassword = await this._passwordService.hash(password);
@@ -36,6 +37,6 @@ export class ResetDoctorPasswordUseCase implements IResetDoctorPassword {
 
         await this._doctorRepository.update(doctor);
 
-        this._logger.info("Doctor's password changed", { doctorId: doctor.id, email: doctor.email })
+        this._logger.info(LOG_MESSAGES.DOCTOR_PASSWORD_CHANGED, { doctorId: doctor.id, email: doctor.email });
     }
 }

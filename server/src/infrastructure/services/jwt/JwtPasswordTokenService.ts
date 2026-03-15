@@ -9,10 +9,10 @@ export class JwtPasswordTokenService implements IPasswordTokenService {
     private _secret = env.JWT_PASSWORD_SECRET;
 
     generatePasswordResetToken(email: string): string {
-        return jwt.sign({ email }, this._secret, { expiresIn: '30m' })
+        return jwt.sign({ email }, this._secret, { expiresIn: '30m' });
     };
 
     verifyPasswordResetToken(token: string): PasswordTokenPayload {
-        return jwt.verify(token, this._secret) as PasswordTokenPayload
+        return jwt.verify(token, this._secret) as PasswordTokenPayload;
     }
 }

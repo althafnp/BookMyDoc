@@ -16,6 +16,7 @@ import { ILoginDoctor } from "../../application/ports/auth/ILoginDoctor";
 import { IForgotDoctorPassword } from "../../application/ports/auth/IForgotDoctorPassword";
 import { IResetDoctorPassword } from "../../application/ports/auth/IResetDoctorPassword";
 import { asyncHandler } from "../../shared/utils/asyncHandler";
+import { AUTH_SUCCESS } from "../../shared/constants/Messages";
 
 @injectable()
 export class AuthController {
@@ -53,16 +54,16 @@ export class AuthController {
 
         await this._signupUserUseCase.execute(dto);
 
-        res.status(HttpStatus.CREATED).json(ApiResponse.success("Registration successfull"));
-    })
+        res.status(HttpStatus.CREATED).json(ApiResponse.success(AUTH_SUCCESS.REGISTRATION_SUCCESSFUL));
+    });
 
     verifyEmail = asyncHandler(async (req, res) => {
         const dto = parseWithZod<VerifyEmailRequestDTO>(verifyEmailSchema, req.params);
         
         await this._verifyEmailUseCase.execute(dto);
         
-        res.status(HttpStatus.OK).json(ApiResponse.success("Email verified successfully, login to access account"))
-    })
+        res.status(HttpStatus.OK).json(ApiResponse.success(AUTH_SUCCESS.EMAIL_VERIFIED));
+    });
         
 
     loginUser = asyncHandler(async (req, res,) => {
@@ -80,13 +81,13 @@ export class AuthController {
         const data = {
             user,
             accessToken
-        }
+        };
 
         res.status(HttpStatus.OK).json(ApiResponse.success(
-            "User logged in successfully",
+            AUTH_SUCCESS.USER_LOGGED_IN,
             data
-        ))
-    })
+        ));
+    });
 
 
 
@@ -94,7 +95,7 @@ export class AuthController {
     googleAuth = asyncHandler(async (req, res) => {
         const { token } = req.body;
         
-        const { user, accessToken, refreshToken } = await this._googleAuthUseCase.execute(token);
+        const { user, accessToken, refreshToken } = await this._googleAuthUseCase.execute({ token });
         
         
         res.cookie("refreshToken", refreshToken, {
@@ -110,16 +111,16 @@ export class AuthController {
         };
         
         res.status(HttpStatus.OK).json(ApiResponse.success(
-            "User logged in with Google",
+            AUTH_SUCCESS.GOOGLE_LOGIN,
             data
         ));
-    })
+    });
 
     logout = asyncHandler(async (req, res) => {
         res.clearCookie("refreshToken");
         
-        res.status(HttpStatus.OK).json(ApiResponse.success("Logged out successfully"));
-    })
+        res.status(HttpStatus.OK).json(ApiResponse.success(AUTH_SUCCESS.LOGGED_OUT));
+    });
 
 
     refreshToken = asyncHandler(async (req, res) => {
@@ -128,10 +129,10 @@ export class AuthController {
         const { accessToken, user } = await this._refreshTokenUseCase.execute(token);
         
         res.status(HttpStatus.OK).json(ApiResponse.success(
-            "Token refreshed",
+            AUTH_SUCCESS.TOKEN_REFRESHED,
             { accessToken, user }
         ));
-    })
+    });
 
 
     //Admin
@@ -150,13 +151,13 @@ export class AuthController {
         const data = {
             admin,
             accessToken
-        }
+        };
 
         res.status(HttpStatus.OK).json(ApiResponse.success(
-            "Admin logged in",
+            AUTH_SUCCESS.ADMIN_LOGGED_IN,
             data
-        ))
-    })
+        ));
+    });
 
 
     //Doctor
@@ -175,13 +176,13 @@ export class AuthController {
         const data = {
             doctor,
             accessToken
-        }
+        };
         
         res.status(HttpStatus.OK).json(ApiResponse.success(
-            "Doctor logged in",
+            AUTH_SUCCESS.DOCTOR_LOGGED_IN,
             data
         ));
-    })
+    });
 
 
     forgotDoctorPassword = asyncHandler(async (req, res) => {
@@ -190,9 +191,9 @@ export class AuthController {
         await this._forgotDoctorPasswordUseCase.execute(dto);
         
         res.status(HttpStatus.OK).json(ApiResponse.success(
-            "Please check your email to reset the password",
+            AUTH_SUCCESS.PASSWORD_RESET_EMAIL_SENT,
         ));
-    })
+    });
 
     resetDoctorPassword = asyncHandler(async (req, res) => {
         const parsed = parseWithZod<ResetPasswordRequestDTO>(resetPasswordSchema, {
@@ -206,8 +207,8 @@ export class AuthController {
         });
         
         res.status(HttpStatus.OK).json(
-            ApiResponse.success("Password reset successful")
+            ApiResponse.success(AUTH_SUCCESS.PASSWORD_RESET_SUCCESSFUL)
         );
-    })
+    });
 
 }

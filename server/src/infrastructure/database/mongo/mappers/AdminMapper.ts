@@ -1,6 +1,6 @@
-import { Admin } from "../../../../domain/entities/Admin"
-import { IAdmin } from "../models/admin.schema"
-import { BaseMapper } from "./BaseMapper"
+import { Admin } from "../../../../domain/entities/Admin";
+import { IAdmin } from "../models/admin.schema";
+import { BaseMapper } from "./BaseMapper";
 
 
 export class AdminMapper extends BaseMapper<Admin, IAdmin> {
@@ -10,7 +10,7 @@ export class AdminMapper extends BaseMapper<Admin, IAdmin> {
             raw.email,
             raw.password,
             raw.role
-        )
+        );
     }
 
     static toPersistence(domain: Admin): Partial<IAdmin> {
@@ -18,6 +18,6 @@ export class AdminMapper extends BaseMapper<Admin, IAdmin> {
             email: domain.email,
             password: domain.getPassword(),
             role: domain.role
-        }
+        };
     }
 }

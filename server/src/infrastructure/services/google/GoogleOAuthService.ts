@@ -2,6 +2,7 @@ import { OAuth2Client } from "google-auth-library";
 import { env } from "../../config/env";
 import { GoogleAuthPayload, IGoogleAuthService } from "../../../application/interfaces/IGoogleAuthService";
 import { injectable } from "inversify";
+import { AUTH_ERRORS } from "../../../shared/constants/Messages";
 
 
 @injectable()
@@ -13,10 +14,10 @@ export class GoogleOAuthService implements IGoogleAuthService {
         const ticket = await this._client.verifyIdToken({
             idToken: token,
             audience: process.env.GOOGLE_CLIENT_ID
-        })
+        });
 
         const payload = ticket.getPayload();
-        if (!payload) throw new Error('Invalid Google token');
+        if (!payload) throw new Error(AUTH_ERRORS.INVALID_GOOGLE_TOKEN);
 
         return {
             googleId: payload.sub,
@@ -24,6 +25,6 @@ export class GoogleOAuthService implements IGoogleAuthService {
             name: payload.name!,
             picture: payload.picture,
             emailVerified: payload.email_verified ?? false
-        }
+        };
     }
 }

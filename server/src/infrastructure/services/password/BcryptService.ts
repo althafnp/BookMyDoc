@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IPasswordService } from "../../../application/interfaces/IPasswordService";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 
 
 @injectable()

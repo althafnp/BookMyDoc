@@ -1,5 +1,5 @@
 import { IEmailService } from "../../../application/interfaces/IEmailService";
-import nodemailer, { Transporter} from "nodemailer"
+import nodemailer, { Transporter} from "nodemailer";
 import { env } from "../../config/env";
 import { injectable } from "inversify";
 
@@ -54,7 +54,7 @@ export class NodeMailerService implements IEmailService{
             `
         };
 
-        await this._transporter.sendMail(mailOptions)
+        await this._transporter.sendMail(mailOptions);
     }
 
 
@@ -91,6 +91,6 @@ export class NodeMailerService implements IEmailService{
             `
         };
 
-        await this._transporter.sendMail(mailOptions)
+        await this._transporter.sendMail(mailOptions);
     }
 }

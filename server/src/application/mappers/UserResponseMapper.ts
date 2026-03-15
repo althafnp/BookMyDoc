@@ -9,6 +9,6 @@ export class UserResponseMapper {
             email: user.email,
             role: user.role,
             profileImage: user.profileImage,
-        }
+        };
     }
 }

@@ -17,7 +17,7 @@ export class DoctorMapper extends BaseMapper<Doctor, IDoctor> {
             raw.consultationFee,
             raw.status,
             raw.role
-        )
+        );
     }
 
     static toPersistence(domain: Doctor): Partial<IDoctor> {
@@ -32,6 +32,6 @@ export class DoctorMapper extends BaseMapper<Doctor, IDoctor> {
             consultationFee: domain.consultationFee,
             status: domain.status,
             role: domain.role
-        }
+        };
     }
 }

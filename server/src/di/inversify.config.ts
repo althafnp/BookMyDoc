@@ -109,8 +109,8 @@ container.bind<ISignupUser>(TYPES.ISignupUser).toDynamicValue((ctx) => {
         ctx.get(TYPES.IEmailService),
         ctx.get(TYPES.IAppConfig),
         ctx.get(TYPES.ILogger),
-    )
-})
+    );
+});
 
 
 container.bind<IVerifyEmail>(TYPES.IVerifyEmail).toDynamicValue((ctx) => {
@@ -118,7 +118,7 @@ container.bind<IVerifyEmail>(TYPES.IVerifyEmail).toDynamicValue((ctx) => {
         ctx.get(TYPES.IUserRepository),
         ctx.get(TYPES.IEmailVerificationTokenService),
         ctx.get(TYPES.ILogger),
-    )
+    );
 });
 
 container.bind<ILoginUser>(TYPES.ILoginUser).toDynamicValue((ctx) => {
@@ -127,8 +127,8 @@ container.bind<ILoginUser>(TYPES.ILoginUser).toDynamicValue((ctx) => {
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.ILogger),
-    )
-})
+    );
+});
 
 container.bind<IGoogleAuth>(TYPES.IGoogleAuth).toDynamicValue((ctx) => {
     return new GoogleAuthUseCase(
@@ -136,14 +136,15 @@ container.bind<IGoogleAuth>(TYPES.IGoogleAuth).toDynamicValue((ctx) => {
         ctx.get(TYPES.IWalletRepository),
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IGoogleAuthService),
-    )
-})
+        ctx.get(TYPES.ILogger)
+    );
+});
 
 container.bind<IRefreshToken>(TYPES.IRefreshToken).toDynamicValue((ctx) => {
     return new RefreshTokenUseCase(
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IUserLookupService)
-    )
+    );
 });
 
 
@@ -152,8 +153,8 @@ container.bind<ILoginAdmin>(TYPES.ILoginAdmin).toDynamicValue((ctx) => {
         ctx.get(TYPES.IAdminRepository),
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.ILogger)
-    )
-})
+    );
+});
 
 
 container.bind<ILoginDoctor>(TYPES.ILoginDoctor).toDynamicValue((ctx) => {
@@ -162,8 +163,8 @@ container.bind<ILoginDoctor>(TYPES.ILoginDoctor).toDynamicValue((ctx) => {
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.ILogger)
-    )
-})
+    );
+});
 
 container.bind<IForgotDoctorPassword>(TYPES.IForgotDoctorPassword).toDynamicValue((ctx) => {
     return new ForgotDoctorPasswordUseCase(
@@ -171,8 +172,8 @@ container.bind<IForgotDoctorPassword>(TYPES.IForgotDoctorPassword).toDynamicValu
         ctx.get(TYPES.IPasswordTokenService),
         ctx.get(TYPES.IAppConfig),
         ctx.get(TYPES.IEmailService)
-    )
-})
+    );
+});
 
 container.bind<IResetDoctorPassword>(TYPES.IResetDoctorPassword).toDynamicValue((ctx) => {
     return new ResetDoctorPasswordUseCase(
@@ -180,11 +181,11 @@ container.bind<IResetDoctorPassword>(TYPES.IResetDoctorPassword).toDynamicValue(
         ctx.get(TYPES.IPasswordTokenService),
         ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.ILogger)
-    )
-})
+    );
+});
 
 
 //controllers
-container.bind(AuthController).toSelf()
+container.bind(AuthController).toSelf();
 
 export { container };

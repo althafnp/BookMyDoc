@@ -1,4 +1,5 @@
 import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
+import { DOCTOR_ERRORS } from "../../../shared/constants/Messages";
 import { NotFoundError } from "../../../shared/errors/HttpError";
 import { ForgotPasswordRequestDTO } from "../../dtos/auth";
 import { IAppConfig } from "../../interfaces/IAppConfig";
@@ -19,7 +20,7 @@ export class ForgotDoctorPasswordUseCase implements IForgotDoctorPassword {
         
         const doctor = await this._doctorRepository.findByEmail(email);
         if(!doctor) {
-            throw new NotFoundError('Email not found');
+            throw new NotFoundError(DOCTOR_ERRORS.EMAIL_NOT_FOUND);
         }
 
         const resetToken = this._passwordTokenService.generatePasswordResetToken(doctor.email);

@@ -63,7 +63,7 @@ const DoctorSchema: Schema = new Schema<IDoctor>(
         }
     },
     { timestamps: true }
-)
+);
 
 
 export const DoctorModel = model<IDoctor>("Doctor", DoctorSchema);

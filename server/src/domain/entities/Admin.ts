@@ -9,6 +9,6 @@ export class Admin {
     ) {}
 
     getPassword(): string {
-        return this.password
+        return this.password;
     }
 }
