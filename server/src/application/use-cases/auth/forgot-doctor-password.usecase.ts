@@ -19,14 +19,12 @@ export class ForgotDoctorPasswordUseCase implements IForgotDoctorPassword {
         const { email } = dto;
         
         const doctor = await this._doctorRepository.findByEmail(email);
-        if(!doctor) {
-            throw new NotFoundError(DOCTOR_ERRORS.EMAIL_NOT_FOUND);
+        if(doctor) {
+            const resetToken = this._passwordTokenService.generatePasswordResetToken(doctor.email);
+            
+            const resetLink = `${this._appConfig.frontendUrl}/doctor/auth/reset-password/${resetToken}`;
+            
+            await this._emailService.sendPasswordResetVerificationEmail(doctor.email, resetLink);
         }
-
-        const resetToken = this._passwordTokenService.generatePasswordResetToken(doctor.email);
-
-        const resetLink = `${this._appConfig.frontendUrl}/doctor/auth/reset-password/${resetToken}`;
-
-        await this._emailService.sendPasswordResetVerificationEmail(doctor.email, resetLink);
     }
 }

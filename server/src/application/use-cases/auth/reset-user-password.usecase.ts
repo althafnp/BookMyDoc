@@ -1,22 +1,22 @@
-import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
-import { AUTH_ERRORS, DOCTOR_ERRORS, LOG_MESSAGES } from "../../../shared/constants/Messages";
-import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
+import { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import { AUTH_ERRORS, LOG_MESSAGES } from "../../../shared/constants/Messages";
+import { UnauthorizedError } from "../../../shared/errors/HttpError";
 import { ResetPasswordRequestDTO } from "../../dtos/auth";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { IPasswordTokenService } from "../../interfaces/IPasswordTokenService";
-import { IResetDoctorPassword } from "../../ports/auth/IResetDoctorPassword";
+import { IResetUserPassword } from "../../ports/auth/IResetUserPassword";
 
-export class ResetDoctorPasswordUseCase implements IResetDoctorPassword {
+export class ResetUserPasswordUseCase implements IResetUserPassword {
     constructor(
-        private _doctorRepository: IDoctorRepository,
+        private _userRepository: IUserRepository,
         private _passwordTokenService: IPasswordTokenService,
         private _passwordService: IPasswordService,
         private _logger: ILogger
     ) {}
 
     async execute(dto: ResetPasswordRequestDTO): Promise<void> {
-        const { token, password } = dto;
+        const { password, token } = dto;
 
         let decoded: { email: string };
 
@@ -26,17 +26,17 @@ export class ResetDoctorPasswordUseCase implements IResetDoctorPassword {
             throw new UnauthorizedError(AUTH_ERRORS.INVALID_OR_EXPIRED_TOKEN);
         }
 
-        const doctor = await this._doctorRepository.findByEmail(decoded.email);
-        if(!doctor) {
+        const user = await this._userRepository.findByEmail(decoded.email);
+        if(!user) {
             throw new UnauthorizedError(AUTH_ERRORS.INVALID_OR_EXPIRED_TOKEN);
         }
 
         const hashedPassword = await this._passwordService.hash(password);
 
-        doctor.changePassword(hashedPassword);
+        user.changePassword(hashedPassword);
 
-        await this._doctorRepository.update(doctor);
+        await this._userRepository.update(user);
 
-        this._logger.info(LOG_MESSAGES.PASSWORD_CHANGED, { doctorId: doctor.id, email: doctor.email });
+        this._logger.info(LOG_MESSAGES.PASSWORD_CHANGED, { userId: user.id, email: user.email });
     }
 }

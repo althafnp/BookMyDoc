@@ -60,7 +60,7 @@ export const AUTH_SUCCESS = {
     TOKEN_REFRESHED: "Token refreshed",
     ADMIN_LOGGED_IN: "Admin logged in",
     DOCTOR_LOGGED_IN: "Doctor logged in",
-    PASSWORD_RESET_EMAIL_SENT: "Please check your email to reset the password",
+    PASSWORD_RESET_EMAIL_SENT: "If the email is registered, a password reset link has been sent to your email",
     PASSWORD_RESET_SUCCESSFUL: "Password reset successful",
 } as const;
 
@@ -76,7 +76,7 @@ export const LOG_MESSAGES = {
     USER_VERIFIED: "User verified successfully",
     ADMIN_LOGGED_IN: "Admin logged in",
     DOCTOR_LOGGED_IN: "Doctor logged in",
-    DOCTOR_PASSWORD_CHANGED: "Doctor's password changed",
+    PASSWORD_CHANGED: "Password changed successfully",
 } as const;
 
 

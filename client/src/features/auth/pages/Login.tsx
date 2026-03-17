@@ -127,7 +127,7 @@ const Login = () => {
                 />
             </div>
 
-            <h2 className="text-center text-sm text-muted-foreground">Need to verify your email? <Link to={'/auth/send-email'} className="hover:underline text-primary">Verify email</Link></h2>
+            <h2 className="text-center text-sm text-muted-foreground">Need to verify your email? <Link to={'/auth/send-verification-email'} className="hover:underline text-primary">Verify email</Link></h2>
         </Card>
     );
 };

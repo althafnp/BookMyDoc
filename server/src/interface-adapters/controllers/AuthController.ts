@@ -17,6 +17,8 @@ import { IForgotDoctorPassword } from "../../application/ports/auth/IForgotDocto
 import { IResetDoctorPassword } from "../../application/ports/auth/IResetDoctorPassword";
 import { asyncHandler } from "../../shared/utils/asyncHandler";
 import { AUTH_SUCCESS } from "../../shared/constants/Messages";
+import { IForgotUserPassword } from "../../application/ports/auth/IForgotUserPassword";
+import { IResetUserPassword } from "../../application/ports/auth/IResetUserPassword";
 
 @injectable()
 export class AuthController {
@@ -32,6 +34,12 @@ export class AuthController {
 
         @inject(TYPES.IGoogleAuth)
         private _googleAuthUseCase: IGoogleAuth,
+
+        @inject(TYPES.IForgotUserPassword)
+        private _forgotUserPasswordUseCase: IForgotUserPassword,
+
+        @inject(TYPES.IResetUserPassword)
+        private _resetUserPasswordUseCase: IResetUserPassword,
 
         @inject(TYPES.IRefreshToken)
         private _refreshTokenUseCase: IRefreshToken,
@@ -90,8 +98,6 @@ export class AuthController {
     });
 
 
-
-
     googleAuth = asyncHandler(async (req, res) => {
         const { token } = req.body;
         
@@ -115,6 +121,32 @@ export class AuthController {
             data
         ));
     });
+
+
+    forgotUserPassword = asyncHandler(async (req, res) => {
+        const dto = parseWithZod<ForgotPasswordRequestDTO>(forgotPasswordSchema, req.body);
+
+        await this._forgotUserPasswordUseCase.execute(dto);
+
+        res.status(HttpStatus.OK).json(ApiResponse.success(AUTH_SUCCESS.PASSWORD_RESET_EMAIL_SENT))
+    });
+
+    resetUserPassword = asyncHandler(async (req, res) => {
+        const parsed = parseWithZod<ResetPasswordRequestDTO>(resetPasswordSchema, {
+            token: req.params.token,
+            ...req.body
+        });
+
+        await this._resetUserPasswordUseCase.execute({
+            token: parsed.token,
+            password: parsed.password
+        });
+
+        res.status(HttpStatus.OK).json(
+            ApiResponse.success(AUTH_SUCCESS.PASSWORD_RESET_SUCCESSFUL)
+        );
+    })
+
 
     logout = asyncHandler(async (req, res) => {
         res.clearCookie("refreshToken");

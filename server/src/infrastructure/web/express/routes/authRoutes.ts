@@ -12,6 +12,8 @@ router.post('/auth/signup', authController.signupUser);
 router.get('/auth/verify-email/:token', authController.verifyEmail);
 router.post('/auth/login', authController.loginUser);
 router.post('/auth/google', authController.googleAuth);
+router.post('/auth/forgot-password', authController.forgotUserPassword);
+router.post('/auth/reset-password/:token', authController.resetUserPassword);
 
 router.post('/auth/logout', authController.logout);
 router.post('/auth/refresh', authController.refreshToken);

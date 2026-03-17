@@ -1,20 +1,20 @@
-import FormPasswordField from "@/components/FormPasswordField"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { resetPasswordSchema, type ResetPasswordFormValues } from "../schemas/resetPassword"
-import { Button } from "@/components/ui/button"
-import { useNavigate, useParams } from "react-router-dom"
-import { useResetDoctorPassword } from "../hooks/useResetDoctorPassword"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "sonner"
-import axios from "axios"
+import FormPasswordField from '@/components/FormPasswordField'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { resetPasswordSchema, type ResetPasswordFormValues } from '../schemas/resetPassword'
+import { Button } from '@/components/ui/button'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useResetUserPassword } from '../hooks/useResetUserPassword'
+import { toast } from 'sonner'
+import axios from 'axios'
 
-const ResetDoctorPassword = () => {
+const ResetUserPassword = () => {
 
     const { token } = useParams();
     const navigate = useNavigate();
 
-    const { mutate, isPending } = useResetDoctorPassword();
+    const { mutate, isPending } = useResetUserPassword();
 
     const {
         register,
@@ -22,11 +22,11 @@ const ResetDoctorPassword = () => {
         formState: { errors }
     } = useForm<ResetPasswordFormValues>({
         resolver: zodResolver(resetPasswordSchema),
-        mode: 'onChange'
+        mode: "onChange"
     });
 
-    const onSubmit = (data: ResetPasswordFormValues) => {
-        if (!token) {
+    const onSubmit = async(data: ResetPasswordFormValues) => {
+        if(!token) {
             toast.error("Token is missing");
             return;
         }
@@ -34,19 +34,18 @@ const ResetDoctorPassword = () => {
         mutate({ token, data }, {
             onSuccess: (response) => {
                 toast.success(response.message);
-                navigate('/doctor/auth/login');
+                navigate('/auth/login');
             },
 
             onError: (error) => {
-                if (axios.isAxiosError(error)) {
-                    toast.error(error.response?.data?.message || "Something went wrong")
+                if(axios.isAxiosError(error)) {
+                    toast.error(error?.response?.data?.message || "Something went wrong");
                 } else {
                     toast.error('Unexpected error occured');
                 }
             }
         })
     }
-
     return (
         <Card className='w-full max-w-sm'>
             <CardHeader>
@@ -80,4 +79,4 @@ const ResetDoctorPassword = () => {
     )
 }
 
-export default ResetDoctorPassword
+export default ResetUserPassword

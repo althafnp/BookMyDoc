@@ -5,7 +5,7 @@ export class User {
         public readonly id: string,
         public name: string,
         public email: string,
-        private password: string | undefined,       
+        private password: string | undefined,  
         public providers: AuthProvider[],           
         public role: UserRole,
         public status: UserStatus = "ACTIVE",

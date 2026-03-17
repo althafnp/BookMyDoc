@@ -28,6 +28,16 @@ export const loginWithGoogle = async(token: string) => {
     return response.data;
 }
 
+export const forgotUserPassword = async(data: ForgotPasswordFormValues) => {
+    const response = await api.post('/auth/forgot-password', data);
+    return response.data;
+}
+
+export const resetUserPassword = async(token: string, data: ResetPasswordFormValues) => {
+    const response = await api.post(`/auth/reset-password/${token}`, data);
+    return response.data;
+}
+
 export const refreshSession = async() => {
     const hadSession = localStorage.getItem('auth:hadSession') === 'true';
     try {
@@ -46,7 +56,11 @@ export const refreshSession = async() => {
 
         if (hadSession) {
             const message = err?.response?.data?.message;
-            toast.error(message)
+            if(message) {
+                toast.error(message)
+            } else {
+                toast.error("An unexpected error occured")
+            }
             logout();
         }
         return null;

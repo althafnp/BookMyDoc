@@ -71,6 +71,12 @@ import { ResetDoctorPasswordUseCase } from "../application/use-cases/auth/reset-
 import { IWalletRepository } from "../domain/repositories/IWalletRepository";
 import { MongoWalletRepository } from "../infrastructure/database/mongo/repositories/MongoWalletRepository";
 
+import { IForgotUserPassword } from "../application/ports/auth/IForgotUserPassword";
+import { ForgotUserPasswordUseCase } from "../application/use-cases/auth/forgot-user-password-usecase";
+
+import { IResetUserPassword } from "../application/ports/auth/IResetUserPassword";
+import { ResetUserPasswordUseCase } from "../application/use-cases/auth/reset-user-password.usecase";
+
 
 
 
@@ -136,6 +142,24 @@ container.bind<IGoogleAuth>(TYPES.IGoogleAuth).toDynamicValue((ctx) => {
         ctx.get(TYPES.IWalletRepository),
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IGoogleAuthService),
+        ctx.get(TYPES.ILogger)
+    );
+});
+
+container.bind<IForgotUserPassword>(TYPES.IForgotUserPassword).toDynamicValue((ctx) => {
+    return new ForgotUserPasswordUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IPasswordTokenService),
+        ctx.get(TYPES.IAppConfig),
+        ctx.get(TYPES.IEmailService)
+    )
+});
+
+container.bind<IResetUserPassword>(TYPES.IResetUserPassword).toDynamicValue((ctx) => {
+    return new ResetUserPasswordUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IPasswordTokenService),
+        ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.ILogger)
     );
 });

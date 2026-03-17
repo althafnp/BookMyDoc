@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import type { ResetPasswordFormValues } from "../schemas/resetPassword";
 import { resetDoctorPassword } from "../api/authApi";
 
-type ResetPasswordInput = {
+export type ResetPasswordInput = {
     token: string;
     data: ResetPasswordFormValues
 }
