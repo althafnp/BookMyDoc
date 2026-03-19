@@ -11,6 +11,10 @@ export interface LoginUserRequestDTO {
     password: string;
 }
 
+export interface GoogleAuthRequestDTO {
+    token: string
+}
+
 export interface LoginUserResponseDTO {
     user: {
         id: string;
@@ -21,6 +25,14 @@ export interface LoginUserResponseDTO {
     },
     accessToken: string;
     refreshToken: string;
+}
+
+export interface SendVerificationEmailRequestDTO {
+    email: string
+}
+
+export interface VerifyEmailRequestDTO {
+    token: string;
 }
 
 export interface RefreshTokenResponseDTO {
@@ -72,6 +84,11 @@ export interface LoginDoctorResponseDTO {
     }
     accessToken: string;
     refreshToken: string
+}
+
+
+export interface ForgotPasswordRequestDTO {
+    email: string
 }
 
 export interface ResetPasswordRequestDTO {

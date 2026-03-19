@@ -16,6 +16,9 @@ import DoctorLayout from '@/layouts/DoctorLayout'
 import ForgotDoctorPassword from '@/features/auth/pages/ForgotDoctorPassword'
 import ResetDoctorPassword from '@/features/auth/pages/ResetDoctorPassword'
 import GuestRoutes from './GuestRoutes'
+import ForgotUserPassword from '@/features/auth/pages/ForgotUserPassword'
+import ResetUserPassword from '@/features/auth/pages/ResetUserPassword'
+import SendVerificationEmail from '@/features/auth/pages/SendVerificationEmail'
 
 const AppRoutes = () => {
     return (
@@ -39,6 +42,9 @@ const AppRoutes = () => {
                     <Route path='/auth/signup' element={<Signup />} />
                     <Route path='/auth/verify-email/:token' element={<VerifyEmail />} />
                     <Route path='/auth/login' element={<Login />} />
+                    <Route path='/auth/send-verification-email' element={<SendVerificationEmail />} />
+                    <Route path='/auth/forgot-password' element={<ForgotUserPassword />} />
+                    <Route path='/auth/reset-password/:token' element={<ResetUserPassword />} />
 
                     <Route path='/admin/auth/login' element={<LoginAdmin />} />
 

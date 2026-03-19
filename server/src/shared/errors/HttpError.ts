@@ -1,4 +1,4 @@
-import { HttpStatus } from "../constants/httpStatus";
+import { HttpStatus } from "../constants/HttpStatus";
 import { FieldError } from "../utils/ApiResponse";
 
 

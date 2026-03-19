@@ -11,7 +11,7 @@ import axios from "axios"
 
 const ResetDoctorPassword = () => {
 
-    const { token } = useParams<{ token: string }>();
+    const { token } = useParams();
     const navigate = useNavigate();
 
     const { mutate, isPending } = useResetDoctorPassword();

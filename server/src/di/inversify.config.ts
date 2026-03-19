@@ -68,6 +68,18 @@ import { ForgotDoctorPasswordUseCase } from "../application/use-cases/auth/forgo
 import { IResetDoctorPassword } from "../application/ports/auth/IResetDoctorPassword";
 import { ResetDoctorPasswordUseCase } from "../application/use-cases/auth/reset-doctor-password.usecase";
 
+import { IWalletRepository } from "../domain/repositories/IWalletRepository";
+import { MongoWalletRepository } from "../infrastructure/database/mongo/repositories/MongoWalletRepository";
+
+import { IForgotUserPassword } from "../application/ports/auth/IForgotUserPassword";
+import { ForgotUserPasswordUseCase } from "../application/use-cases/auth/forgot-user-password-usecase";
+
+import { IResetUserPassword } from "../application/ports/auth/IResetUserPassword";
+import { ResetUserPasswordUseCase } from "../application/use-cases/auth/reset-user-password.usecase";
+
+import { ISendVerificationEmail } from "../application/ports/auth/ISendVerificationEmail";
+import { SendVerificationEmailUseCase } from "../application/use-cases/auth/send-verification-email.usecase";
+
 
 
 
@@ -91,6 +103,7 @@ container.bind<IPasswordTokenService>(TYPES.IPasswordTokenService).to(JwtPasswor
 container.bind<IUserRepository>(TYPES.IUserRepository).to(MongoUserRepository);
 container.bind<IDoctorRepository>(TYPES.IDoctorRepository).to(MongoDoctorRepository);
 container.bind<IAdminRepository>(TYPES.IAdminRepository).to(MongoAdminRepository);
+container.bind<IWalletRepository>(TYPES.IWalletRepository).to(MongoWalletRepository);
 
 
 
@@ -100,12 +113,13 @@ container.bind<ISignupUser>(TYPES.ISignupUser).toDynamicValue((ctx) => {
     return new SignupUserUseCase(
         ctx.get(TYPES.IUserRepository),
         ctx.get(TYPES.IPasswordService),
+        ctx.get(TYPES.IWalletRepository),
         ctx.get(TYPES.IEmailVerificationTokenService),
         ctx.get(TYPES.IEmailService),
         ctx.get(TYPES.IAppConfig),
         ctx.get(TYPES.ILogger),
-    )
-})
+    );
+});
 
 
 container.bind<IVerifyEmail>(TYPES.IVerifyEmail).toDynamicValue((ctx) => {
@@ -113,7 +127,7 @@ container.bind<IVerifyEmail>(TYPES.IVerifyEmail).toDynamicValue((ctx) => {
         ctx.get(TYPES.IUserRepository),
         ctx.get(TYPES.IEmailVerificationTokenService),
         ctx.get(TYPES.ILogger),
-    )
+    );
 });
 
 container.bind<ILoginUser>(TYPES.ILoginUser).toDynamicValue((ctx) => {
@@ -122,22 +136,51 @@ container.bind<ILoginUser>(TYPES.ILoginUser).toDynamicValue((ctx) => {
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.ILogger),
-    )
-})
+    );
+});
 
 container.bind<IGoogleAuth>(TYPES.IGoogleAuth).toDynamicValue((ctx) => {
     return new GoogleAuthUseCase(
         ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IWalletRepository),
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IGoogleAuthService),
+        ctx.get(TYPES.ILogger)
+    );
+});
+
+container.bind<ISendVerificationEmail>(TYPES.ISendVerificationEmail).toDynamicValue((ctx) => {
+    return new SendVerificationEmailUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IEmailVerificationTokenService),
+        ctx.get(TYPES.IEmailService),
+        ctx.get(TYPES.IAppConfig)
     )
-})
+});
+
+container.bind<IForgotUserPassword>(TYPES.IForgotUserPassword).toDynamicValue((ctx) => {
+    return new ForgotUserPasswordUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IPasswordTokenService),
+        ctx.get(TYPES.IAppConfig),
+        ctx.get(TYPES.IEmailService)
+    )
+});
+
+container.bind<IResetUserPassword>(TYPES.IResetUserPassword).toDynamicValue((ctx) => {
+    return new ResetUserPasswordUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IPasswordTokenService),
+        ctx.get(TYPES.IPasswordService),
+        ctx.get(TYPES.ILogger)
+    );
+});
 
 container.bind<IRefreshToken>(TYPES.IRefreshToken).toDynamicValue((ctx) => {
     return new RefreshTokenUseCase(
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IUserLookupService)
-    )
+    );
 });
 
 
@@ -146,8 +189,8 @@ container.bind<ILoginAdmin>(TYPES.ILoginAdmin).toDynamicValue((ctx) => {
         ctx.get(TYPES.IAdminRepository),
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.ILogger)
-    )
-})
+    );
+});
 
 
 container.bind<ILoginDoctor>(TYPES.ILoginDoctor).toDynamicValue((ctx) => {
@@ -156,8 +199,8 @@ container.bind<ILoginDoctor>(TYPES.ILoginDoctor).toDynamicValue((ctx) => {
         ctx.get(TYPES.IAuthTokenService),
         ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.ILogger)
-    )
-})
+    );
+});
 
 container.bind<IForgotDoctorPassword>(TYPES.IForgotDoctorPassword).toDynamicValue((ctx) => {
     return new ForgotDoctorPasswordUseCase(
@@ -165,8 +208,8 @@ container.bind<IForgotDoctorPassword>(TYPES.IForgotDoctorPassword).toDynamicValu
         ctx.get(TYPES.IPasswordTokenService),
         ctx.get(TYPES.IAppConfig),
         ctx.get(TYPES.IEmailService)
-    )
-})
+    );
+});
 
 container.bind<IResetDoctorPassword>(TYPES.IResetDoctorPassword).toDynamicValue((ctx) => {
     return new ResetDoctorPasswordUseCase(
@@ -174,11 +217,11 @@ container.bind<IResetDoctorPassword>(TYPES.IResetDoctorPassword).toDynamicValue(
         ctx.get(TYPES.IPasswordTokenService),
         ctx.get(TYPES.IPasswordService),
         ctx.get(TYPES.ILogger)
-    )
-})
+    );
+});
 
 
 //controllers
-container.bind(AuthController).toSelf()
+container.bind(AuthController).toSelf();
 
 export { container };

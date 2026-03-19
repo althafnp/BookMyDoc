@@ -1,4 +1,5 @@
 import { Document, model, Schema, Types } from "mongoose";
+import { DoctorStatus } from "../../../../domain/enums/Auth";
 
 
 export interface IDoctor extends Document {
@@ -11,7 +12,7 @@ export interface IDoctor extends Document {
     experience: string;
     qualification: string;
     consultationFee: number;
-    isActive: boolean;
+    status: DoctorStatus;
     role: "DOCTOR";
 }
 
@@ -51,9 +52,10 @@ const DoctorSchema: Schema = new Schema<IDoctor>(
             type: Number,
             required: true
         },
-        isActive: {
-            type: Boolean,
-            default: true
+        status: {
+            type: String,
+            enum: ["ACTIVE", "BLOCKED"],
+            default: "ACTIVE"
         },
         role: {
             type: String,
@@ -61,7 +63,7 @@ const DoctorSchema: Schema = new Schema<IDoctor>(
         }
     },
     { timestamps: true }
-)
+);
 
 
 export const DoctorModel = model<IDoctor>("Doctor", DoctorSchema);

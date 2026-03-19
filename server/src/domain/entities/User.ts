@@ -1,14 +1,14 @@
-import { AuthProvider, UserRole } from "../enums/Auth";
+import { AuthProvider, UserRole, UserStatus } from "../enums/Auth";
 
 export class User {
     constructor(
         public readonly id: string,
         public name: string,
         public email: string,
-        private password: string | undefined,       
+        private password: string | undefined,  
         public providers: AuthProvider[],           
         public role: UserRole,
-        public isBlocked: boolean = false,
+        public status: UserStatus = "ACTIVE",
         public emailVerified: boolean = false,
         public googleId?: string,                   
         public profileImage?: string
@@ -19,12 +19,12 @@ export class User {
     // -------------------------
 
     // Block / unblock user 
-    block() {
-        this.isBlocked = true;
+    deactivate() {
+        this.status = "INACTIVE";
     }
 
-    unblock() {
-        this.isBlocked = false;
+    activate() {
+        this.status = "ACTIVE";
     }
 
     // Password behavior

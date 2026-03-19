@@ -1,6 +1,6 @@
-import { User } from "../../../../domain/entities/User"
-import { IUser } from "../models/user.schema"
-import { BaseMapper } from "./BaseMapper"
+import { User } from "../../../../domain/entities/User";
+import { IUser } from "../models/user.schema";
+import { BaseMapper } from "./BaseMapper";
 
 export class UserMapper extends BaseMapper<User, IUser> {
 
@@ -12,11 +12,11 @@ export class UserMapper extends BaseMapper<User, IUser> {
             raw.password,
             raw.providers,
             raw.role,
-            raw.isBlocked,
+            raw.status,
             raw.emailVerified,
             raw.googleId,
             raw.profileImage
-        )
+        );
     }
 
     static toPersistence(domain: User): Partial<IUser> {
@@ -26,10 +26,10 @@ export class UserMapper extends BaseMapper<User, IUser> {
             password: domain.getPassword(),
             providers: domain.providers,
             role: domain.role,
-            isBlocked: domain.isBlocked,
+            status: domain.status,
             emailVerified: domain.emailVerified,
             googleId: domain.googleId,
             profileImage: domain.profileImage
-        }
+        };
     }
 }

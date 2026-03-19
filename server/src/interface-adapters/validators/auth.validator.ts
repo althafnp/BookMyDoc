@@ -21,7 +21,7 @@ export const signupSchema = z.object({
 .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-})
+});
 
 
 
@@ -32,7 +32,7 @@ export const loginSchema = z.object({
         .email("Enter a valid email"),
     
     password: z.string().min(1, 'Password is required')
-})
+});
 
 
 
@@ -51,4 +51,13 @@ export const resetPasswordSchema = z.object({
 .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-})
+});
+
+
+export const verifyEmailSchema = z.object({
+    token: z.string().min(1, 'Token is required')
+});
+
+export const emailSchema = z.object({
+    email: z.string().min(1, 'Email is required')
+});

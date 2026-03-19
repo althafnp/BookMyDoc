@@ -1,35 +1,42 @@
 import { User } from "../../../domain/entities/User";
+import { Wallet } from "../../../domain/entities/Wallet";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import { IWalletRepository } from "../../../domain/repositories/IWalletRepository";
+import { LOG_MESSAGES, USER_ERRORS } from "../../../shared/constants/Messages";
 import { BadRequestError } from "../../../shared/errors/HttpError";
-import { LoginUserResponseDTO } from "../../dtos/auth";
+import { GoogleAuthRequestDTO, LoginUserResponseDTO } from "../../dtos/auth";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { IGoogleAuthService } from "../../interfaces/IGoogleAuthService";
+import { ILogger } from "../../interfaces/ILogger";
 import { UserResponseMapper } from "../../mappers/UserResponseMapper";
 import { IGoogleAuth } from "../../ports/auth/IGoogleAuth";
 
 export class GoogleAuthUseCase implements IGoogleAuth{
     constructor(
-        private userRepository: IUserRepository,
-        private authTokenService: IAuthTokenService,
-        private googleAuthService: IGoogleAuthService
+        private _userRepository: IUserRepository,
+        private _walletRepository: IWalletRepository,
+        private _authTokenService: IAuthTokenService,
+        private _googleAuthService: IGoogleAuthService,
+        private _logger: ILogger
     ) {}
 
-    async execute(googleToken: string): Promise<LoginUserResponseDTO> {
-        const googleUser = await this.googleAuthService.verifyIdToken(googleToken);
-        // console.log('user: ', googleUser)
+    async execute(dto: GoogleAuthRequestDTO): Promise<LoginUserResponseDTO> {
+        const { token } = dto;
+        
+        const googleUser = await this._googleAuthService.verifyIdToken(token);
 
-        let user = await this.userRepository.findByEmail(googleUser.email);
+        let user = await this._userRepository.findByEmail(googleUser.email);
 
         if(user) {
-            if(!user.isProviderLinked("GOOGLE")) {
-                user.addProvider("GOOGLE", googleUser.googleId);
-            }
-
-            if(user.isBlocked) {
-                throw new BadRequestError("User is currenty blocked")
+            if(user.status === "INACTIVE") {
+                throw new BadRequestError(USER_ERRORS.USER_BLOCKED);
             };
 
-            await this.userRepository.update(user);
+            if(!user.isProviderLinked("GOOGLE")) {
+                user.addProvider("GOOGLE", googleUser.googleId);
+
+                await this._userRepository.update(user);
+            }
         };
 
         
@@ -41,22 +48,28 @@ export class GoogleAuthUseCase implements IGoogleAuth{
                 undefined,
                 ["GOOGLE"],
                 "USER",
-                false,
+                "ACTIVE",
                 true,
                 googleUser.googleId,
                 googleUser.picture
-            )
+            );
 
-            user = await this.userRepository.create(user)
+            user = await this._userRepository.create(user);
+
+            // Create wallet for the new Google user
+            const wallet = new Wallet("", user.id);
+            await this._walletRepository.create(wallet);
         }
 
-        const accessToken = this.authTokenService.generateAccessToken({ id: user.id, role: user.role });
-        const refreshToken = this.authTokenService.generateAccessToken({ id: user.id, role: user.role });
+        const accessToken = this._authTokenService.generateAccessToken({ id: user.id, role: user.role });
+        const refreshToken = this._authTokenService.generateRefreshToken({ id: user.id, role: user.role });
+
+        this._logger.info(LOG_MESSAGES.USER_LOGGED_IN_GOOGLE, { userId: user.id, email: user.email});
 
         return { 
             user: UserResponseMapper.toDTO(user),
             accessToken,
             refreshToken
-        }
+        };
     }
 }

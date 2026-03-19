@@ -6,7 +6,7 @@ import { UserModel } from "../models/user.schema";
 
 
 @injectable()
-export class MongoUserRepository implements IUserRepository{
+export class MongoUserRepository implements IUserRepository {
     async create(user: User): Promise<User> {
         const persistence = UserMapper.toPersistence(user);
 

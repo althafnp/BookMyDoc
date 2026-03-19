@@ -1,39 +1,42 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import { AUTH_ERRORS, LOG_MESSAGES, USER_ERRORS } from "../../../shared/constants/Messages";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
+import { VerifyEmailRequestDTO } from "../../dtos/auth";
 import { IEmailVerificationTokenService } from "../../interfaces/IEmailVerificationTokenService";
 import { ILogger } from "../../interfaces/ILogger";
 import { IVerifyEmail } from "../../ports/auth/IVerifyEmail";
 
 export class VerifyEmailUseCase implements IVerifyEmail {
     constructor(
-        private userRepository: IUserRepository,
-        private emailVerificationTokenService: IEmailVerificationTokenService,
-        private logger: ILogger
+        private _userRepository: IUserRepository,
+        private _emailVerificationTokenService: IEmailVerificationTokenService,
+        private _logger: ILogger
     ) {}
 
-    async execute(token: string): Promise<void> {
+    async execute(dto: VerifyEmailRequestDTO): Promise<void> {
+        const { token } = dto;
         let decoded: { email: string };
 
         try {
-            decoded = this.emailVerificationTokenService.verifyEmailVerificationToken(token);
+            decoded = this._emailVerificationTokenService.verifyEmailVerificationToken(token);
         } catch {
-            throw new UnauthorizedError("Invalid or expired verification token");
+            throw new UnauthorizedError(AUTH_ERRORS.INVALID_OR_EXPIRED_TOKEN);
         }
 
-        const user = await this.userRepository.findByEmail(decoded.email);
+        const user = await this._userRepository.findByEmail(decoded.email);
 
         if (!user) {
-            throw new NotFoundError("User not found");
+            throw new NotFoundError(USER_ERRORS.USER_NOT_FOUND);
         }
 
         if (user.emailVerified) {
-            throw new BadRequestError("Email is already verified");
+            throw new BadRequestError(AUTH_ERRORS.EMAIL_ALREADY_VERIFIED);
         }
 
         user.emailVerified = true;
 
-        await this.userRepository.update(user);
+        await this._userRepository.update(user);
 
-        this.logger.info("User verified successfully", { userId: user.id, email: user.email });
+        this._logger.info(LOG_MESSAGES.USER_VERIFIED, { userId: user.id, email: user.email });
     }
 }

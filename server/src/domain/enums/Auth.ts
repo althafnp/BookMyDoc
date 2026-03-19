@@ -13,3 +13,7 @@ export type UserRole = "USER";
 export type DoctorRole = "DOCTOR";
 
 export type AdminRole = "ADMIN";
+
+export type UserStatus = "ACTIVE" | "INACTIVE";
+
+export type DoctorStatus = "ACTIVE" | "INACTIVE";

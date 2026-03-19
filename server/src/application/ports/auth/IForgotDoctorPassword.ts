@@ -1,3 +1,5 @@
+import { ForgotPasswordRequestDTO } from "../../dtos/auth";
+
 export interface IForgotDoctorPassword {
-    execute(email: string): Promise<void>
+    execute(dto: ForgotPasswordRequestDTO): Promise<void>
 }

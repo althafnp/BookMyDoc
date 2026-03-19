@@ -6,17 +6,17 @@ import store from "@/store/store";
 import { clearUser, setInitialized, setLoading, setUser } from "@/store/reducers/authSlice";
 import { toast } from "sonner";
 import type { ForgotPasswordFormValues, ResetPasswordFormValues } from "../schemas/resetPassword";
+import type { SendVerificationFormValues } from "../schemas/sendVerificationSchema";
 
 export const signupUser = async (data: SignupFormValues) => {
     const response = await api.post("/auth/signup", data);
     return response.data;
 }
 
-export const verifyUser = async (token: string) => {
+export const verifyEmail = async (token: string) => {
     const response = await api.get(`/auth/verify-email/${token}`);
     return response.data;
 }
-
 
 export const loginUser = async(data: LoginFormValues) => {
     const response = await api.post('/auth/login', data);
@@ -25,6 +25,21 @@ export const loginUser = async(data: LoginFormValues) => {
 
 export const loginWithGoogle = async(token: string) => {
     const response = await api.post('/auth/google', { token });
+    return response.data;
+}
+
+export const sendVerificationEmail = async(data: SendVerificationFormValues) => {
+    const response = await api.post('/auth/send-verification-email', data);
+    return response.data;
+}
+
+export const forgotUserPassword = async(data: ForgotPasswordFormValues) => {
+    const response = await api.post('/auth/forgot-password', data);
+    return response.data;
+}
+
+export const resetUserPassword = async(token: string, data: ResetPasswordFormValues) => {
+    const response = await api.post(`/auth/reset-password/${token}`, data);
     return response.data;
 }
 
@@ -46,7 +61,11 @@ export const refreshSession = async() => {
 
         if (hadSession) {
             const message = err?.response?.data?.message;
-            toast.error(message)
+            if(message) {
+                toast.error(message)
+            } else {
+                toast.error("An unexpected error occured")
+            }
             logout();
         }
         return null;

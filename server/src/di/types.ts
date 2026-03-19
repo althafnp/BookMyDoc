@@ -14,6 +14,7 @@ export const TYPES = {
     IUserRepository: Symbol.for("IUserRepository"),
     IDoctorRepository: Symbol.for("IDoctorRepository"),
     IAdminRepository: Symbol.for("IAdminRepository"),
+    IWalletRepository: Symbol.for("IWalletRepository"),
 
 
     //use-cases
@@ -21,6 +22,11 @@ export const TYPES = {
     IVerifyEmail: Symbol.for("IVerifyEmail"),
     ILoginUser: Symbol.for("ILoginUser"),
     IGoogleAuth: Symbol.for("IGoogleAuth"),
+    ISendVerificationEmail: Symbol.for("ISendVerificationEmail"),
+    IForgotUserPassword: Symbol.for("IForgotUserPassword"),
+    IResetUserPassword: Symbol.for("IResetUserPassword"),
+
+
     IRefreshToken: Symbol.for("IRefreshToken"),
 
     ILoginAdmin: Symbol.for("ILoginAdmin"),
@@ -28,4 +34,4 @@ export const TYPES = {
     ILoginDoctor: Symbol.for("ILoginDoctor"),
     IForgotDoctorPassword: Symbol.for("IForgotDoctorPassword"),
     IResetDoctorPassword: Symbol.for("IResetDoctorPassword"),
-}
+};

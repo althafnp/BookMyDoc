@@ -1,3 +1,4 @@
+import { AUTH_ERRORS, USER_ERRORS } from "../../../shared/constants/Messages";
 import { UnauthorizedError } from "../../../shared/errors/HttpError";
 import { RefreshTokenResponseDTO } from "../../dtos/auth";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
@@ -6,28 +7,28 @@ import { IRefreshToken } from "../../ports/auth/IRefreshToken";
 
 export class RefreshTokenUseCase implements IRefreshToken {
     constructor(
-        private authTokenService: IAuthTokenService,
-        private userLookupService: IUserLookupService,
+        private _authTokenService: IAuthTokenService,
+        private _userLookupService: IUserLookupService,
     ) { }
 
     async execute(token: string): Promise<RefreshTokenResponseDTO> {
         if (!token) {
-            throw new UnauthorizedError("Refresh token is missing, Login again");
+            throw new UnauthorizedError(AUTH_ERRORS.REFRESH_TOKEN_MISSING);
         }
 
         try {
-            const payload = this.authTokenService.verifyRefreshToken(token);
+            const payload = this._authTokenService.verifyRefreshToken(token);
 
-            const user = await this.userLookupService.findByIdAndRole(payload.id, payload.role);
+            const user = await this._userLookupService.findByIdAndRole(payload.id, payload.role);
             if(!user) {
-                throw new UnauthorizedError('User not found');
+                throw new UnauthorizedError(USER_ERRORS.USER_NOT_FOUND);
             };
 
-            const accessToken = this.authTokenService.generateAccessToken({ id: payload.id, role: payload.role });
+            const accessToken = this._authTokenService.generateAccessToken({ id: payload.id, role: payload.role });
 
             return { accessToken, user };
         } catch {
-            throw new UnauthorizedError("Invalid refresh token");
+            throw new UnauthorizedError(AUTH_ERRORS.INVALID_REFRESH_TOKEN);
         }
     }
 }

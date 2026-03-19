@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { useLoginAdmin } from '../hooks/useLoginAdmin'
 import { useDispatch } from 'react-redux'
 import { setUser } from '@/store/reducers/authSlice'
+import axios from 'axios'
 
 const LoginAdmin = () => {
 
@@ -22,18 +23,42 @@ const LoginAdmin = () => {
 
     const { setError } = methods;
 
+    const { mutate, isPending } = useLoginAdmin();
 
-    const loginMutation = useLoginAdmin({ setError });
+    const handleSubmit = async(data: LoginFormValues) => {
+        mutate(data, {
+             onSuccess: (res) => {
+                setAccessToken(res.data.accessToken);
+                dispatch(setUser(res.data.admin));
+                localStorage.setItem("auth:hadSession", "true");
+                toast.success(res.message);
+                navigate("/admin/dashboard");
+            },
 
-    const handleSubmit = async (data: LoginFormValues) => {
-        const res = await loginMutation.mutateAsync(data);
-
-        setAccessToken(res.data.accessToken);
-        dispatch(setUser(res.data.admin))
-        localStorage.setItem("auth:hadSession", "true");
-
-        toast.success(res.message);
-        navigate("/admin/dashboard");
+            onError: (err) => {
+                if (axios.isAxiosError(err)) {
+                    const response = err?.response?.data;
+                    if (response?.errors && Array.isArray(response.errors)) {
+                        response.errors.forEach((error: any) => {
+                            setError(error.field as keyof LoginFormValues, {
+                                type: 'server',
+                                message: error.message
+                            });
+                        });
+                    } else {
+                        setError('root', {
+                            type: 'server',
+                            message: response?.message || "Something went wrong. Please try again."
+                        });
+                    }
+                } else {
+                    setError("root", {
+                        type: "server",
+                        message: "An unexpected error occured"
+                    });
+                }
+            }
+        })
     }
 
     return (
@@ -49,7 +74,7 @@ const LoginAdmin = () => {
                 <FormProvider {...methods}>
                     <LoginAdminForm
                         onSubmit={handleSubmit}
-                        loading={loginMutation.isPending}
+                        loading={isPending}
                     />
                 </FormProvider>
             </CardContent>

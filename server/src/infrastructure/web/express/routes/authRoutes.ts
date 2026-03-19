@@ -1,4 +1,4 @@
-import express from "express"
+import express from "express";
 import { container } from "../../../../di/inversify.config";
 import { AuthController } from "../../../../interface-adapters/controllers/AuthController";
 
@@ -12,9 +12,11 @@ router.post('/auth/signup', authController.signupUser);
 router.get('/auth/verify-email/:token', authController.verifyEmail);
 router.post('/auth/login', authController.loginUser);
 router.post('/auth/google', authController.googleAuth);
-
-router.post('/auth/logout', authController.logout)
-router.post('/auth/refresh', authController.refreshToken)
+router.post('/auth/send-verification-email', authController.sendVerificationEmail);
+router.post('/auth/forgot-password', authController.forgotUserPassword);
+router.post('/auth/reset-password/:token', authController.resetUserPassword);
+router.post('/auth/logout', authController.logout);
+router.post('/auth/refresh', authController.refreshToken);
 
 
 //Admin
@@ -27,4 +29,4 @@ router.post('/doctor/auth/reset-password/:token', authController.resetDoctorPass
 
 
 
-export default router
+export default router;

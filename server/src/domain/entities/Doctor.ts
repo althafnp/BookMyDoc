@@ -1,4 +1,4 @@
-import { DoctorRole } from "../enums/Auth";
+import { DoctorRole, DoctorStatus } from "../enums/Auth";
 
 export class Doctor {
     constructor(
@@ -11,7 +11,7 @@ export class Doctor {
         public qualification: string,
         public experience: string,
         public consultationFee: number,
-        public isActive: boolean = true,
+        public status: DoctorStatus = "ACTIVE",
         public role: DoctorRole,
     ) {}
 
@@ -24,10 +24,10 @@ export class Doctor {
     }
 
     deactivate() {
-        this.isActive = false;
+        this.status = "INACTIVE";
     }
 
     activate() {
-        this.isActive = true;
+        this.status = "ACTIVE";
     }
 }

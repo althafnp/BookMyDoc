@@ -10,27 +10,27 @@ import { IAdminRepository } from "../../domain/repositories/IAdminRepository";
 @injectable()
 export class UserLookupService implements IUserLookupService {
     constructor(
-        @inject(TYPES.IUserRepository) private userRepository: IUserRepository,
-        @inject(TYPES.IDoctorRepository) private doctorRepository: IDoctorRepository,
-        @inject(TYPES.IAdminRepository) private adminRepository: IAdminRepository,
+        @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+        @inject(TYPES.IDoctorRepository) private _doctorRepository: IDoctorRepository,
+        @inject(TYPES.IAdminRepository) private _adminRepository: IAdminRepository,
     ) {}
 
     async findByIdAndRole(id: string, role: Role): Promise<UserInfo | null> {
         switch (role) {
             case "USER": {
-                const user = await this.userRepository.findById(id);
+                const user = await this._userRepository.findById(id);
                 if(!user) return null;
 
-                return { id: user.id, name: user.name, email: user.email, role: "USER", profileImage: user.profileImage }
+                return { id: user.id, name: user.name, email: user.email, role: "USER", profileImage: user.profileImage };
             }
             case "DOCTOR": {
-                const doctor = await this.doctorRepository.findById(id);
+                const doctor = await this._doctorRepository.findById(id);
                 if(!doctor) return null;
 
-                return { id: doctor.id, name: doctor.name, email: doctor.email, role: "DOCTOR", profileImage: doctor.profileImage }
+                return { id: doctor.id, name: doctor.name, email: doctor.email, role: "DOCTOR", profileImage: doctor.profileImage };
             }
             case "ADMIN": {
-                const admin = await this.adminRepository.findById(id);
+                const admin = await this._adminRepository.findById(id);
                 if(!admin) return null;
 
                 return { id: admin.id, email: admin.email, role: "ADMIN" };

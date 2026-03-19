@@ -1,7 +1,7 @@
 import express from'express';
 import cors from 'cors';
-import cookieParser from 'cookie-parser'
-import authRoutes from './routes/authRoutes'
+import cookieParser from 'cookie-parser';
+import authRoutes from './routes/authRoutes';
 import { createErrorMiddleware } from './middlewares/error.middleware';
 import { env } from '../../config/env';
 import { container } from '../../../di/inversify.config';
@@ -17,10 +17,10 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 
 
-app.use('/api', authRoutes)
+app.use('/api', authRoutes);
 
 
 

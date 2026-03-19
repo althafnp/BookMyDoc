@@ -6,7 +6,7 @@ import { DoctorModel } from "../models/doctor.schema";
 
 
 @injectable()
-export class MongoDoctorRepository implements IDoctorRepository{
+export class MongoDoctorRepository implements IDoctorRepository {
     async findById(id: string): Promise<Doctor | null> {
         const doc = await DoctorModel.findById(id);
         return doc ? DoctorMapper.toDomain(doc) : null;

@@ -6,13 +6,13 @@ import jwt from "jsonwebtoken";
 
 @injectable()
 export class JwtEmailVerificationTokenService implements IEmailVerificationTokenService {
-    private secret = env.JWT_ACCESS_SECRET;
+    private _secret = env.JWT_EMAIL_SECRET;
 
     generateEmailVerificationToken(email: string): string {
-        return jwt.sign({ email }, this.secret, { expiresIn: '30m' })
+        return jwt.sign({ email }, this._secret, { expiresIn: '30m' });
     }
 
     verifyEmailVerificationToken(token: string): EmailVerificationTokenPayload {
-        return jwt.verify(token, this.secret) as EmailVerificationTokenPayload
+        return jwt.verify(token, this._secret) as EmailVerificationTokenPayload;
     }
 }
