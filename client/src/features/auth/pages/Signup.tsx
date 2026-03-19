@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import { signupSchema, type SignupFormValues } from '../schemas/signupSchema'
 import { useState } from 'react'
@@ -7,16 +6,14 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { toast } from 'sonner'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { signupUser } from '../api/authApi'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import SignupForm from '../components/forms/SignupForm'
+import { useSignup } from '../hooks/useSignup'
 
 
 const Signup = () => {
 
-    const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1);
-
 
     const methods = useForm<SignupFormValues>({
         resolver: zodResolver(signupSchema),
@@ -25,64 +22,62 @@ const Signup = () => {
 
     const { getValues, setError } = methods;
 
+    const { mutate, isPending } = useSignup();
+
     const handleSignup = async (data: SignupFormValues) => {
-        try {
-            setLoading(true)
-        
-            const res = await signupUser(data);
-            console.log("Signup response:", res);
+        mutate(data, {
+            onSuccess: (response) => {
+                toast.success(response.message);
 
-            toast.success(res?.message)
+                setStep(step + 1);
+            },
 
-            setStep(step + 1)
-        } catch (err: any) {
-            console.error(err)
-            if(axios.isAxiosError(err)) {
-                const response = err.response?.data;
+            onError: (error) => {
+                if (axios.isAxiosError(error)) {
+                    const response = error.response?.data;
 
-                if(response?.errors && Array.isArray(response.errors)) {
-                    response.errors.forEach((error: any) => {
-                        setError(error.field as keyof SignupFormValues, {
-                            type: "server",
-                            message: error.message
+                    if (response?.errors && Array.isArray(response.errors)) {
+                        response.errors.forEach((error: any) => {
+                            setError(error.field as keyof SignupFormValues, {
+                                type: "server",
+                                message: error.message
+                            })
                         })
-                    })
-                }
-                //Form-level error
-                else {
+                    }
+                    //Form-level error
+                    else {
+                        setError("root", {
+                            type: "server",
+                            message: response?.message || "Something went wrong. Please try again."
+                        })
+                    }
+                } else {
                     setError("root", {
                         type: "server",
-                        message: response?.message || "Something went wrong. Please try again."
-                    })
+                        message: "Unexpected error occured"
+                    });
                 }
-            } else {
-                setError("root", {
-                    type: "server",
-                    message: "Unexpected error occured"
-                });
             }
-        } finally {
-            setLoading(false)
-        }
-
+        })
     }
+
     return (
         <Card className="w-full max-w-sm">
 
-            {  
+            {
                 step === 1 && (
                     <>
                         <CardHeader>
                             <CardTitle>Create an account</CardTitle>
                             <CardDescription>Enter your information below to create your account</CardDescription>
                         </CardHeader>
-                        
+
                         <CardContent>
                             <FormProvider {...methods}>
-                                <SignupForm onSubmit={handleSignup} loading={loading} />
+                                <SignupForm onSubmit={handleSignup} loading={isPending} />
                             </FormProvider>
                         </CardContent>
-                        
+
 
                         <h2 className="text-center text-sm text-muted-foreground">Already have an account? <Link to={'/auth/login'} className="hover:underline">Sign in</Link></h2>
                     </>
@@ -99,7 +94,7 @@ const Signup = () => {
                             <button
                                 onClick={() => setStep(step - 1)}
                                 className="mb-4 p-1 hover:bg-accent rounded-lg transition-colors w-fit"
-                                >
+                            >
                                 <ArrowLeft />
                             </button>
 
@@ -133,16 +128,6 @@ const Signup = () => {
                                 If you don't see the email, check your spam folder.
                             </p>
                         </CardContent>
-
-                        <CardFooter>
-                            <Button
-                                size="lg"
-                                className="w-full"
-                            >
-                                Resend Email
-                            </Button>
-                        </CardFooter>
-                        
                     </>
                 )
             }

@@ -9,7 +9,7 @@ export type ResetPasswordInput = {
 
 export const useResetDoctorPassword = () => {
     return useMutation({
-        mutationFn: ({ token, data }: ResetPasswordInput) => 
+        mutationFn: ({ token, data}: ResetPasswordInput) => 
             resetDoctorPassword(token, data)
     });
 }

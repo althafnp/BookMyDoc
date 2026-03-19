@@ -58,6 +58,6 @@ export const verifyEmailSchema = z.object({
     token: z.string().min(1, 'Token is required')
 });
 
-export const forgotPasswordSchema = z.object({
+export const emailSchema = z.object({
     email: z.string().min(1, 'Email is required')
 });

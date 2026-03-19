@@ -1,47 +1,49 @@
 import { Button } from '@/components/ui/button'
 import { CheckCircle, XCircle } from 'lucide-react'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
-import { verifyUser } from '../api/authApi';
 import { toast } from 'sonner';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useVerifyEmail } from '../hooks/useVerifyEmail';
 
-type Status = "loading" | "success" | "error";
 
 const VerifyEmail = () => {
     const navigate = useNavigate();
-    const { token } = useParams<{ token: string }>()
+    const { token } = useParams();
 
-    const [status, setStatus] = useState<Status>('loading');
-    const [error, setError] = useState('')
-
-    if (!token) {
-            setStatus('error');
-            toast.error('Invalid verification link');
-            return;
-        }
-
-    const handleVerifyEmail = async () => {
-        try {
-            const res = await verifyUser(token);
-            console.log('resp', res)
-            setStatus('success')
-            toast.success(res.message)
-        } catch (err: any) {
-            setStatus('error');
-            setError(err?.response?.data?.message)
-
-            toast.error(err?.response?.data?.message || 'Verification link is invalid or expired1')
-        }
-    }
+    const { data, isLoading, isError, error, isSuccess } = useVerifyEmail(token);
 
     useEffect(() => {
-        handleVerifyEmail()
-    }, [])
+        if(isSuccess && data) {
+            toast.success(data.message)
+        }
+
+        if(isError) {
+            const errMsg = (error as any)?.response?.data?.message || 'Verification link is invalid or expired';
+            toast.error(errMsg);
+        }
+    }, [isSuccess, isError, data, error]);
+
+    if(!token) {
+        return (
+            <Card className="w-full max-w-sm">
+                <CardContent className="text-center py-10">
+                    Invalid verification link
+                </CardContent>
+            </Card>
+        )
+    }
 
     return (
         <Card className="w-full max-w-sm">
-            {status === 'success' && (
+
+            {isLoading && (
+                <CardContent className="text-center py-10 animate-pulse">
+                    Verifying your email...
+                </CardContent>
+            )}
+
+            {isSuccess && (
                 <>
                     <CardHeader className='gap-6'>
                         <div className="flex justify-center">
@@ -75,7 +77,7 @@ const VerifyEmail = () => {
             )}
 
 
-            {status === 'error' && (
+            {isError && (
                 <>
                     <CardHeader className='gap-6'>
                         <div className="flex justify-center">
@@ -91,22 +93,12 @@ const VerifyEmail = () => {
                     <CardContent>
                         {/* Instructions */}
                         <p className="text-center text-muted-foreground text-sm sm:text-base">
-                            {error ? error : "We couldn't verify your email address. The link might be expired or invalid."}
+                            {(error as any)?.response?.data?.message || "We couldn't verify your email address. The link might be expired or invalid."}
                         </p>
                     </CardContent>
 
-
-                    <CardFooter>
-                        <Button
-                            size="lg"
-                            className="w-full"
-                            >
-                            Resend verification link
-                        </Button>
-                    </CardFooter>
                 </>
             )}
-
         </Card>
 
     )

@@ -22,6 +22,7 @@ export const TYPES = {
     IVerifyEmail: Symbol.for("IVerifyEmail"),
     ILoginUser: Symbol.for("ILoginUser"),
     IGoogleAuth: Symbol.for("IGoogleAuth"),
+    ISendVerificationEmail: Symbol.for("ISendVerificationEmail"),
     IForgotUserPassword: Symbol.for("IForgotUserPassword"),
     IResetUserPassword: Symbol.for("IResetUserPassword"),
 

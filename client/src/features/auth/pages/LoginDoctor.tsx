@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/reducers/authSlice";
 import { useLoginDoctor } from "../hooks/useLoginDoctor";
+import axios from "axios";
 
 
 const LoginDoctor = () => {
@@ -23,17 +24,47 @@ const LoginDoctor = () => {
 
     const { setError } = methods;
 
-    const loginMutation = useLoginDoctor({ setError })
+    const { mutate, isPending } = useLoginDoctor();
 
     const handleSubmit = async (data: LoginFormValues) => {
-        const res = await loginMutation.mutateAsync(data);
+        mutate(data, {
+            onSuccess: (res) => {
+                setAccessToken(res.data.accessToken);
+                dispatch(setUser(res.data.doctor));
+                localStorage.setItem("auth:hadSession", "true");
+                toast.success(res.message);
+                navigate("/doctor/dashboard");
+            },
 
-        setAccessToken(res.data.accessToken);
-        dispatch(setUser(res.data.doctor));
-        localStorage.setItem("auth:hadSession", "true");
 
-        toast.success(res.message);
-        navigate("/doctor/dashboard");
+            onError: (err: any) => {
+                console.log(err);
+                if (axios.isAxiosError(err)) {
+                    const response = err?.response?.data;
+
+                    if (response?.errors && Array.isArray(response.errors)) {
+                        response.errors.forEach((error: any) => {
+                            setError(error.field as keyof LoginFormValues, {
+                                type: 'server',
+                                message: error.message
+                            })
+                        })
+                    }
+                    //Form-level errors
+                    else {
+                        setError('root', {
+                            type: 'server',
+                            message: response?.message || "Something went wrong. Please try again."
+                        })
+                    }
+                } else {
+                    setError("root", {
+                        type: "server",
+                        message: "An unexpected error occured"
+                    })
+                }
+            }
+        })
     }
 
     return (
@@ -44,7 +75,7 @@ const LoginDoctor = () => {
 
             <CardContent>
                 <FormProvider {...methods}>
-                    <LoginDoctorForm onSubmit={handleSubmit} loading={loginMutation.isPending} />
+                    <LoginDoctorForm onSubmit={handleSubmit} loading={isPending} />
                 </FormProvider>
             </CardContent>
         </Card>

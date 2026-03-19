@@ -77,6 +77,9 @@ import { ForgotUserPasswordUseCase } from "../application/use-cases/auth/forgot-
 import { IResetUserPassword } from "../application/ports/auth/IResetUserPassword";
 import { ResetUserPasswordUseCase } from "../application/use-cases/auth/reset-user-password.usecase";
 
+import { ISendVerificationEmail } from "../application/ports/auth/ISendVerificationEmail";
+import { SendVerificationEmailUseCase } from "../application/use-cases/auth/send-verification-email.usecase";
+
 
 
 
@@ -144,6 +147,15 @@ container.bind<IGoogleAuth>(TYPES.IGoogleAuth).toDynamicValue((ctx) => {
         ctx.get(TYPES.IGoogleAuthService),
         ctx.get(TYPES.ILogger)
     );
+});
+
+container.bind<ISendVerificationEmail>(TYPES.ISendVerificationEmail).toDynamicValue((ctx) => {
+    return new SendVerificationEmailUseCase(
+        ctx.get(TYPES.IUserRepository),
+        ctx.get(TYPES.IEmailVerificationTokenService),
+        ctx.get(TYPES.IEmailService),
+        ctx.get(TYPES.IAppConfig)
+    )
 });
 
 container.bind<IForgotUserPassword>(TYPES.IForgotUserPassword).toDynamicValue((ctx) => {

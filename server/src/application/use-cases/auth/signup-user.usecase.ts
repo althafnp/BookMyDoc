@@ -54,11 +54,11 @@ export class SignupUserUseCase implements ISignupUser {
         );
         await this._walletRepository.create(wallet);
 
-        const emailVerificationToken = this._emailVerificationTokenService.generateEmailVerificationToken(user.email);
+        const verificationToken = this._emailVerificationTokenService.generateEmailVerificationToken(user.email);
 
-        const emailVerificationLink = `${this._appConfig.frontendUrl}/auth/verify-email/${emailVerificationToken}`;
+        const verificationLink = `${this._appConfig.frontendUrl}/auth/verify-email/${verificationToken}`;
 
-        await this._emailService.sendVerificationEmail(user.email, emailVerificationLink);
+        await this._emailService.sendVerificationEmail(user.email, verificationLink);
 
         this._logger.info(LOG_MESSAGES.USER_REGISTERED, { email });
     }

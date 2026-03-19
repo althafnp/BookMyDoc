@@ -62,6 +62,7 @@ export const AUTH_SUCCESS = {
     DOCTOR_LOGGED_IN: "Doctor logged in",
     PASSWORD_RESET_EMAIL_SENT: "If the email is registered, a password reset link has been sent to your email",
     PASSWORD_RESET_SUCCESSFUL: "Password reset successful",
+    VERIFICATION_EMAIL_SENT: "If an account exists, a verification email has been sent"
 } as const;
 
 

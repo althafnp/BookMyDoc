@@ -21,14 +21,14 @@ const ForgotUserPassword = () => {
         mode: "onChange"
     });
 
-    const onSubmit = async(data: ForgotPasswordFormValues) => {
+    const onSubmit = async (data: ForgotPasswordFormValues) => {
         mutate(data, {
             onSuccess: (response) => {
                 toast.success(response.message);
             },
 
             onError: (error) => {
-                if(axios.isAxiosError(error)) {
+                if (axios.isAxiosError(error)) {
                     toast.error(error?.response?.data?.message || 'Something went wrong. Please try again.')
                 } else {
                     toast.error('Unexpected error occured');
@@ -39,25 +39,25 @@ const ForgotUserPassword = () => {
 
     return (
         <Card className='w-full max-w-sm'>
-        <CardHeader>
-            <CardTitle className='text-center text-xl'>Enter your email for resetting password</CardTitle>
-        </CardHeader>
+            <CardHeader>
+                <CardTitle className='text-center text-xl'>Enter your email for resetting password</CardTitle>
+            </CardHeader>
 
-        <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <FormField<ForgotPasswordFormValues>
-                    name="email"
-                    label="Email"
-                    register={register}
-                    errors={errors}
-                />
+            <CardContent>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <FormField<ForgotPasswordFormValues>
+                        name="email"
+                        label="Email"
+                        register={register}
+                        errors={errors}
+                    />
 
-                <Button size={'lg'} className='w-full mt-6' disabled={isPending}>
-                    {isPending ? "Sending..." : "Send Reset Link"}
-                </Button>
-            </form>
-        </CardContent>
-    </Card>
+                    <Button size={'lg'} className='w-full mt-6' disabled={isPending}>
+                        {isPending ? "Sending..." : "Send Reset Link"}
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
     );
 };
 

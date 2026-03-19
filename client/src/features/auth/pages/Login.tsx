@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { type LoginFormValues, loginSchema } from "../schemas/loginSchema";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser, loginWithGoogle,} from "../api/authApi";
 import { toast } from "sonner";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import axios from "axios";
@@ -12,10 +10,10 @@ import { setUser } from "@/store/reducers/authSlice";
 import { useDispatch } from "react-redux";
 import { GoogleLogin } from "@react-oauth/google";
 import LoginForm from "@/features/auth/components/forms/LoginForm";
+import { useGoogleLogin, useLogin } from "../hooks/useLogin";
 
 
 const Login = () => {
-    const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -27,73 +25,74 @@ const Login = () => {
 
     const { setError } = methods;
 
+    const { mutate, isPending } = useLogin();
+    const { mutate: googleMutate } = useGoogleLogin();
 
     const handleLogin = async (data: LoginFormValues) => {
-        try {
-            setLoading(true)
+        mutate(data, {
+            onSuccess: (response) => {
+                setAccessToken(response.data.accessToken);
+                dispatch(setUser(response.data.user));
 
-            const res = await loginUser(data);
-            console.log("Login response:", res);
+                localStorage.setItem('auth:hadSesion', 'true');
 
-            setAccessToken(res.data.accessToken);
-            dispatch(setUser(res.data.user));
+                toast.success(response.message);
 
-            localStorage.setItem('auth:hadSession', 'true')
+                navigate('/');
+            },
 
-            toast.success(res?.message)
+            onError: (error) => {
+                if (axios.isAxiosError(error)) {
+                    const response = error.response?.data;
 
-            navigate('/')
-
-        } catch (err: any) {
-            console.log(err);
-            if (axios.isAxiosError(err)) {
-                const response = err.response?.data;
-
-                if (response?.errors && Array.isArray(response.errors)) {
-                    response.errors.forEach((error: any) => {
-                        setError(error.field as keyof LoginFormValues, {
+                    if (response?.errors && Array.isArray(response.errors)) {
+                        response.errors.forEach((error: any) => {
+                            setError(error.field as keyof LoginFormValues, {
+                                type: "server",
+                                message: error.message
+                            })
+                        });
+                    }
+                    //Form-level error
+                    else {
+                        setError("root", {
                             type: "server",
-                            message: error.message
+                            message: response?.message || "Something went wrong. Please try again."
                         })
-                    });
-                }
-                //Form-level error
-                else {
+                    }
+                } else {
                     setError("root", {
                         type: "server",
-                        message: response?.message || "Something went wrong. Please try again."
+                        message: "An unexpected error occured"
                     })
                 }
-            } else {
-                setError("root", {
-                    type: "server",
-                    message: "An unexpected error occured"
-                })
             }
-        } finally {
-            setLoading(false);
-        }
-    };
+        })
+    }
 
     const handleGoogleLogin = async (response: any) => {
-        try {
-            console.log('resp:', response)
-            const res = await loginWithGoogle(response.credential);
-            console.log('Google login response:', res);
+        googleMutate(response.credential, {
+            onSuccess: (res) => {
+                setAccessToken(res.data.accessToken);
+                dispatch(setUser(res.data.user));
 
-            setAccessToken(res.data.accessToken);
-            dispatch(setUser(res.data.user));
+                localStorage.setItem('auth:hadSession', 'true');
 
-            localStorage.setItem('auth:hadSession', 'true')
+                toast.success(res.message);
 
-            toast.success(res?.message);
+                navigate('/')
+            },
 
-            navigate('/')
-        } catch (error) {
-            console.error("Google login error", error);
-            toast.error("Google login failed. Please try again.");
-        }
-    };
+            onError: (error) => {
+                if (axios.isAxiosError(error)) {
+                    toast.error(error?.response?.data?.message || 'Google login failed. Please try again.');
+                } else {
+                    toast.error('An unexpected error occurred');
+                }
+            }
+        })
+    }
+
     return (
         <Card className="w-full max-w-sm">
             <CardHeader>
@@ -104,7 +103,7 @@ const Login = () => {
 
             <CardContent>
                 <FormProvider {...methods}>
-                    <LoginForm onSubmit={handleLogin} loading={loading} />
+                    <LoginForm onSubmit={handleLogin} loading={isPending} />
                 </FormProvider>
             </CardContent>
 

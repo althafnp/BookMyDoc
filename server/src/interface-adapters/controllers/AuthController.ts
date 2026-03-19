@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../di/types";
 import { ISignupUser } from "../../application/ports/auth/ISignupUser";
-import { forgotPasswordSchema, loginSchema, resetPasswordSchema, signupSchema, verifyEmailSchema } from "../validators/auth.validator";
+import { emailSchema, loginSchema, resetPasswordSchema, signupSchema, verifyEmailSchema } from "../validators/auth.validator";
 import { HttpStatus } from "../../shared/constants/HttpStatus";
 import { ApiResponse } from "../../shared/utils/ApiResponse";
 import { parseWithZod } from "../validators/zod-error.validator";
-import { ForgotPasswordRequestDTO, LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, ResetPasswordRequestDTO, SignupUserRequestDTO, VerifyEmailRequestDTO } from "../../application/dtos/auth";
+import { ForgotPasswordRequestDTO, LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, ResetPasswordRequestDTO, SendVerificationEmailRequestDTO, SignupUserRequestDTO, VerifyEmailRequestDTO } from "../../application/dtos/auth";
 import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
 import { ILoginUser } from "../../application/ports/auth/ILoginUser";
 import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";
@@ -19,6 +19,7 @@ import { asyncHandler } from "../../shared/utils/asyncHandler";
 import { AUTH_SUCCESS } from "../../shared/constants/Messages";
 import { IForgotUserPassword } from "../../application/ports/auth/IForgotUserPassword";
 import { IResetUserPassword } from "../../application/ports/auth/IResetUserPassword";
+import { ISendVerificationEmail } from "../../application/ports/auth/ISendVerificationEmail";
 
 @injectable()
 export class AuthController {
@@ -34,6 +35,9 @@ export class AuthController {
 
         @inject(TYPES.IGoogleAuth)
         private _googleAuthUseCase: IGoogleAuth,
+
+        @inject(TYPES.ISendVerificationEmail)
+        private _sendVerificationEmailUseCase: ISendVerificationEmail,
 
         @inject(TYPES.IForgotUserPassword)
         private _forgotUserPasswordUseCase: IForgotUserPassword,
@@ -122,9 +126,16 @@ export class AuthController {
         ));
     });
 
+    sendVerificationEmail = asyncHandler(async (req, res) => {
+        const dto = parseWithZod<SendVerificationEmailRequestDTO>(emailSchema, req.body);
+
+        await this._sendVerificationEmailUseCase.execute(dto);
+
+        res.status(HttpStatus.OK).json(ApiResponse.success(AUTH_SUCCESS.VERIFICATION_EMAIL_SENT));
+    })
 
     forgotUserPassword = asyncHandler(async (req, res) => {
-        const dto = parseWithZod<ForgotPasswordRequestDTO>(forgotPasswordSchema, req.body);
+        const dto = parseWithZod<ForgotPasswordRequestDTO>(emailSchema, req.body);
 
         await this._forgotUserPasswordUseCase.execute(dto);
 
@@ -218,7 +229,7 @@ export class AuthController {
 
 
     forgotDoctorPassword = asyncHandler(async (req, res) => {
-        const dto = parseWithZod<ForgotPasswordRequestDTO>(forgotPasswordSchema, req.body);
+        const dto = parseWithZod<ForgotPasswordRequestDTO>(emailSchema, req.body);
         
         await this._forgotDoctorPasswordUseCase.execute(dto);
         
