@@ -1,5 +1,5 @@
 import { Input } from './ui/input'
-import type { FieldErrors, FieldValues, Path, RegisterOptions, UseFormRegister } from 'react-hook-form';
+import type { FieldErrors, FieldValues, Path, UseFormRegister } from 'react-hook-form';
 import { Label } from './ui/label';
 
 
@@ -8,7 +8,6 @@ type FormFieldProps<T extends FieldValues> = {
     label: string;
     register: UseFormRegister<T>;
     errors: FieldErrors<T>;
-    registerOptions?: RegisterOptions<T, Path<T>>;
     type?: React.HTMLInputTypeAttribute;
     maxLength?: number;
     disabled?: boolean
@@ -20,7 +19,6 @@ const FormField = <T extends FieldValues>({
     label,
     register,
     errors,
-    registerOptions,
     type = 'text',
     maxLength,
     disabled,
@@ -35,7 +33,7 @@ const FormField = <T extends FieldValues>({
                 id={name} 
                 type={type} 
                 maxLength={maxLength} 
-                {...register(name, registerOptions)}
+                {...register(name)}
                 aria-invalid={!!error} 
                 disabled={disabled} 
                 placeholder={placeholder}

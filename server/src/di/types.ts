@@ -15,9 +15,11 @@ export const TYPES = {
     IDoctorRepository: Symbol.for("IDoctorRepository"),
     IAdminRepository: Symbol.for("IAdminRepository"),
     IWalletRepository: Symbol.for("IWalletRepository"),
+    ICategoryRepository: Symbol.for("ICategoryRepository"),
 
 
-    //use-cases
+    // USER USECASES.
+    // auth
     ISignupUser: Symbol.for("ISignupUser"),
     IVerifyEmail: Symbol.for("IVerifyEmail"),
     ILoginUser: Symbol.for("ILoginUser"),
@@ -29,9 +31,20 @@ export const TYPES = {
 
     IRefreshToken: Symbol.for("IRefreshToken"),
 
+    // ADMIN USECASES
+    // auth
     ILoginAdmin: Symbol.for("ILoginAdmin"),
 
+    // category
+    ICreateCategory: Symbol.for("ICreateCategory"),
+    IGetAllCategories: Symbol.for("IGetAllCategories"),
+    IUpdateCategory: Symbol.for("IUpdateCategory"),
+    IToggleCategoryStatus: Symbol.for("IToggleCategoryStatus"),
+
+
+    // DOCTOR USECASES
+    // auth
     ILoginDoctor: Symbol.for("ILoginDoctor"),
     IForgotDoctorPassword: Symbol.for("IForgotDoctorPassword"),
-    IResetDoctorPassword: Symbol.for("IResetDoctorPassword"),
+    IResetDoctorPassword: Symbol.for("IResetDoctorPassword"),       
 };

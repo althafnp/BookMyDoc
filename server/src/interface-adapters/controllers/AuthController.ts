@@ -5,7 +5,7 @@ import { emailSchema, loginSchema, resetPasswordSchema, signupSchema, verifyEmai
 import { HttpStatus } from "../../shared/constants/HttpStatus";
 import { ApiResponse } from "../../shared/utils/ApiResponse";
 import { parseWithZod } from "../validators/zod-error.validator";
-import { ForgotPasswordRequestDTO, LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, ResetPasswordRequestDTO, SendVerificationEmailRequestDTO, SignupUserRequestDTO, VerifyEmailRequestDTO } from "../../application/dtos/auth";
+import { ForgotPasswordRequestDTO, LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, ResetPasswordRequestDTO, SendVerificationEmailRequestDTO, SignupUserRequestDTO, VerifyEmailRequestDTO } from "../../application/dtos/auth/auth.dto";
 import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
 import { ILoginUser } from "../../application/ports/auth/ILoginUser";
 import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";

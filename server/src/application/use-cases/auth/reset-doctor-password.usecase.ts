@@ -1,7 +1,7 @@
 import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
 import { AUTH_ERRORS, DOCTOR_ERRORS, LOG_MESSAGES } from "../../../shared/constants/Messages";
 import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
-import { ResetPasswordRequestDTO } from "../../dtos/auth";
+import { ResetPasswordRequestDTO } from "../../dtos/auth/auth.dto";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { IPasswordTokenService } from "../../interfaces/IPasswordTokenService";

@@ -1,7 +1,7 @@
 import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
 import { DOCTOR_ERRORS } from "../../../shared/constants/Messages";
 import { NotFoundError } from "../../../shared/errors/HttpError";
-import { ForgotPasswordRequestDTO } from "../../dtos/auth";
+import { ForgotPasswordRequestDTO } from "../../dtos/auth/auth.dto";
 import { IAppConfig } from "../../interfaces/IAppConfig";
 import { IEmailService } from "../../interfaces/IEmailService";
 import { IPasswordTokenService } from "../../interfaces/IPasswordTokenService";

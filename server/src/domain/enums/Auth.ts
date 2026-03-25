@@ -14,6 +14,4 @@ export type DoctorRole = "DOCTOR";
 
 export type AdminRole = "ADMIN";
 
-export type UserStatus = "ACTIVE" | "INACTIVE";
-
-export type DoctorStatus = "ACTIVE" | "INACTIVE";
+export type Status = "ACTIVE" | "INACTIVE";

@@ -47,6 +47,13 @@ export const WALLET_ERRORS = {
 } as const;
 
 
+export const CATEGORY_ERRORS = {
+    CATEGORY_NOT_FOUND: "Category not found",
+    CATEGORY_ALREADY_EXISTS: "A category with this name already exists",
+} as const;
+
+
+
 // ================================
 // Success Messages (Controller Responses)
 // ================================
@@ -66,6 +73,14 @@ export const AUTH_SUCCESS = {
 } as const;
 
 
+export const CATEGORY_SUCCESS = {
+    CATEGORY_CREATED: "Category created successfully",
+    CATEGORIES_FETCHED: "Categories fetched successfully",
+    CATEGORY_UPDATED: "Category updated successfully",
+    CATEGORY_STATUS_TOGGLED: "Category status toggled successfully",
+} as const;
+
+
 // ================================
 // Logger Messages
 // ================================
@@ -78,6 +93,9 @@ export const LOG_MESSAGES = {
     ADMIN_LOGGED_IN: "Admin logged in",
     DOCTOR_LOGGED_IN: "Doctor logged in",
     PASSWORD_CHANGED: "Password changed successfully",
+    CATEGORY_CREATED: "New category created",
+    CATEGORY_UPDATED: "Category updated",
+    CATEGORY_STATUS_TOGGLED: "Category status toggled",
 } as const;
 
 

@@ -19,6 +19,8 @@ import GuestRoutes from './GuestRoutes'
 import ForgotUserPassword from '@/features/auth/pages/ForgotUserPassword'
 import ResetUserPassword from '@/features/auth/pages/ResetUserPassword'
 import SendVerificationEmail from '@/features/auth/pages/SendVerificationEmail'
+import UsersPage from '@/components/user/Test'
+import Category from '@/features/admin/pages/Category'
 
 const AppRoutes = () => {
     return (
@@ -27,6 +29,7 @@ const AppRoutes = () => {
             {/* Public routes */}
             <Route path='/' element={<UserLayout />} >
                 <Route index element={<HomePage />} />
+                <Route path='/test' element={<UsersPage />} />
             </Route>
 
             {/* User protected routes */}
@@ -59,6 +62,7 @@ const AppRoutes = () => {
             <Route element={<AdminProtectedRoute />}>
                 <Route element={<AdminLayout />}>
                     <Route path='/admin/dashboard' element={<div>admin</div>} />
+                    <Route path='/admin/categories' element={<Category />} />
                     {/* <Route path='/admin/categories' element={<CategoriesPage />} />
                     <Route path='/admin/doctors' element={<DoctorsPage />} />
                     <Route path='/admin/users' element={<UsersPage />} /> */}

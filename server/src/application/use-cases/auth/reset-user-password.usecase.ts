@@ -1,7 +1,7 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { AUTH_ERRORS, LOG_MESSAGES } from "../../../shared/constants/Messages";
 import { UnauthorizedError } from "../../../shared/errors/HttpError";
-import { ResetPasswordRequestDTO } from "../../dtos/auth";
+import { ResetPasswordRequestDTO } from "../../dtos/auth/auth.dto";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { IPasswordTokenService } from "../../interfaces/IPasswordTokenService";

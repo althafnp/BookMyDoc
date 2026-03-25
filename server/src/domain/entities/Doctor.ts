@@ -1,4 +1,4 @@
-import { DoctorRole, DoctorStatus } from "../enums/Auth";
+import { DoctorRole, Status } from "../enums/Auth";
 
 export class Doctor {
     constructor(
@@ -11,7 +11,7 @@ export class Doctor {
         public qualification: string,
         public experience: string,
         public consultationFee: number,
-        public status: DoctorStatus = "ACTIVE",
+        public status: Status = "ACTIVE",
         public role: DoctorRole,
     ) {}
 

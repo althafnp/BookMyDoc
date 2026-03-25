@@ -4,11 +4,11 @@ import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IWalletRepository } from "../../../domain/repositories/IWalletRepository";
 import { LOG_MESSAGES, USER_ERRORS } from "../../../shared/constants/Messages";
 import { BadRequestError } from "../../../shared/errors/HttpError";
-import { GoogleAuthRequestDTO, LoginUserResponseDTO } from "../../dtos/auth";
+import { GoogleAuthRequestDTO, LoginUserResponseDTO } from "../../dtos/auth/auth.dto";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { IGoogleAuthService } from "../../interfaces/IGoogleAuthService";
 import { ILogger } from "../../interfaces/ILogger";
-import { UserResponseMapper } from "../../mappers/UserResponseMapper";
+import { UserResponseMapper } from "../../mappers/user/UserResponseMapper";
 import { IGoogleAuth } from "../../ports/auth/IGoogleAuth";
 
 export class GoogleAuthUseCase implements IGoogleAuth{

@@ -1,6 +1,6 @@
 import { AUTH_ERRORS, USER_ERRORS } from "../../../shared/constants/Messages";
 import { UnauthorizedError } from "../../../shared/errors/HttpError";
-import { RefreshTokenResponseDTO } from "../../dtos/auth";
+import { RefreshTokenResponseDTO } from "../../dtos/auth/auth.dto";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { IUserLookupService } from "../../interfaces/IUserLookupService";
 import { IRefreshToken } from "../../ports/auth/IRefreshToken";

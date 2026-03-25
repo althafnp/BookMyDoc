@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { SendVerificationEmailRequestDTO } from "../../dtos/auth";
+import { SendVerificationEmailRequestDTO } from "../../dtos/auth/auth.dto";
 import { IAppConfig } from "../../interfaces/IAppConfig";
 import { IEmailService } from "../../interfaces/IEmailService";
 import { IEmailVerificationTokenService } from "../../interfaces/IEmailVerificationTokenService";

@@ -1,5 +1,5 @@
-import { Doctor } from "../../domain/entities/Doctor";
-import { LoginDoctorResponseDTO } from "../dtos/auth";
+import { Doctor } from "../../../domain/entities/Doctor";
+import { LoginDoctorResponseDTO } from "../../dtos/auth/auth.dto";
 
 export class DoctorResponseMapper {
     static toDTO(doctor: Doctor): LoginDoctorResponseDTO["doctor"] {

@@ -1,11 +1,11 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { AUTH_ERRORS, LOG_MESSAGES, USER_ERRORS, VALIDATION } from "../../../shared/constants/Messages";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
-import { LoginUserRequestDTO, LoginUserResponseDTO } from "../../dtos/auth";
+import { LoginUserRequestDTO, LoginUserResponseDTO } from "../../dtos/auth/auth.dto";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
-import { UserResponseMapper } from "../../mappers/UserResponseMapper";
+import { UserResponseMapper } from "../../mappers/user/UserResponseMapper";
 import { ILoginUser } from "../../ports/auth/ILoginUser";
 
 export class LoginUserUseCase implements ILoginUser {

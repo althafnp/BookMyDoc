@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { ForgotPasswordRequestDTO } from "../../dtos/auth";
+import { ForgotPasswordRequestDTO } from "../../dtos/auth/auth.dto";
 import { IAppConfig } from "../../interfaces/IAppConfig";
 import { IEmailService } from "../../interfaces/IEmailService";
 import { IPasswordTokenService } from "../../interfaces/IPasswordTokenService";

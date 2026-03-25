@@ -79,6 +79,17 @@ import { ResetUserPasswordUseCase } from "../application/use-cases/auth/reset-us
 
 import { ISendVerificationEmail } from "../application/ports/auth/ISendVerificationEmail";
 import { SendVerificationEmailUseCase } from "../application/use-cases/auth/send-verification-email.usecase";
+import { ICategoryRepository } from "../domain/repositories/ICategoryRepository";
+import { MongoCategoryRepository } from "../infrastructure/database/mongo/repositories/MongoCategoryRepository";
+import { ICreateCategory } from "../application/ports/admin/category/ICreateCategory";
+import { CreateCategoryUseCase } from "../application/use-cases/admin/category/create-category.usecase";
+import { IGetAllCategories } from "../application/ports/admin/category/IGetAllCategories";
+import { GetAllCategoriesUseCase } from "../application/use-cases/admin/category/get-all-categories.usecase";
+import { IUpdateCategory } from "../application/ports/admin/category/IUpdateCategory";
+import { UpdateCategoryUseCase } from "../application/use-cases/admin/category/update-category.usecase";
+import { IToggleCategoryStatus } from "../application/ports/admin/category/IToggleCategoryStatus";
+import { ToggleCategoryStatusUseCase } from "../application/use-cases/admin/category/toggle-category-status.usecase";
+import { CategoryController } from "../interface-adapters/controllers/CategoryController";
 
 
 
@@ -104,6 +115,7 @@ container.bind<IUserRepository>(TYPES.IUserRepository).to(MongoUserRepository);
 container.bind<IDoctorRepository>(TYPES.IDoctorRepository).to(MongoDoctorRepository);
 container.bind<IAdminRepository>(TYPES.IAdminRepository).to(MongoAdminRepository);
 container.bind<IWalletRepository>(TYPES.IWalletRepository).to(MongoWalletRepository);
+container.bind<ICategoryRepository>(TYPES.ICategoryRepository).to(MongoCategoryRepository);
 
 
 
@@ -221,7 +233,38 @@ container.bind<IResetDoctorPassword>(TYPES.IResetDoctorPassword).toDynamicValue(
 });
 
 
+
+container.bind<ICreateCategory>(TYPES.ICreateCategory).toDynamicValue((ctx) => {
+    return new CreateCategoryUseCase(
+        ctx.get(TYPES.ICategoryRepository),
+        ctx.get(TYPES.ILogger)
+    )
+});
+
+container.bind<IGetAllCategories>(TYPES.IGetAllCategories).toDynamicValue((ctx) => {
+    return new GetAllCategoriesUseCase(
+        ctx.get(TYPES.ICategoryRepository)
+    );
+});
+
+container.bind<IUpdateCategory>(TYPES.IUpdateCategory).toDynamicValue((ctx) => {
+    return new UpdateCategoryUseCase(
+        ctx.get(TYPES.ICategoryRepository),
+        ctx.get(TYPES.ILogger)
+    );
+});
+
+container.bind<IToggleCategoryStatus>(TYPES.IToggleCategoryStatus).toDynamicValue((ctx) => {
+    return new ToggleCategoryStatusUseCase(
+        ctx.get(TYPES.ICategoryRepository),
+        ctx.get(TYPES.ILogger)
+    );
+});
+
+
+
 //controllers
 container.bind(AuthController).toSelf();
+container.bind(CategoryController).toSelf();
 
 export { container };

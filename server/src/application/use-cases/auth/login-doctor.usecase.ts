@@ -1,11 +1,11 @@
 import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
 import { AUTH_ERRORS, DOCTOR_ERRORS, LOG_MESSAGES, VALIDATION } from "../../../shared/constants/Messages";
 import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
-import { LoginDoctorRequestDTO, LoginDoctorResponseDTO } from "../../dtos/auth";
+import { LoginDoctorRequestDTO, LoginDoctorResponseDTO } from "../../dtos/auth/auth.dto";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
-import { DoctorResponseMapper } from "../../mappers/DoctorResponseMapper";
+import { DoctorResponseMapper } from "../../mappers/doctor/DoctorResponseMapper";
 import { ILoginDoctor } from "../../ports/auth/ILoginDoctor";
 
 export class LoginDoctorUseCase implements ILoginDoctor {

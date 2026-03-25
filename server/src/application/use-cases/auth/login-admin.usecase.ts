@@ -1,10 +1,10 @@
 import { IAdminRepository } from "../../../domain/repositories/IAdminRepository";
 import { ADMIN_ERRORS, AUTH_ERRORS, LOG_MESSAGES, VALIDATION } from "../../../shared/constants/Messages";
 import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
-import { LoginAdminRequestDTO, LoginAdminResponseDTO } from "../../dtos/auth";
+import { LoginAdminRequestDTO, LoginAdminResponseDTO } from "../../dtos/auth/auth.dto";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { ILogger } from "../../interfaces/ILogger";
-import { AdminResponseMapper } from "../../mappers/AdminResponseMapper";
+import { AdminResponseMapper } from "../../mappers/admin/AdminResponseMapper";
 import { ILoginAdmin } from "../../ports/auth/ILoginAdmin";
 
 export class LoginAdminUseCase implements ILoginAdmin {

@@ -1,4 +1,4 @@
-import { SignupUserRequestDTO } from "../../dtos/auth";
+import { SignupUserRequestDTO } from "../../dtos/auth/auth.dto";
 import { ISignupUser } from "../../ports/auth/ISignupUser";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IEmailVerificationTokenService } from "../../interfaces/IEmailVerificationTokenService";
