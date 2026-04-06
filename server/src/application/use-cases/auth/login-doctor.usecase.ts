@@ -1,3 +1,4 @@
+import { inject, injectable } from "inversify";
 import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
 import { AUTH_ERRORS, DOCTOR_ERRORS, LOG_MESSAGES, VALIDATION } from "../../../shared/constants/Messages";
 import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
@@ -6,14 +7,16 @@ import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { DoctorResponseMapper } from "../../mappers/doctor/DoctorResponseMapper";
-import { ILoginDoctor } from "../../ports/auth/ILoginDoctor";
+import { ILoginDoctorUseCase } from "../../ports/auth/ILoginDoctorUseCase";
+import { TYPES } from "../../../di/types";
 
-export class LoginDoctorUseCase implements ILoginDoctor {
+@injectable()
+export class LoginDoctorUseCase implements ILoginDoctorUseCase {
     constructor(
-        private _doctorRepository: IDoctorRepository,
-        private _authTokenService: IAuthTokenService,
-        private _passwordService: IPasswordService,
-        private _logger: ILogger
+        @inject(TYPES.IDoctorRepository) private _doctorRepository: IDoctorRepository,
+        @inject(TYPES.IAuthTokenService) private _authTokenService: IAuthTokenService,
+        @inject(TYPES.IPasswordService) private _passwordService: IPasswordService,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: LoginDoctorRequestDTO): Promise<LoginDoctorResponseDTO> {

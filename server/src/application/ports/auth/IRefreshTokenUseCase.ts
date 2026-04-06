@@ -1,5 +1,5 @@
 import { RefreshTokenResponseDTO } from "../../dtos/auth/auth.dto";
 
-export interface IRefreshToken {
+export interface IRefreshTokenUseCase {
     execute(token: string): Promise<RefreshTokenResponseDTO>
 }

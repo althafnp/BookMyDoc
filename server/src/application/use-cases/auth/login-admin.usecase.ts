@@ -1,3 +1,4 @@
+import { inject, injectable } from "inversify";
 import { IAdminRepository } from "../../../domain/repositories/IAdminRepository";
 import { ADMIN_ERRORS, AUTH_ERRORS, LOG_MESSAGES, VALIDATION } from "../../../shared/constants/Messages";
 import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
@@ -5,13 +6,15 @@ import { LoginAdminRequestDTO, LoginAdminResponseDTO } from "../../dtos/auth/aut
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { ILogger } from "../../interfaces/ILogger";
 import { AdminResponseMapper } from "../../mappers/admin/AdminResponseMapper";
-import { ILoginAdmin } from "../../ports/auth/ILoginAdmin";
+import { ILoginAdminUseCase } from "../../ports/auth/ILoginAdminUseCase";
+import { TYPES } from "../../../di/types";
 
-export class LoginAdminUseCase implements ILoginAdmin {
+@injectable()
+export class LoginAdminUseCase implements ILoginAdminUseCase {
     constructor(
-        private _adminRepository: IAdminRepository,
-        private _authTokenService: IAuthTokenService,
-        private _logger: ILogger
+        @inject(TYPES.IAdminRepository) private _adminRepository: IAdminRepository,
+        @inject(TYPES.IAuthTokenService) private _authTokenService: IAuthTokenService,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: LoginAdminRequestDTO): Promise<LoginAdminResponseDTO> {

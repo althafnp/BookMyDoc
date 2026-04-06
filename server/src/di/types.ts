@@ -9,6 +9,7 @@ export const TYPES = {
     IAppConfig: Symbol.for("IAppConfig"),
     IUserLookupService: Symbol.for("IUserLookupService"),
     IPasswordTokenService: Symbol.for("IPasswordTokenService"),
+    IFileStorageService: Symbol.for("IFileStorageService"),
 
     //repositories
     IUserRepository: Symbol.for("IUserRepository"),
@@ -16,35 +17,42 @@ export const TYPES = {
     IAdminRepository: Symbol.for("IAdminRepository"),
     IWalletRepository: Symbol.for("IWalletRepository"),
     ICategoryRepository: Symbol.for("ICategoryRepository"),
+    IDoctorAvailabilityRepository: Symbol.for("IDoctorAvailabilityRepository"),
 
 
     // USER USECASES.
     // auth
-    ISignupUser: Symbol.for("ISignupUser"),
-    IVerifyEmail: Symbol.for("IVerifyEmail"),
-    ILoginUser: Symbol.for("ILoginUser"),
-    IGoogleAuth: Symbol.for("IGoogleAuth"),
-    ISendVerificationEmail: Symbol.for("ISendVerificationEmail"),
-    IForgotUserPassword: Symbol.for("IForgotUserPassword"),
-    IResetUserPassword: Symbol.for("IResetUserPassword"),
+    ISignupUserUseCase: Symbol.for("ISignupUserUseCase"),
+    IVerifyEmailUseCase: Symbol.for("IVerifyEmailUseCase"),
+    ILoginUserUseCase: Symbol.for("ILoginUserUseCase"),
+    IGoogleAuthUseCase: Symbol.for("IGoogleAuthUseCase"),
+    ISendVerificationEmailUseCase: Symbol.for("ISendVerificationEmailUseCase"),
+    IForgotUserPasswordUseCase: Symbol.for("IForgotUserPasswordUseCase"),
+    IResetUserPasswordUseCase: Symbol.for("IResetUserPasswordUseCase"),
 
 
-    IRefreshToken: Symbol.for("IRefreshToken"),
+    IRefreshTokenUseCase: Symbol.for("IRefreshTokenUseCase"),
 
     // ADMIN USECASES
     // auth
-    ILoginAdmin: Symbol.for("ILoginAdmin"),
+    ILoginAdminUseCase: Symbol.for("ILoginAdminUseCase"),
 
     // category
-    ICreateCategory: Symbol.for("ICreateCategory"),
-    IGetAllCategories: Symbol.for("IGetAllCategories"),
-    IUpdateCategory: Symbol.for("IUpdateCategory"),
-    IToggleCategoryStatus: Symbol.for("IToggleCategoryStatus"),
+    ICreateCategoryUseCase: Symbol.for("ICreateCategoryUseCase"),
+    IGetAllCategoriesUseCase: Symbol.for("IGetAllCategoriesUseCase"),
+    IUpdateCategoryUseCase: Symbol.for("IUpdateCategoryUseCase"),
+    IToggleCategoryStatusUseCase: Symbol.for("IToggleCategoryStatusUseCase"),
+
+    // doctor
+    ICreateDoctorUseCase: Symbol.for("ICreateDoctorUseCase"),
+    IGetAllDoctorsUseCase: Symbol.for("IGetAllDoctorsUseCase"),
+    IUpdateDoctorUseCase: Symbol.for("IUpdateDoctorUseCase"),
+    IToggleDoctorStatusUseCase: Symbol.for("IToggleDoctorStatusUseCase"),
 
 
     // DOCTOR USECASES
     // auth
-    ILoginDoctor: Symbol.for("ILoginDoctor"),
-    IForgotDoctorPassword: Symbol.for("IForgotDoctorPassword"),
-    IResetDoctorPassword: Symbol.for("IResetDoctorPassword"),       
+    ILoginDoctorUseCase: Symbol.for("ILoginDoctor"),
+    IForgotDoctorPasswordUseCase: Symbol.for("IForgotDoctorPasswordUseCase"),
+    IResetDoctorPasswordUseCase: Symbol.for("IResetDoctorPasswordUseCase"),       
 };

@@ -1,5 +1,5 @@
 import { SendVerificationEmailRequestDTO } from "../../dtos/auth/auth.dto";
 
-export interface ISendVerificationEmail {
+export interface ISendVerificationEmailUseCase {
     execute(dto: SendVerificationEmailRequestDTO): Promise<void>
 }

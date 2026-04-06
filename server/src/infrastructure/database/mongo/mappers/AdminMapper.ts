@@ -3,7 +3,7 @@ import { IAdmin } from "../models/admin.schema";
 import { BaseMapper } from "./BaseMapper";
 
 
-export class AdminMapper extends BaseMapper<Admin, IAdmin> {
+export class AdminMapper {
     static toDomain(raw: IAdmin): Admin {
         return new Admin(
             BaseMapper.toStringId(raw._id),

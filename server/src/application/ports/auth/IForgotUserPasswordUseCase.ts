@@ -1,5 +1,5 @@
 import { ForgotPasswordRequestDTO } from "../../dtos/auth/auth.dto";
 
-export interface IForgotDoctorPassword {
+export interface IForgotUserPasswordUseCase {
     execute(dto: ForgotPasswordRequestDTO): Promise<void>
 }

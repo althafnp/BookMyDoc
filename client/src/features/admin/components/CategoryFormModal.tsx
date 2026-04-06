@@ -60,7 +60,7 @@ const CategoryFormModal = ({
             onClick={onClose}
         >
             <Card
-                className="max-w-md w-full animate-in fade-in zoom-in-95 duration-200 overflow-hidden py-0 border-none"
+                className="max-w-lg w-full animate-in fade-in zoom-in-95 duration-200 overflow-hidden py-0 border-none"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}

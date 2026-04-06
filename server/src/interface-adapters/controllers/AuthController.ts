@@ -1,64 +1,64 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../di/types";
-import { ISignupUser } from "../../application/ports/auth/ISignupUser";
+import { ISignupUserUseCase } from "../../application/ports/auth/ISignupUserUseCase";
 import { emailSchema, loginSchema, resetPasswordSchema, signupSchema, verifyEmailSchema } from "../validators/auth.validator";
 import { HttpStatus } from "../../shared/constants/HttpStatus";
 import { ApiResponse } from "../../shared/utils/ApiResponse";
 import { parseWithZod } from "../validators/zod-error.validator";
 import { ForgotPasswordRequestDTO, LoginAdminRequestDTO, LoginDoctorRequestDTO, LoginUserRequestDTO, ResetPasswordRequestDTO, SendVerificationEmailRequestDTO, SignupUserRequestDTO, VerifyEmailRequestDTO } from "../../application/dtos/auth/auth.dto";
-import { IVerifyEmail } from "../../application/ports/auth/IVerifyEmail";
-import { ILoginUser } from "../../application/ports/auth/ILoginUser";
-import { IGoogleAuth } from "../../application/ports/auth/IGoogleAuth";
-import { IRefreshToken } from "../../application/ports/auth/IRefreshToken";
+import { IVerifyEmailUseCase } from "../../application/ports/auth/IVerifyEmailUseCase";
+import { ILoginUserUseCase } from "../../application/ports/auth/ILoginUserUseCase";
+import { IGoogleAuthUseCase } from "../../application/ports/auth/IGoogleAuthUseCase";
+import { IRefreshTokenUseCase } from "../../application/ports/auth/IRefreshTokenUseCase";
 import { env } from "../../infrastructure/config/env";
-import { ILoginAdmin } from "../../application/ports/auth/ILoginAdmin";
-import { ILoginDoctor } from "../../application/ports/auth/ILoginDoctor";
-import { IForgotDoctorPassword } from "../../application/ports/auth/IForgotDoctorPassword";
-import { IResetDoctorPassword } from "../../application/ports/auth/IResetDoctorPassword";
+import { ILoginAdminUseCase } from "../../application/ports/auth/ILoginAdminUseCase";
+import { ILoginDoctorUseCase } from "../../application/ports/auth/ILoginDoctorUseCase";
+import { IForgotDoctorPasswordUseCase } from "../../application/ports/auth/IForgotDoctorPasswordUseCase";
+import { IResetDoctorPasswordUseCase } from "../../application/ports/auth/IResetDoctorPasswordUseCase";
 import { asyncHandler } from "../../shared/utils/asyncHandler";
 import { AUTH_SUCCESS } from "../../shared/constants/Messages";
-import { IForgotUserPassword } from "../../application/ports/auth/IForgotUserPassword";
-import { IResetUserPassword } from "../../application/ports/auth/IResetUserPassword";
-import { ISendVerificationEmail } from "../../application/ports/auth/ISendVerificationEmail";
+import { IForgotUserPasswordUseCase } from "../../application/ports/auth/IForgotUserPasswordUseCase";
+import { IResetUserPasswordUseCase } from "../../application/ports/auth/IResetUserPasswordUseCase";
+import { ISendVerificationEmailUseCase } from "../../application/ports/auth/ISendVerificationEmailUseCase";
 
 @injectable()
 export class AuthController {
     constructor(
-        @inject(TYPES.ISignupUser)
-        private _signupUserUseCase: ISignupUser,
+        @inject(TYPES.ISignupUserUseCase)
+        private _signupUserUseCase: ISignupUserUseCase,
 
-        @inject(TYPES.IVerifyEmail)
-        private _verifyEmailUseCase: IVerifyEmail,
+        @inject(TYPES.IVerifyEmailUseCase)
+        private _verifyEmailUseCase: IVerifyEmailUseCase,
 
-        @inject(TYPES.ILoginUser)
-        private _loginUserUseCase: ILoginUser,
+        @inject(TYPES.ILoginUserUseCase)
+        private _loginUserUseCase: ILoginUserUseCase,
 
-        @inject(TYPES.IGoogleAuth)
-        private _googleAuthUseCase: IGoogleAuth,
+        @inject(TYPES.IGoogleAuthUseCase)
+        private _googleAuthUseCase: IGoogleAuthUseCase,
 
-        @inject(TYPES.ISendVerificationEmail)
-        private _sendVerificationEmailUseCase: ISendVerificationEmail,
+        @inject(TYPES.ISendVerificationEmailUseCase)
+        private _sendVerificationEmailUseCase: ISendVerificationEmailUseCase,
 
-        @inject(TYPES.IForgotUserPassword)
-        private _forgotUserPasswordUseCase: IForgotUserPassword,
+        @inject(TYPES.IForgotUserPasswordUseCase)
+        private _forgotUserPasswordUseCase: IForgotUserPasswordUseCase,
 
-        @inject(TYPES.IResetUserPassword)
-        private _resetUserPasswordUseCase: IResetUserPassword,
+        @inject(TYPES.IResetUserPasswordUseCase)
+        private _resetUserPasswordUseCase: IResetUserPasswordUseCase,
 
-        @inject(TYPES.IRefreshToken)
-        private _refreshTokenUseCase: IRefreshToken,
+        @inject(TYPES.IRefreshTokenUseCase)
+        private _refreshTokenUseCase: IRefreshTokenUseCase,
 
-        @inject(TYPES.ILoginAdmin)
-        private _loginAdminUseCase: ILoginAdmin,
+        @inject(TYPES.ILoginAdminUseCase)
+        private _loginAdminUseCase: ILoginAdminUseCase,
 
-        @inject(TYPES.ILoginDoctor)
-        private _loginDoctorUseCase: ILoginDoctor,
+        @inject(TYPES.ILoginDoctorUseCase)
+        private _loginDoctorUseCase: ILoginDoctorUseCase,
 
-        @inject(TYPES.IForgotDoctorPassword)
-        private _forgotDoctorPasswordUseCase: IForgotDoctorPassword,
+        @inject(TYPES.IForgotDoctorPasswordUseCase)
+        private _forgotDoctorPasswordUseCase: IForgotDoctorPasswordUseCase,
 
-        @inject(TYPES.IResetDoctorPassword)
-        private _resetDoctorPasswordUseCase: IResetDoctorPassword,
+        @inject(TYPES.IResetDoctorPasswordUseCase)
+        private _resetDoctorPasswordUseCase: IResetDoctorPasswordUseCase,
     ) { }
 
     signupUser = asyncHandler(async (req, res) => {
@@ -132,14 +132,14 @@ export class AuthController {
         await this._sendVerificationEmailUseCase.execute(dto);
 
         res.status(HttpStatus.OK).json(ApiResponse.success(AUTH_SUCCESS.VERIFICATION_EMAIL_SENT));
-    })
+    });
 
     forgotUserPassword = asyncHandler(async (req, res) => {
         const dto = parseWithZod<ForgotPasswordRequestDTO>(emailSchema, req.body);
 
         await this._forgotUserPasswordUseCase.execute(dto);
 
-        res.status(HttpStatus.OK).json(ApiResponse.success(AUTH_SUCCESS.PASSWORD_RESET_EMAIL_SENT))
+        res.status(HttpStatus.OK).json(ApiResponse.success(AUTH_SUCCESS.PASSWORD_RESET_EMAIL_SENT));
     });
 
     resetUserPassword = asyncHandler(async (req, res) => {
@@ -156,7 +156,7 @@ export class AuthController {
         res.status(HttpStatus.OK).json(
             ApiResponse.success(AUTH_SUCCESS.PASSWORD_RESET_SUCCESSFUL)
         );
-    })
+    });
 
 
     logout = asyncHandler(async (req, res) => {

@@ -3,6 +3,6 @@ import {
     UpdateCategoryResponseDTO,
 } from "../../../dtos/admin/category.dto";
 
-export interface IUpdateCategory {
+export interface IUpdateCategoryUseCase {
     execute(dto: UpdateCategoryRequestDTO): Promise<UpdateCategoryResponseDTO>;
 }

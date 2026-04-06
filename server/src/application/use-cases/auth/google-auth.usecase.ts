@@ -1,3 +1,4 @@
+import { inject, injectable } from "inversify";
 import { User } from "../../../domain/entities/User";
 import { Wallet } from "../../../domain/entities/Wallet";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
@@ -9,15 +10,17 @@ import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { IGoogleAuthService } from "../../interfaces/IGoogleAuthService";
 import { ILogger } from "../../interfaces/ILogger";
 import { UserResponseMapper } from "../../mappers/user/UserResponseMapper";
-import { IGoogleAuth } from "../../ports/auth/IGoogleAuth";
+import { IGoogleAuthUseCase } from "../../ports/auth/IGoogleAuthUseCase";
+import { TYPES } from "../../../di/types";
 
-export class GoogleAuthUseCase implements IGoogleAuth{
+@injectable()
+export class GoogleAuthUseCase implements IGoogleAuthUseCase {
     constructor(
-        private _userRepository: IUserRepository,
-        private _walletRepository: IWalletRepository,
-        private _authTokenService: IAuthTokenService,
-        private _googleAuthService: IGoogleAuthService,
-        private _logger: ILogger
+        @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+        @inject(TYPES.IWalletRepository) private _walletRepository: IWalletRepository,
+        @inject(TYPES.IAuthTokenService) private _authTokenService: IAuthTokenService,
+        @inject(TYPES.IGoogleAuthService) private _googleAuthService: IGoogleAuthService,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: GoogleAuthRequestDTO): Promise<LoginUserResponseDTO> {

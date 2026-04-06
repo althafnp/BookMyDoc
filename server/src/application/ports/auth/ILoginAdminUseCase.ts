@@ -1,5 +1,5 @@
 import { LoginAdminRequestDTO, LoginAdminResponseDTO } from "../../dtos/auth/auth.dto";
 
-export interface ILoginAdmin {
+export interface ILoginAdminUseCase {
     execute(dto: LoginAdminRequestDTO): Promise<LoginAdminResponseDTO>;
 }

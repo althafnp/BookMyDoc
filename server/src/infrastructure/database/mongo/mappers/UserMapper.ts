@@ -2,7 +2,7 @@ import { User } from "../../../../domain/entities/User";
 import { IUser } from "../models/user.schema";
 import { BaseMapper } from "./BaseMapper";
 
-export class UserMapper extends BaseMapper<User, IUser> {
+export class UserMapper {
 
     static toDomain(raw: IUser): User {
         return new User(

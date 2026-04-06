@@ -4,14 +4,20 @@ import { HttpStatus } from "../../../../shared/constants/HttpStatus";
 import { ILogger } from "../../../../application/interfaces/ILogger";
 import { SERVER_ERRORS } from "../../../../shared/constants/Messages";
 
+type ErrorResponse = {
+    success: false;
+    message: string;
+    errors?: unknown;
+};
+
 
 export const createErrorMiddleware = (logger: ILogger): ErrorRequestHandler => {
 
-    return (err, req, res, next) => {
+    return (err, req, res, _next) => {
 
         if(err instanceof HttpError) {
             console.log('from middleware', err);
-            const response: any = {
+            const response: ErrorResponse = {
                 success: false,
                 message: err.message,
             };

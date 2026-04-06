@@ -37,6 +37,8 @@ export const ADMIN_ERRORS = {
 export const DOCTOR_ERRORS = {
     DOCTOR_NOT_FOUND: "Doctor not found",
     EMAIL_NOT_FOUND: "Email not found",
+    DOCTOR_ALREADY_EXISTS: "A doctor with this email already exists",
+    AVAILABILITY_NOT_FOUND: "Doctor availability not found",
 } as const;
 
 
@@ -81,6 +83,14 @@ export const CATEGORY_SUCCESS = {
 } as const;
 
 
+export const DOCTOR_SUCCESS = {
+    DOCTOR_CREATED: "Doctor created successfully",
+    DOCTORS_FETCHED: "Doctors fetched successfully",
+    DOCTOR_UPDATED: "Doctor updated successfully",
+    DOCTOR_STATUS_TOGGLED: "Doctor status toggled successfully",
+} as const;
+
+
 // ================================
 // Logger Messages
 // ================================
@@ -96,6 +106,9 @@ export const LOG_MESSAGES = {
     CATEGORY_CREATED: "New category created",
     CATEGORY_UPDATED: "Category updated",
     CATEGORY_STATUS_TOGGLED: "Category status toggled",
+    DOCTOR_CREATED: "New doctor created",
+    DOCTOR_UPDATED: "Doctor updated",
+    DOCTOR_STATUS_TOGGLED: "Doctor status toggled",
 } as const;
 
 
@@ -107,4 +120,4 @@ export const LOG_MESSAGES = {
 export const SERVER_ERRORS = {
     UNEXPECTED_ERROR: "Unexpected server error",
     SERVER_ERROR: "Internal Server Error"
-}
+};

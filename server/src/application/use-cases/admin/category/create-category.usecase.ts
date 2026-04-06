@@ -1,3 +1,4 @@
+import { inject, injectable } from "inversify";
 import { Category } from "../../../../domain/entities/Category";
 import { ICategoryRepository } from "../../../../domain/repositories/ICategoryRepository";
 import { CATEGORY_ERRORS, LOG_MESSAGES } from "../../../../shared/constants/Messages";
@@ -5,12 +6,14 @@ import { ConflictError } from "../../../../shared/errors/HttpError";
 import { CreateCategoryRequestDTO, CreateCategoryResponseDTO } from "../../../dtos/admin/category.dto";
 import { ILogger } from "../../../interfaces/ILogger";
 import { CategoryResponseMapper } from "../../../mappers/admin/CategoryResponseMapper";
-import { ICreateCategory } from "../../../ports/admin/category/ICreateCategory";
+import { ICreateCategoryUseCase } from "../../../ports/admin/category/ICreateCategoryUseCase";
+import { TYPES } from "../../../../di/types";
 
-export class CreateCategoryUseCase implements ICreateCategory {
+@injectable()
+export class CreateCategoryUseCase implements ICreateCategoryUseCase {
     constructor(
-        private _categoryRepository: ICategoryRepository,
-        private _logger: ILogger
+        @inject(TYPES.ICategoryRepository) private _categoryRepository: ICategoryRepository,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: CreateCategoryRequestDTO): Promise<CreateCategoryResponseDTO> {

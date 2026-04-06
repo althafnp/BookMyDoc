@@ -1,3 +1,4 @@
+import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { AUTH_ERRORS, LOG_MESSAGES, USER_ERRORS, VALIDATION } from "../../../shared/constants/Messages";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
@@ -6,14 +7,16 @@ import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { UserResponseMapper } from "../../mappers/user/UserResponseMapper";
-import { ILoginUser } from "../../ports/auth/ILoginUser";
+import { ILoginUserUseCase } from "../../ports/auth/ILoginUserUseCase";
+import { TYPES } from "../../../di/types";
 
-export class LoginUserUseCase implements ILoginUser {
+@injectable()
+export class LoginUserUseCase implements ILoginUserUseCase {
     constructor(
-        private _userRepository: IUserRepository,
-        private _authTokenService: IAuthTokenService,
-        private _passwordService: IPasswordService,
-        private _logger: ILogger
+        @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+        @inject(TYPES.IAuthTokenService) private _authTokenService: IAuthTokenService,
+        @inject(TYPES.IPasswordService) private _passwordService: IPasswordService,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) { }
 
     async execute(dto: LoginUserRequestDTO): Promise<LoginUserResponseDTO> {

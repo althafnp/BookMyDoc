@@ -1,15 +1,18 @@
+import { inject, injectable } from "inversify";
 import { ICategoryRepository } from "../../../../domain/repositories/ICategoryRepository";
 import { CATEGORY_ERRORS, LOG_MESSAGES } from "../../../../shared/constants/Messages";
 import { NotFoundError } from "../../../../shared/errors/HttpError";
 import { ToggleCategoryStatusRequestDTO, ToggleCategoryStatusResponseDTO } from "../../../dtos/admin/category.dto";
 import { ILogger } from "../../../interfaces/ILogger";
 import { CategoryResponseMapper } from "../../../mappers/admin/CategoryResponseMapper";
-import { IToggleCategoryStatus } from "../../../ports/admin/category/IToggleCategoryStatus";
+import { IToggleCategoryStatusUseCase } from "../../../ports/admin/category/IToggleCategoryStatusUseCase";
+import { TYPES } from "../../../../di/types";
 
-export class ToggleCategoryStatusUseCase implements IToggleCategoryStatus {
+@injectable()
+export class ToggleCategoryStatusUseCase implements IToggleCategoryStatusUseCase {
     constructor(
-        private _categoryRepository: ICategoryRepository,
-        private _logger: ILogger
+        @inject(TYPES.ICategoryRepository) private _categoryRepository: ICategoryRepository,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: ToggleCategoryStatusRequestDTO): Promise<ToggleCategoryStatusResponseDTO> {

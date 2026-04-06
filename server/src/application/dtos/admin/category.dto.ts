@@ -1,4 +1,5 @@
 import { Status } from "../../../domain/enums/Auth";
+import { PaginatedResponseDTO, PaginationRequestDTO } from "../shared/pagination.dto";
 
 // ── Create ──
 export interface CreateCategoryRequestDTO {
@@ -13,26 +14,20 @@ export interface CreateCategoryResponseDTO {
 
 
 // ── Get All (List) ──
-export interface GetAllCategoriesRequestDTO {
-    page: number;
-    limit: number;
+export interface GetAllCategoriesRequestDTO extends PaginationRequestDTO {
     sortBy: "name" | "createdAt";
     sortOrder: "asc" | "desc";
     status?: Status;
     search?: string;
 }
+
 export interface CategoryItemDTO {
     id: string;
     name: string;
     status: Status;
 }
-export interface GetAllCategoriesResponseDTO {
-    categories: CategoryItemDTO[];
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-}
+
+export type GetAllCategoriesResponseDTO = PaginatedResponseDTO<CategoryItemDTO>;
 
 
 // ── Update (Edit) ──

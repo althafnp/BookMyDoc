@@ -1,3 +1,5 @@
 export interface IAppConfig {
-    frontendUrl: string
+    frontendUrl: string,
+    awsS3BucketName: string;
+    awsRegion: string
 }

@@ -8,10 +8,10 @@ export class Category {
     ) {}
 
     activate() {
-        this.status = "ACTIVE"
+        this.status = "ACTIVE";
     }
 
     deactivate() {
-        this.status = "INACTIVE"
+        this.status = "INACTIVE";
     }
 }

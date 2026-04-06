@@ -1,5 +1,5 @@
 import { LoginDoctorRequestDTO, LoginDoctorResponseDTO } from "../../dtos/auth/auth.dto";
 
-export interface ILoginDoctor {
+export interface ILoginDoctorUseCase {
     execute(dto: LoginDoctorRequestDTO): Promise<LoginDoctorResponseDTO>
 }

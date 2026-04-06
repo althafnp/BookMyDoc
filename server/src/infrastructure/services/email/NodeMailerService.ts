@@ -93,4 +93,50 @@ export class NodeMailerService implements IEmailService{
 
         await this._transporter.sendMail(mailOptions);
     }
+
+
+    async sendDoctorOnBoardingEmail(email: string, name: string, loginUrl: string) {
+        const mailOptions = {
+            from: env.EMAIL_USER,
+            to: email,
+            subject: 'Your Doctor account has been created',
+            html: `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+                <h2>Welcome, Dr. ${name} 👋</h2>
+                <p>
+                    An administrator has created a doctor account for you on our platform.
+                </p>
+                <p>
+                    You can log in using the button below:
+                </p>
+                <a 
+                    href="${loginUrl}"
+                    style="
+                        display: inline-block;
+                        padding: 12px 20px;
+                        margin: 16px 0;
+                        background-color: #2563eb;
+                        color: #ffffff;
+                        text-decoration: none;
+                        border-radius: 6px;
+                        font-weight: bold;
+                    "
+                >
+                    Go to Doctor Login
+                </a>
+                <p>Don't forget to change password before login.</p>
+                <p>
+                    If you have any issues accessing your account, please contact support.
+                </p>
+                <p>
+                    The BookMyDoc team.
+                </p>
+            </div>
+
+            `
+        };
+
+        await this._transporter.sendMail(mailOptions);
+    }
+
 }

@@ -3,6 +3,6 @@ import {
     ToggleCategoryStatusResponseDTO,
 } from "../../../dtos/admin/category.dto";
 
-export interface IToggleCategoryStatus {
+export interface IToggleCategoryStatusUseCase {
     execute(dto: ToggleCategoryStatusRequestDTO): Promise<ToggleCategoryStatusResponseDTO>;
 }

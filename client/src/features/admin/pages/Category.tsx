@@ -48,7 +48,7 @@ const Category = () => {
                 return { sortBy: 'createdAt' as const, sortOrder: 'desc' as const };
         }
     };
-
+    
     const queryParams = {
         page,
         limit: 10,
@@ -63,8 +63,8 @@ const Category = () => {
     const updateMutation = useUpdateCategory();
     const toggleMutation = useToggleCategoryStatus(queryClient);
 
-    const categories: CategoryItem[] = data?.data?.categories ?? [];
-    const totalPages = data?.data?.totalPages ?? 1;
+    const categories: CategoryItem[] = data?.data?.items ?? [];
+    const totalPages = data?.data?.meta.totalPages ?? 1;
 
     const invalidateCategories = () => {
         queryClient.invalidateQueries({ queryKey: ['admin', 'categories'] });

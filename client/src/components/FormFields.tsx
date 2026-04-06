@@ -1,5 +1,5 @@
 import { Input } from './ui/input'
-import type { FieldErrors, FieldValues, Path, UseFormRegister } from 'react-hook-form';
+import { get, type FieldErrors, type FieldValues, type Path, type UseFormRegister } from 'react-hook-form';
 import { Label } from './ui/label';
 
 
@@ -23,24 +23,26 @@ const FormField = <T extends FieldValues>({
     maxLength,
     disabled,
     placeholder
-} : FormFieldProps<T>) => {
+}: FormFieldProps<T>) => {
 
-    const error = errors[name];
+    const error = get(errors, name);
     return (
         <div className='grid gap-2'>
             <Label htmlFor={name} >{label}</Label>
             <Input
-                id={name} 
-                type={type} 
-                maxLength={maxLength} 
+                id={name}
+                type={type}
+                maxLength={maxLength}
                 {...register(name)}
-                aria-invalid={!!error} 
-                disabled={disabled} 
+                aria-invalid={!!error}
+                disabled={disabled}
                 placeholder={placeholder}
             />
 
-            {error?.message && (
-                <p className='text-sm text-destructive'>{String(error.message)}</p>
+            {error && (
+                <p className="text-sm text-destructive">
+                    {error.message as string}
+                </p>
             )}
         </div>
     )

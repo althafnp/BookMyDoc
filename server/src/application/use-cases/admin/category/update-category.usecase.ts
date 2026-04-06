@@ -1,15 +1,18 @@
+import { inject, injectable } from "inversify";
 import { ICategoryRepository } from "../../../../domain/repositories/ICategoryRepository";
 import { CATEGORY_ERRORS, LOG_MESSAGES } from "../../../../shared/constants/Messages";
 import { ConflictError, NotFoundError } from "../../../../shared/errors/HttpError";
 import { UpdateCategoryRequestDTO, UpdateCategoryResponseDTO } from "../../../dtos/admin/category.dto";
 import { ILogger } from "../../../interfaces/ILogger";
 import { CategoryResponseMapper } from "../../../mappers/admin/CategoryResponseMapper";
-import { IUpdateCategory } from "../../../ports/admin/category/IUpdateCategory";
+import { IUpdateCategoryUseCase } from "../../../ports/admin/category/IUpdateCategoryUseCase";
+import { TYPES } from "../../../../di/types";
 
-export class UpdateCategoryUseCase implements IUpdateCategory {
+@injectable()
+export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
     constructor(
-        private _categoryRepository: ICategoryRepository,
-        private _logger: ILogger
+        @inject(TYPES.ICategoryRepository) private _categoryRepository: ICategoryRepository,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: UpdateCategoryRequestDTO): Promise<UpdateCategoryResponseDTO> {
@@ -18,10 +21,12 @@ export class UpdateCategoryUseCase implements IUpdateCategory {
             throw new NotFoundError(CATEGORY_ERRORS.CATEGORY_NOT_FOUND);
         };
 
-        const existing = await this._categoryRepository.findByName(dto.name);
-        if(existing) {
-            throw new ConflictError(CATEGORY_ERRORS.CATEGORY_ALREADY_EXISTS);
-        };
+        if(dto.name !== category.name) {
+            const existing = await this._categoryRepository.findByName(dto.name);
+            if(existing) {
+                throw new ConflictError(CATEGORY_ERRORS.CATEGORY_ALREADY_EXISTS);
+            };
+        }
 
         category.name = dto.name;
 

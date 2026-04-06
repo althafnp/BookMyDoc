@@ -1,22 +1,27 @@
+import { inject, injectable } from "inversify";
 import { ICategoryRepository } from "../../../../domain/repositories/ICategoryRepository";
 import { GetAllCategoriesRequestDTO, GetAllCategoriesResponseDTO } from "../../../dtos/admin/category.dto";
 import { CategoryResponseMapper } from "../../../mappers/admin/CategoryResponseMapper";
-import { IGetAllCategories } from "../../../ports/admin/category/IGetAllCategories";
+import { IGetAllCategoriesUseCase } from "../../../ports/admin/category/IGetAllCategoriesUseCase";
+import { TYPES } from "../../../../di/types";
 
-export class GetAllCategoriesUseCase implements IGetAllCategories {
+@injectable()
+export class GetAllCategoriesUseCase implements IGetAllCategoriesUseCase {
     constructor(
-        private _categoryRepository: ICategoryRepository
+        @inject(TYPES.ICategoryRepository) private _categoryRepository: ICategoryRepository
     ) {}
 
     async execute(dto: GetAllCategoriesRequestDTO): Promise<GetAllCategoriesResponseDTO> {
         const { categories, total } = await this._categoryRepository.findAll(dto);
 
         return {
-            categories: categories.map(CategoryResponseMapper.toDTO),
-            total,
-            page: dto.page,
-            limit: dto.limit,
-            totalPages: Math.ceil(total / dto.limit)
+            items: categories.map(CategoryResponseMapper.toDTO),
+            meta: {
+                total,
+                page: dto.page,
+                limit: dto.limit,
+                totalPages: Math.ceil(total / dto.limit)
+            }
         };
     }
 }
