@@ -27,21 +27,21 @@ import { IAppConfig } from "../application/interfaces/IAppConfig";
 import { AppConfig } from "../infrastructure/config/AppConfig";
 
 
-import { ISignupUser } from "../application/ports/auth/ISignupUser";
+import { ISignupUserUseCase } from "../application/ports/auth/ISignupUserUseCase";
 import { SignupUserUseCase } from "../application/use-cases/auth/signup-user.usecase";
 
 import { AuthController } from "../interface-adapters/controllers/AuthController";
 
-import { IVerifyEmail } from "../application/ports/auth/IVerifyEmail";
+import { IVerifyEmailUseCase } from "../application/ports/auth/IVerifyEmailUseCase";
 import { VerifyEmailUseCase } from "../application/use-cases/auth/verify-email.usecase";
 
-import { ILoginUser } from "../application/ports/auth/ILoginUser";
+import { ILoginUserUseCase } from "../application/ports/auth/ILoginUserUseCase";
 import { LoginUserUseCase } from "../application/use-cases/auth/login-user.usecase";
 
-import { IGoogleAuth } from "../application/ports/auth/IGoogleAuth";
+import { IGoogleAuthUseCase } from "../application/ports/auth/IGoogleAuthUseCase";
 import { GoogleAuthUseCase } from "../application/use-cases/auth/google-auth.usecase";
 
-import { IRefreshToken } from "../application/ports/auth/IRefreshToken";
+import { IRefreshTokenUseCase } from "../application/ports/auth/IRefreshTokenUseCase";
 import { RefreshTokenUseCase } from "../application/use-cases/auth/refresh-token.usecase";
 
 import { IUserLookupService } from "../application/interfaces/IUserLookupService";
@@ -53,40 +53,75 @@ import { MongoDoctorRepository } from "../infrastructure/database/mongo/reposito
 import { IAdminRepository } from "../domain/repositories/IAdminRepository";
 import { MongoAdminRepository } from "../infrastructure/database/mongo/repositories/MongoAdminRepository";
 
-import { ILoginAdmin } from "../application/ports/auth/ILoginAdmin";
+import { ILoginAdminUseCase } from "../application/ports/auth/ILoginAdminUseCase";
 import { LoginAdminUseCase } from "../application/use-cases/auth/login-admin.usecase";
 
-import { ILoginDoctor } from "../application/ports/auth/ILoginDoctor";
+import { ILoginDoctorUseCase } from "../application/ports/auth/ILoginDoctorUseCase";
 import { LoginDoctorUseCase } from "../application/use-cases/auth/login-doctor.usecase";
 
 import { IPasswordTokenService } from "../application/interfaces/IPasswordTokenService";
 import { JwtPasswordTokenService } from "../infrastructure/services/jwt/JwtPasswordTokenService";
 
-import { IForgotDoctorPassword } from "../application/ports/auth/IForgotDoctorPassword";
+import { IForgotDoctorPasswordUseCase } from "../application/ports/auth/IForgotDoctorPasswordUseCase";
 import { ForgotDoctorPasswordUseCase } from "../application/use-cases/auth/forgot-doctor-password.usecase";
 
-import { IResetDoctorPassword } from "../application/ports/auth/IResetDoctorPassword";
+import { IResetDoctorPasswordUseCase } from "../application/ports/auth/IResetDoctorPasswordUseCase";
 import { ResetDoctorPasswordUseCase } from "../application/use-cases/auth/reset-doctor-password.usecase";
 
 import { IWalletRepository } from "../domain/repositories/IWalletRepository";
 import { MongoWalletRepository } from "../infrastructure/database/mongo/repositories/MongoWalletRepository";
 
-import { IForgotUserPassword } from "../application/ports/auth/IForgotUserPassword";
+import { IForgotUserPasswordUseCase } from "../application/ports/auth/IForgotUserPasswordUseCase";
 import { ForgotUserPasswordUseCase } from "../application/use-cases/auth/forgot-user-password-usecase";
 
-import { IResetUserPassword } from "../application/ports/auth/IResetUserPassword";
+import { IResetUserPasswordUseCase } from "../application/ports/auth/IResetUserPasswordUseCase";
 import { ResetUserPasswordUseCase } from "../application/use-cases/auth/reset-user-password.usecase";
 
-import { ISendVerificationEmail } from "../application/ports/auth/ISendVerificationEmail";
+import { ISendVerificationEmailUseCase } from "../application/ports/auth/ISendVerificationEmailUseCase";
 import { SendVerificationEmailUseCase } from "../application/use-cases/auth/send-verification-email.usecase";
 
+import { ICategoryRepository } from "../domain/repositories/ICategoryRepository";
+import { MongoCategoryRepository } from "../infrastructure/database/mongo/repositories/MongoCategoryRepository";
 
+import { ICreateCategoryUseCase } from "../application/ports/admin/category/ICreateCategoryUseCase";
+import { CreateCategoryUseCase } from "../application/use-cases/admin/category/create-category.usecase";
+
+import { IGetAllCategoriesUseCase } from "../application/ports/admin/category/IGetAllCategoriesUseCase";
+import { GetAllCategoriesUseCase } from "../application/use-cases/admin/category/get-all-categories.usecase";
+
+import { IUpdateCategoryUseCase } from "../application/ports/admin/category/IUpdateCategoryUseCase";
+import { UpdateCategoryUseCase } from "../application/use-cases/admin/category/update-category.usecase";
+
+import { IToggleCategoryStatusUseCase } from "../application/ports/admin/category/IToggleCategoryStatusUseCase";
+import { ToggleCategoryStatusUseCase } from "../application/use-cases/admin/category/toggle-category-status.usecase";
+
+import { CategoryController } from "../interface-adapters/controllers/CategoryController";
+
+import { IFileStorageService } from "../application/interfaces/IFileStorageService";
+import { S3FileStorageService } from "../infrastructure/services/storage/S3FileStorageService";
+
+import { IDoctorAvailabilityRepository } from "../domain/repositories/IDoctorAvailabiltyRepository";
+import { MongoDoctorAvailbilityRepository } from "../infrastructure/database/mongo/repositories/MongoDoctorAvailabilityRepository";
+
+import { ICreateDoctorUseCase } from "../application/ports/admin/doctor/ICreateDoctorUseCase";
+import { CreateDoctorUseCase } from "../application/use-cases/admin/doctor/create-doctor.usecase";
+
+import { DoctorController } from "../interface-adapters/controllers/DoctorController";
+
+import { IUpdateDoctorUseCase } from "../application/ports/admin/doctor/IUpdateDoctorUseCase";
+import { UpdateDoctorUseCase } from "../application/use-cases/admin/doctor/update-doctor.usecase";
+
+import { IToggleDoctorStatusUseCase } from "../application/ports/admin/doctor/IToggleDoctorStatusUseCase";
+import { ToggleDoctorStatusUseCase } from "../application/use-cases/admin/doctor/toggle-doctor-status.usecase";
+
+import { IGetAllDoctorsUseCase } from "../application/ports/admin/doctor/IGetAllDoctorsUseCase";
+import { GetAllDoctorsUseCase } from "../application/use-cases/admin/doctor/get-all-doctors.usecase";
 
 
 
 const container = new Container();
 
-//Services
+//services
 container.bind<IAuthTokenService>(TYPES.IAuthTokenService).to(JwtAuthTokenService);
 container.bind<IEmailVerificationTokenService>(TYPES.IEmailVerificationTokenService).to(JwtEmailVerificationTokenService);
 container.bind<IPasswordService>(TYPES.IPasswordService).to(BcryptService);
@@ -96,6 +131,7 @@ container.bind<IGoogleAuthService>(TYPES.IGoogleAuthService).to(GoogleOAuthServi
 container.bind<IAppConfig>(TYPES.IAppConfig).to(AppConfig);
 container.bind<IUserLookupService>(TYPES.IUserLookupService).to(UserLookupService);
 container.bind<IPasswordTokenService>(TYPES.IPasswordTokenService).to(JwtPasswordTokenService);
+container.bind<IFileStorageService>(TYPES.IFileStorageService).to(S3FileStorageService);
 
 
 
@@ -104,124 +140,48 @@ container.bind<IUserRepository>(TYPES.IUserRepository).to(MongoUserRepository);
 container.bind<IDoctorRepository>(TYPES.IDoctorRepository).to(MongoDoctorRepository);
 container.bind<IAdminRepository>(TYPES.IAdminRepository).to(MongoAdminRepository);
 container.bind<IWalletRepository>(TYPES.IWalletRepository).to(MongoWalletRepository);
+container.bind<ICategoryRepository>(TYPES.ICategoryRepository).to(MongoCategoryRepository);
+container.bind<IDoctorAvailabilityRepository>(TYPES.IDoctorAvailabilityRepository).to(MongoDoctorAvailbilityRepository);
 
 
 
 
 //use-cases
-container.bind<ISignupUser>(TYPES.ISignupUser).toDynamicValue((ctx) => {
-    return new SignupUserUseCase(
-        ctx.get(TYPES.IUserRepository),
-        ctx.get(TYPES.IPasswordService),
-        ctx.get(TYPES.IWalletRepository),
-        ctx.get(TYPES.IEmailVerificationTokenService),
-        ctx.get(TYPES.IEmailService),
-        ctx.get(TYPES.IAppConfig),
-        ctx.get(TYPES.ILogger),
-    );
-});
+//auth
+container.bind<ISignupUserUseCase>(TYPES.ISignupUserUseCase).to(SignupUserUseCase);
+container.bind<IVerifyEmailUseCase>(TYPES.IVerifyEmailUseCase).to(VerifyEmailUseCase);
+container.bind<ILoginUserUseCase>(TYPES.ILoginUserUseCase).to(LoginUserUseCase);
+container.bind<IGoogleAuthUseCase>(TYPES.IGoogleAuthUseCase).to(GoogleAuthUseCase);
+container.bind<ISendVerificationEmailUseCase>(TYPES.ISendVerificationEmailUseCase).to(SendVerificationEmailUseCase);
+container.bind<IForgotUserPasswordUseCase>(TYPES.IForgotUserPasswordUseCase).to(ForgotUserPasswordUseCase);
+container.bind<IResetUserPasswordUseCase>(TYPES.IResetUserPasswordUseCase).to(ResetUserPasswordUseCase);
+container.bind<IRefreshTokenUseCase>(TYPES.IRefreshTokenUseCase).to(RefreshTokenUseCase);
+
+container.bind<ILoginAdminUseCase>(TYPES.ILoginAdminUseCase).to(LoginAdminUseCase);
+
+container.bind<ILoginDoctorUseCase>(TYPES.ILoginDoctorUseCase).to(LoginDoctorUseCase);
+container.bind<IForgotDoctorPasswordUseCase>(TYPES.IForgotDoctorPasswordUseCase).to(ForgotDoctorPasswordUseCase);
+container.bind<IResetDoctorPasswordUseCase>(TYPES.IResetDoctorPasswordUseCase).to(ResetDoctorPasswordUseCase);
 
 
-container.bind<IVerifyEmail>(TYPES.IVerifyEmail).toDynamicValue((ctx) => {
-    return new VerifyEmailUseCase(
-        ctx.get(TYPES.IUserRepository),
-        ctx.get(TYPES.IEmailVerificationTokenService),
-        ctx.get(TYPES.ILogger),
-    );
-});
+//Admin
+//category-management
+container.bind<ICreateCategoryUseCase>(TYPES.ICreateCategoryUseCase).to(CreateCategoryUseCase);
+container.bind<IGetAllCategoriesUseCase>(TYPES.IGetAllCategoriesUseCase).to(GetAllCategoriesUseCase);
+container.bind<IUpdateCategoryUseCase>(TYPES.IUpdateCategoryUseCase).to(UpdateCategoryUseCase);
+container.bind<IToggleCategoryStatusUseCase>(TYPES.IToggleCategoryStatusUseCase).to(ToggleCategoryStatusUseCase);
 
-container.bind<ILoginUser>(TYPES.ILoginUser).toDynamicValue((ctx) => {
-    return new LoginUserUseCase(
-        ctx.get(TYPES.IUserRepository),
-        ctx.get(TYPES.IAuthTokenService),
-        ctx.get(TYPES.IPasswordService),
-        ctx.get(TYPES.ILogger),
-    );
-});
+//doctor-management
+container.bind<ICreateDoctorUseCase>(TYPES.ICreateDoctorUseCase).to(CreateDoctorUseCase);
+container.bind<IGetAllDoctorsUseCase>(TYPES.IGetAllDoctorsUseCase).to(GetAllDoctorsUseCase);
+container.bind<IUpdateDoctorUseCase>(TYPES.IUpdateDoctorUseCase).to(UpdateDoctorUseCase);
+container.bind<IToggleDoctorStatusUseCase>(TYPES.IToggleDoctorStatusUseCase).to(ToggleDoctorStatusUseCase);
 
-container.bind<IGoogleAuth>(TYPES.IGoogleAuth).toDynamicValue((ctx) => {
-    return new GoogleAuthUseCase(
-        ctx.get(TYPES.IUserRepository),
-        ctx.get(TYPES.IWalletRepository),
-        ctx.get(TYPES.IAuthTokenService),
-        ctx.get(TYPES.IGoogleAuthService),
-        ctx.get(TYPES.ILogger)
-    );
-});
-
-container.bind<ISendVerificationEmail>(TYPES.ISendVerificationEmail).toDynamicValue((ctx) => {
-    return new SendVerificationEmailUseCase(
-        ctx.get(TYPES.IUserRepository),
-        ctx.get(TYPES.IEmailVerificationTokenService),
-        ctx.get(TYPES.IEmailService),
-        ctx.get(TYPES.IAppConfig)
-    )
-});
-
-container.bind<IForgotUserPassword>(TYPES.IForgotUserPassword).toDynamicValue((ctx) => {
-    return new ForgotUserPasswordUseCase(
-        ctx.get(TYPES.IUserRepository),
-        ctx.get(TYPES.IPasswordTokenService),
-        ctx.get(TYPES.IAppConfig),
-        ctx.get(TYPES.IEmailService)
-    )
-});
-
-container.bind<IResetUserPassword>(TYPES.IResetUserPassword).toDynamicValue((ctx) => {
-    return new ResetUserPasswordUseCase(
-        ctx.get(TYPES.IUserRepository),
-        ctx.get(TYPES.IPasswordTokenService),
-        ctx.get(TYPES.IPasswordService),
-        ctx.get(TYPES.ILogger)
-    );
-});
-
-container.bind<IRefreshToken>(TYPES.IRefreshToken).toDynamicValue((ctx) => {
-    return new RefreshTokenUseCase(
-        ctx.get(TYPES.IAuthTokenService),
-        ctx.get(TYPES.IUserLookupService)
-    );
-});
-
-
-container.bind<ILoginAdmin>(TYPES.ILoginAdmin).toDynamicValue((ctx) => {
-    return new LoginAdminUseCase(
-        ctx.get(TYPES.IAdminRepository),
-        ctx.get(TYPES.IAuthTokenService),
-        ctx.get(TYPES.ILogger)
-    );
-});
-
-
-container.bind<ILoginDoctor>(TYPES.ILoginDoctor).toDynamicValue((ctx) => {
-    return new LoginDoctorUseCase(
-        ctx.get(TYPES.IDoctorRepository),
-        ctx.get(TYPES.IAuthTokenService),
-        ctx.get(TYPES.IPasswordService),
-        ctx.get(TYPES.ILogger)
-    );
-});
-
-container.bind<IForgotDoctorPassword>(TYPES.IForgotDoctorPassword).toDynamicValue((ctx) => {
-    return new ForgotDoctorPasswordUseCase(
-        ctx.get(TYPES.IDoctorRepository),
-        ctx.get(TYPES.IPasswordTokenService),
-        ctx.get(TYPES.IAppConfig),
-        ctx.get(TYPES.IEmailService)
-    );
-});
-
-container.bind<IResetDoctorPassword>(TYPES.IResetDoctorPassword).toDynamicValue((ctx) => {
-    return new ResetDoctorPasswordUseCase(
-        ctx.get(TYPES.IDoctorRepository),
-        ctx.get(TYPES.IPasswordTokenService),
-        ctx.get(TYPES.IPasswordService),
-        ctx.get(TYPES.ILogger)
-    );
-});
 
 
 //controllers
 container.bind(AuthController).toSelf();
+container.bind(CategoryController).toSelf();
+container.bind(DoctorController).toSelf();
 
 export { container };

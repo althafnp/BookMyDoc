@@ -2,6 +2,7 @@ import express from'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/authRoutes';
+import adminRoutes from './routes/adminRoutes';
 import { createErrorMiddleware } from './middlewares/error.middleware';
 import { env } from '../../config/env';
 import { container } from '../../../di/inversify.config';
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 
 app.use('/api', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 

@@ -2,7 +2,7 @@ import { Wallet } from "../../../../domain/entities/Wallet";
 import { IWallet } from "../models/wallet.schema";
 import { BaseMapper } from "./BaseMapper";
 
-export class WalletMapper extends BaseMapper<Wallet, IWallet> {
+export class WalletMapper {
 
     static toDomain(raw: IWallet): Wallet {
         return new Wallet(

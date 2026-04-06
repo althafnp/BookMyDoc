@@ -1,5 +1,5 @@
-import { SignupUserRequestDTO } from "../../dtos/auth";
-import { ISignupUser } from "../../ports/auth/ISignupUser";
+import { SignupUserRequestDTO } from "../../dtos/auth/auth.dto";
+import { ISignupUserUseCase } from "../../ports/auth/ISignupUserUseCase";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IEmailVerificationTokenService } from "../../interfaces/IEmailVerificationTokenService";
 import { IEmailService } from "../../interfaces/IEmailService";
@@ -11,17 +11,19 @@ import { IAppConfig } from "../../interfaces/IAppConfig";
 import { IWalletRepository } from "../../../domain/repositories/IWalletRepository";
 import { Wallet } from "../../../domain/entities/Wallet";
 import { LOG_MESSAGES, USER_ERRORS, VALIDATION } from "../../../shared/constants/Messages";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../di/types";
 
-
-export class SignupUserUseCase implements ISignupUser {
+@injectable()
+export class SignupUserUseCase implements ISignupUserUseCase {
     constructor(
-        private _userRepository: IUserRepository,
-        private _passwordService: IPasswordService,
-        private _walletRepository: IWalletRepository,
-        private _emailVerificationTokenService: IEmailVerificationTokenService,
-        private _emailService: IEmailService,
-        private _appConfig: IAppConfig,
-        private _logger: ILogger
+        @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+        @inject(TYPES.IPasswordService) private _passwordService: IPasswordService,
+        @inject(TYPES.IWalletRepository) private _walletRepository: IWalletRepository,
+        @inject(TYPES.IEmailVerificationTokenService) private _emailVerificationTokenService: IEmailVerificationTokenService,
+        @inject(TYPES.IEmailService) private _emailService: IEmailService,
+        @inject(TYPES.IAppConfig) private _appConfig: IAppConfig,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: SignupUserRequestDTO): Promise<void> {

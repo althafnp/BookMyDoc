@@ -1,18 +1,21 @@
+import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { AUTH_ERRORS, LOG_MESSAGES } from "../../../shared/constants/Messages";
 import { UnauthorizedError } from "../../../shared/errors/HttpError";
-import { ResetPasswordRequestDTO } from "../../dtos/auth";
+import { ResetPasswordRequestDTO } from "../../dtos/auth/auth.dto";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { IPasswordTokenService } from "../../interfaces/IPasswordTokenService";
-import { IResetUserPassword } from "../../ports/auth/IResetUserPassword";
+import { IResetUserPasswordUseCase } from "../../ports/auth/IResetUserPasswordUseCase";
+import { TYPES } from "../../../di/types";
 
-export class ResetUserPasswordUseCase implements IResetUserPassword {
+@injectable()
+export class ResetUserPasswordUseCase implements IResetUserPasswordUseCase {
     constructor(
-        private _userRepository: IUserRepository,
-        private _passwordTokenService: IPasswordTokenService,
-        private _passwordService: IPasswordService,
-        private _logger: ILogger
+        @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+        @inject(TYPES.IPasswordTokenService) private _passwordTokenService: IPasswordTokenService,
+        @inject(TYPES.IPasswordService) private _passwordService: IPasswordService,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: ResetPasswordRequestDTO): Promise<void> {

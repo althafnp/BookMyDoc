@@ -1,14 +1,17 @@
+import { inject, injectable } from "inversify";
 import { AUTH_ERRORS, USER_ERRORS } from "../../../shared/constants/Messages";
 import { UnauthorizedError } from "../../../shared/errors/HttpError";
-import { RefreshTokenResponseDTO } from "../../dtos/auth";
+import { RefreshTokenResponseDTO } from "../../dtos/auth/auth.dto";
 import { IAuthTokenService } from "../../interfaces/IAuthTokenService";
 import { IUserLookupService } from "../../interfaces/IUserLookupService";
-import { IRefreshToken } from "../../ports/auth/IRefreshToken";
+import { IRefreshTokenUseCase } from "../../ports/auth/IRefreshTokenUseCase";
+import { TYPES } from "../../../di/types";
 
-export class RefreshTokenUseCase implements IRefreshToken {
+@injectable()
+export class RefreshTokenUseCase implements IRefreshTokenUseCase {
     constructor(
-        private _authTokenService: IAuthTokenService,
-        private _userLookupService: IUserLookupService,
+        @inject(TYPES.IAuthTokenService)private _authTokenService: IAuthTokenService,
+        @inject(TYPES.IUserLookupService)private _userLookupService: IUserLookupService,
     ) { }
 
     async execute(token: string): Promise<RefreshTokenResponseDTO> {

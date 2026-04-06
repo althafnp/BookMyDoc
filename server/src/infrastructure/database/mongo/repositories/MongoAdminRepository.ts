@@ -4,6 +4,7 @@ import { AdminMapper } from "../mappers/AdminMapper";
 import { AdminModel } from "../models/admin.schema";
 
 export class MongoAdminRepository implements IAdminRepository {
+
     async findById(id: string): Promise<Admin | null> {
         const doc = await AdminModel.findById(id);
         return doc ? AdminMapper.toDomain(doc) : null;

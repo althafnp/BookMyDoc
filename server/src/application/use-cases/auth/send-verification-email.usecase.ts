@@ -1,16 +1,19 @@
+import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { SendVerificationEmailRequestDTO } from "../../dtos/auth";
+import { SendVerificationEmailRequestDTO } from "../../dtos/auth/auth.dto";
 import { IAppConfig } from "../../interfaces/IAppConfig";
 import { IEmailService } from "../../interfaces/IEmailService";
 import { IEmailVerificationTokenService } from "../../interfaces/IEmailVerificationTokenService";
-import { ISendVerificationEmail } from "../../ports/auth/ISendVerificationEmail";
+import { ISendVerificationEmailUseCase } from "../../ports/auth/ISendVerificationEmailUseCase";
+import { TYPES } from "../../../di/types";
 
-export class SendVerificationEmailUseCase implements ISendVerificationEmail {
+@injectable()
+export class SendVerificationEmailUseCase implements ISendVerificationEmailUseCase {
     constructor(
-        private _userRepository: IUserRepository,
-        private _emailVerificationTokenService: IEmailVerificationTokenService,
-        private _emailService: IEmailService,
-        private _appConfig: IAppConfig
+        @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+        @inject(TYPES.IEmailVerificationTokenService) private _emailVerificationTokenService: IEmailVerificationTokenService,
+        @inject(TYPES.IEmailService) private _emailService: IEmailService,
+        @inject(TYPES.IAppConfig) private _appConfig: IAppConfig
     ) {}
 
     async execute(dto: SendVerificationEmailRequestDTO): Promise<void> {
@@ -24,7 +27,7 @@ export class SendVerificationEmailUseCase implements ISendVerificationEmail {
 
             const verificationLink = `${this._appConfig.frontendUrl}/auth/verify-email/${verificationToken}`;
 
-            await this._emailService.sendVerificationEmail(user.email, verificationLink)
+            await this._emailService.sendVerificationEmail(user.email, verificationLink);
         }
     }
 }

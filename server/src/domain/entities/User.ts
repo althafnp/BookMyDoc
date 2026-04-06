@@ -1,4 +1,4 @@
-import { AuthProvider, UserRole, UserStatus } from "../enums/Auth";
+import { AuthProvider, Status, UserRole } from "../enums/Auth";
 
 export class User {
     constructor(
@@ -8,7 +8,7 @@ export class User {
         private password: string | undefined,  
         public providers: AuthProvider[],           
         public role: UserRole,
-        public status: UserStatus = "ACTIVE",
+        public status: Status = "ACTIVE",
         public emailVerified: boolean = false,
         public googleId?: string,                   
         public profileImage?: string

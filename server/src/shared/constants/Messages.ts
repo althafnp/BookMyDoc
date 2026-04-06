@@ -37,6 +37,8 @@ export const ADMIN_ERRORS = {
 export const DOCTOR_ERRORS = {
     DOCTOR_NOT_FOUND: "Doctor not found",
     EMAIL_NOT_FOUND: "Email not found",
+    DOCTOR_ALREADY_EXISTS: "A doctor with this email already exists",
+    AVAILABILITY_NOT_FOUND: "Doctor availability not found",
 } as const;
 
 
@@ -45,6 +47,13 @@ export const WALLET_ERRORS = {
     DEBIT_AMOUNT_INVALID: "Debit amount must be greater than zero",
     INSUFFICIENT_BALANCE: "Insufficient wallet balance",
 } as const;
+
+
+export const CATEGORY_ERRORS = {
+    CATEGORY_NOT_FOUND: "Category not found",
+    CATEGORY_ALREADY_EXISTS: "A category with this name already exists",
+} as const;
+
 
 
 // ================================
@@ -66,6 +75,22 @@ export const AUTH_SUCCESS = {
 } as const;
 
 
+export const CATEGORY_SUCCESS = {
+    CATEGORY_CREATED: "Category created successfully",
+    CATEGORIES_FETCHED: "Categories fetched successfully",
+    CATEGORY_UPDATED: "Category updated successfully",
+    CATEGORY_STATUS_TOGGLED: "Category status toggled successfully",
+} as const;
+
+
+export const DOCTOR_SUCCESS = {
+    DOCTOR_CREATED: "Doctor created successfully",
+    DOCTORS_FETCHED: "Doctors fetched successfully",
+    DOCTOR_UPDATED: "Doctor updated successfully",
+    DOCTOR_STATUS_TOGGLED: "Doctor status toggled successfully",
+} as const;
+
+
 // ================================
 // Logger Messages
 // ================================
@@ -78,6 +103,12 @@ export const LOG_MESSAGES = {
     ADMIN_LOGGED_IN: "Admin logged in",
     DOCTOR_LOGGED_IN: "Doctor logged in",
     PASSWORD_CHANGED: "Password changed successfully",
+    CATEGORY_CREATED: "New category created",
+    CATEGORY_UPDATED: "Category updated",
+    CATEGORY_STATUS_TOGGLED: "Category status toggled",
+    DOCTOR_CREATED: "New doctor created",
+    DOCTOR_UPDATED: "Doctor updated",
+    DOCTOR_STATUS_TOGGLED: "Doctor status toggled",
 } as const;
 
 
@@ -89,4 +120,4 @@ export const LOG_MESSAGES = {
 export const SERVER_ERRORS = {
     UNEXPECTED_ERROR: "Unexpected server error",
     SERVER_ERROR: "Internal Server Error"
-}
+};

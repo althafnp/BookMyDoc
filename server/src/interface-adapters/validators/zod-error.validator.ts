@@ -1,13 +1,14 @@
+import { ZodType } from "zod";
 import { BadRequestError } from "../../shared/errors/HttpError";
 
 export const parseWithZod = <T>(
-    schema: any,
+    schema: ZodType<T>,
     data: unknown
 ): T => {
     const result = schema.safeParse(data);
 
     if (!result.success) {
-        const errors = result.error.issues.map((e: any) => ({
+        const errors = result.error.issues.map((e) => ({
             field: e.path.join("."),
             message: e.message,
         }));

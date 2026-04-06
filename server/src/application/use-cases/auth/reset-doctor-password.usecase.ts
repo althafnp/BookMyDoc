@@ -1,18 +1,21 @@
+import { inject, injectable } from "inversify";
 import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
-import { AUTH_ERRORS, DOCTOR_ERRORS, LOG_MESSAGES } from "../../../shared/constants/Messages";
-import { NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
-import { ResetPasswordRequestDTO } from "../../dtos/auth";
+import { AUTH_ERRORS, LOG_MESSAGES } from "../../../shared/constants/Messages";
+import { UnauthorizedError } from "../../../shared/errors/HttpError";
+import { ResetPasswordRequestDTO } from "../../dtos/auth/auth.dto";
 import { ILogger } from "../../interfaces/ILogger";
 import { IPasswordService } from "../../interfaces/IPasswordService";
 import { IPasswordTokenService } from "../../interfaces/IPasswordTokenService";
-import { IResetDoctorPassword } from "../../ports/auth/IResetDoctorPassword";
+import { IResetDoctorPasswordUseCase } from "../../ports/auth/IResetDoctorPasswordUseCase";
+import { TYPES } from "../../../di/types";
 
-export class ResetDoctorPasswordUseCase implements IResetDoctorPassword {
+@injectable()
+export class ResetDoctorPasswordUseCase implements IResetDoctorPasswordUseCase {
     constructor(
-        private _doctorRepository: IDoctorRepository,
-        private _passwordTokenService: IPasswordTokenService,
-        private _passwordService: IPasswordService,
-        private _logger: ILogger
+        @inject(TYPES.IDoctorRepository) private _doctorRepository: IDoctorRepository,
+        @inject(TYPES.IPasswordTokenService) private _passwordTokenService: IPasswordTokenService,
+        @inject(TYPES.IPasswordService) private _passwordService: IPasswordService,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: ResetPasswordRequestDTO): Promise<void> {

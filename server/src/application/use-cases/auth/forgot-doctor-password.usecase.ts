@@ -1,18 +1,19 @@
+import { inject, injectable } from "inversify";
 import { IDoctorRepository } from "../../../domain/repositories/IDoctorRepository";
-import { DOCTOR_ERRORS } from "../../../shared/constants/Messages";
-import { NotFoundError } from "../../../shared/errors/HttpError";
-import { ForgotPasswordRequestDTO } from "../../dtos/auth";
+import { ForgotPasswordRequestDTO } from "../../dtos/auth/auth.dto";
 import { IAppConfig } from "../../interfaces/IAppConfig";
 import { IEmailService } from "../../interfaces/IEmailService";
 import { IPasswordTokenService } from "../../interfaces/IPasswordTokenService";
-import { IForgotDoctorPassword } from "../../ports/auth/IForgotDoctorPassword";
+import { IForgotDoctorPasswordUseCase } from "../../ports/auth/IForgotDoctorPasswordUseCase";
+import { TYPES } from "../../../di/types";
 
-export class ForgotDoctorPasswordUseCase implements IForgotDoctorPassword {
+@injectable()
+export class ForgotDoctorPasswordUseCase implements IForgotDoctorPasswordUseCase {
     constructor(
-        private _doctorRepository: IDoctorRepository,
-        private _passwordTokenService: IPasswordTokenService,
-        private _appConfig: IAppConfig,
-        private _emailService: IEmailService
+        @inject(TYPES.IDoctorRepository) private _doctorRepository: IDoctorRepository,
+        @inject(TYPES.IPasswordTokenService) private _passwordTokenService: IPasswordTokenService,
+        @inject(TYPES.IAppConfig) private _appConfig: IAppConfig,
+        @inject(TYPES.IEmailService) private _emailService: IEmailService
     ) {}
 
     async execute(dto: ForgotPasswordRequestDTO): Promise<void> {

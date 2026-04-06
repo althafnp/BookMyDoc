@@ -2,7 +2,7 @@ import { Doctor } from "../../../../domain/entities/Doctor";
 import { IDoctor } from "../models/doctor.schema";
 import { BaseMapper } from "./BaseMapper";
 
-export class DoctorMapper extends BaseMapper<Doctor, IDoctor> {
+export class DoctorMapper {
     
     static toDomain(raw: IDoctor): Doctor {
         return new Doctor(

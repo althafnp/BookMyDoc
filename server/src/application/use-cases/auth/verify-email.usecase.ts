@@ -1,16 +1,19 @@
+import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { AUTH_ERRORS, LOG_MESSAGES, USER_ERRORS } from "../../../shared/constants/Messages";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../../../shared/errors/HttpError";
-import { VerifyEmailRequestDTO } from "../../dtos/auth";
+import { VerifyEmailRequestDTO } from "../../dtos/auth/auth.dto";
 import { IEmailVerificationTokenService } from "../../interfaces/IEmailVerificationTokenService";
 import { ILogger } from "../../interfaces/ILogger";
-import { IVerifyEmail } from "../../ports/auth/IVerifyEmail";
+import { IVerifyEmailUseCase } from "../../ports/auth/IVerifyEmailUseCase";
+import { TYPES } from "../../../di/types";
 
-export class VerifyEmailUseCase implements IVerifyEmail {
+@injectable()
+export class VerifyEmailUseCase implements IVerifyEmailUseCase {
     constructor(
-        private _userRepository: IUserRepository,
-        private _emailVerificationTokenService: IEmailVerificationTokenService,
-        private _logger: ILogger
+        @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+        @inject(TYPES.IEmailVerificationTokenService) private _emailVerificationTokenService: IEmailVerificationTokenService,
+        @inject(TYPES.ILogger) private _logger: ILogger
     ) {}
 
     async execute(dto: VerifyEmailRequestDTO): Promise<void> {
