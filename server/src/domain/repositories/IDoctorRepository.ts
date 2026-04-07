@@ -1,11 +1,12 @@
 import { Doctor } from "../entities/Doctor";
+import { Status } from "../enums/Auth";
 
 export interface DoctorFindAllOptions {
     page: number;
     limit: number;
     sortBy: "name" | "createdAt";
     sortOrder: "asc" | "desc";
-    status?: "ACTIVE" | "INACTIVE";
+    status?: Status;
     categoryId?: string;
     search?: string;
 };

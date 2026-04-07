@@ -117,6 +117,14 @@ import { ToggleDoctorStatusUseCase } from "../application/use-cases/admin/doctor
 import { IGetAllDoctorsUseCase } from "../application/ports/admin/doctor/IGetAllDoctorsUseCase";
 import { GetAllDoctorsUseCase } from "../application/use-cases/admin/doctor/get-all-doctors.usecase";
 
+import { IGetAllUsersUseCase } from "../application/ports/admin/user/IGetAllUsersUseCase";
+import { GetAllUsersUseCase } from "../application/use-cases/admin/user/get-all-users.usecase";
+
+import { UserController } from "../interface-adapters/controllers/UserController";
+
+import { IToggleUserStatusUseCase } from "../application/ports/admin/user/IToggleUserStatusUseCase";
+import { ToggleUserStatusUseCase } from "../application/use-cases/admin/user/toggle-user-status.usecase";
+
 
 
 const container = new Container();
@@ -177,11 +185,16 @@ container.bind<IGetAllDoctorsUseCase>(TYPES.IGetAllDoctorsUseCase).to(GetAllDoct
 container.bind<IUpdateDoctorUseCase>(TYPES.IUpdateDoctorUseCase).to(UpdateDoctorUseCase);
 container.bind<IToggleDoctorStatusUseCase>(TYPES.IToggleDoctorStatusUseCase).to(ToggleDoctorStatusUseCase);
 
+//user-management
+container.bind<IGetAllUsersUseCase>(TYPES.IGetAllUsersUseCase).to(GetAllUsersUseCase);
+container.bind<IToggleUserStatusUseCase>(TYPES.IToggleUserStatusUseCase).to(ToggleUserStatusUseCase);
+
 
 
 //controllers
 container.bind(AuthController).toSelf();
 container.bind(CategoryController).toSelf();
 container.bind(DoctorController).toSelf();
+container.bind(UserController).toSelf()
 
 export { container };
