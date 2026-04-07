@@ -22,6 +22,7 @@ import SendVerificationEmail from '@/features/auth/pages/SendVerificationEmail'
 import UsersPage from '@/components/user/Test'
 import Category from '@/features/admin/pages/Category'
 import Doctor from '@/features/admin/pages/Doctor'
+import User from '@/features/admin/pages/User'
 
 const AppRoutes = () => {
     return (
@@ -65,6 +66,7 @@ const AppRoutes = () => {
                     <Route path='/admin/dashboard' element={<div>admin</div>} />
                     <Route path='/admin/categories' element={<Category />} />
                     <Route path='/admin/doctors' element={<Doctor />} />
+                    <Route path='/admin/users' element={<User />} />
                 </Route>
             </Route>
 

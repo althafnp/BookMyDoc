@@ -4,6 +4,7 @@ import { CategoryController } from "../../../../interface-adapters/controllers/C
 import { authenticate } from '../middlewares/auth.middleware';
 import { DoctorController } from '../../../../interface-adapters/controllers/DoctorController';
 import { upload } from '../middlewares/multer.middleware';
+import { UserController } from '../../../../interface-adapters/controllers/UserController';
 
 const router = express.Router();
 
@@ -26,6 +27,13 @@ router.post('/create-doctor', upload.single("profileImage"), doctorController.cr
 router.get('/doctors', doctorController.getAllDoctors);
 router.put('/doctors/:id', upload.single("profileImage"), doctorController.updateDoctor);
 router.patch('/doctors/:id/toggle-status', doctorController.toggleDoctorStatus);
+
+
+//User management
+const userController = container.get(UserController);
+
+router.get('/users', userController.getAllUsers);
+router.patch('/users/:id/toggle-status', userController.toggleUserStatus);
 
 
 

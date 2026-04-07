@@ -6,7 +6,7 @@ export class User {
         public name: string,
         public email: string,
         private password: string | undefined,  
-        public providers: AuthProvider[],           
+        public providers: AuthProvider[],        
         public role: UserRole,
         public status: Status = "ACTIVE",
         public emailVerified: boolean = false,

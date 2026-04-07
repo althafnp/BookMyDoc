@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { User } from "../../../../domain/entities/User";
-import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
+import { IUserRepository, UserFindAllOptions, UserFindAllResult } from "../../../../domain/repositories/IUserRepository";
 import { UserMapper } from "../mappers/UserMapper";
 import { UserModel } from "../models/user.schema";
 
@@ -35,5 +35,41 @@ export class MongoUserRepository implements IUserRepository {
         );
 
         return doc ? UserMapper.toDomain(doc) : null;
+    }
+
+    async findAll(options: UserFindAllOptions): Promise<UserFindAllResult> {
+        const { page, limit, sortBy, sortOrder, status, search } = options;
+
+        const filter: Record<string, unknown> = {};
+
+        if(status) {
+            filter.status = status;
+        }
+
+        const searchFields = ["name", "email"];
+
+        if(search) {
+            const regex = { $regex: search, $options: "i" }
+
+            filter.$or = searchFields.map(field => ({
+                [field]: regex
+            }))
+        };
+
+        const skip = (page - 1) * limit;
+
+        const sortDirection = sortOrder === "asc" ? 1 : -1;
+
+        const [docs, total] = await Promise.all([
+            UserModel.find(filter)
+                .sort({ [sortBy]: sortDirection })
+                .skip(skip)
+                .limit(limit),
+            UserModel.countDocuments(filter)
+        ]);
+
+        const users = docs.map(UserMapper.toDomain);
+
+        return { users, total };
     }
 }

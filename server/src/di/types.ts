@@ -49,6 +49,10 @@ export const TYPES = {
     IUpdateDoctorUseCase: Symbol.for("IUpdateDoctorUseCase"),
     IToggleDoctorStatusUseCase: Symbol.for("IToggleDoctorStatusUseCase"),
 
+    //user
+    IGetAllUsersUseCase: Symbol.for("IGetAllUsersUseCase"),
+    IToggleUserStatusUseCase: Symbol.for("IToggleUserStatusUseCase"),
+
 
     // DOCTOR USECASES
     // auth

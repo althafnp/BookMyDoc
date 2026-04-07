@@ -91,6 +91,12 @@ export const DOCTOR_SUCCESS = {
 } as const;
 
 
+export const USER_SUCCESS = {
+    USERS_FETCHED: "Users fetched successfully",
+    USER_STATUS_TOGGLED: "User status toggled successfully",
+} as const;
+
+
 // ================================
 // Logger Messages
 // ================================
@@ -109,6 +115,7 @@ export const LOG_MESSAGES = {
     DOCTOR_CREATED: "New doctor created",
     DOCTOR_UPDATED: "Doctor updated",
     DOCTOR_STATUS_TOGGLED: "Doctor status toggled",
+    USER_STATUS_TOGGLED: "User status toggled",
 } as const;
 
 
