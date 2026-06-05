@@ -1,17 +1,17 @@
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../di/types";
-import { IGetAllUsersUseCase } from "../../application/ports/admin/user/IGetAllUsersUseCase";
-import { asyncHandler } from "../../shared/utils/asyncHandler";
-import { parseWithZod } from "../validators/zod-error.validator";
-import { GetAllUsersRequestDTO, ToggleUserStatusRequestDTO } from "../../application/dtos/admin/user.dto";
-import { getAllUsersSchema, userIdSchema } from "../validators/user.validator";
-import { HttpStatus } from "../../shared/constants/HttpStatus";
-import { ApiResponse } from "../../shared/utils/ApiResponse";
-import { USER_SUCCESS } from "../../shared/constants/Messages";
-import { IToggleUserStatusUseCase } from "../../application/ports/admin/user/IToggleUserStatusUseCase";
+import { TYPES } from "../../../di/types";
+import { IGetAllUsersUseCase } from "../../../application/ports/admin/user/IGetAllUsersUseCase";
+import { asyncHandler } from "../../../shared/utils/asyncHandler";
+import { parseWithZod } from "../../validators/zod-error.validator";
+import { GetAllUsersRequestDTO, ToggleUserStatusRequestDTO } from "../../../application/dtos/admin/user.dto";
+import { getAllUsersSchema, userIdSchema } from "../../validators/user.validator";
+import { HttpStatus } from "../../../shared/constants/HttpStatus";
+import { ApiResponse } from "../../../shared/utils/ApiResponse";
+import { USER_SUCCESS } from "../../../shared/constants/Messages";
+import { IToggleUserStatusUseCase } from "../../../application/ports/admin/user/IToggleUserStatusUseCase";
 
 @injectable()
-export class UserController {
+export class AdminUserController {
     constructor(
         @inject(TYPES.IGetAllUsersUseCase) private _getAllUsersUseCase: IGetAllUsersUseCase,
         @inject(TYPES.IToggleUserStatusUseCase) private _toggleUserStatusUseCase: IToggleUserStatusUseCase,

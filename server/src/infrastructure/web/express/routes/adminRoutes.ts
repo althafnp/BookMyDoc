@@ -1,10 +1,10 @@
 import express from 'express';
 import { container } from "../../../../di/inversify.config";
-import { CategoryController } from "../../../../interface-adapters/controllers/CategoryController";
+import { AdminCategoryController } from "../../../../interface-adapters/controllers/admin/AdminCategoryController";
 import { authenticate } from '../middlewares/auth.middleware';
-import { DoctorController } from '../../../../interface-adapters/controllers/DoctorController';
+import { AdminDoctorController } from '../../../../interface-adapters/controllers/admin/AdminDoctorController';
 import { upload } from '../middlewares/multer.middleware';
-import { UserController } from '../../../../interface-adapters/controllers/UserController';
+import { AdminUserController } from '../../../../interface-adapters/controllers/admin/AdminUserController';
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.use(authenticate(["ADMIN"]));
 
 
 //Category management
-const categoryController = container.get(CategoryController);
+const categoryController = container.get(AdminCategoryController);
 
 router.post('/create-category', categoryController.createCategory);
 router.get('/categories', categoryController.getAllCategories);
@@ -21,7 +21,7 @@ router.patch('/categories/:id/toggle-status', categoryController.toggleCategoryS
 
 
 // Doctor management
-const doctorController = container.get(DoctorController);
+const doctorController = container.get(AdminDoctorController);
 
 router.post('/create-doctor', upload.single("profileImage"), doctorController.createDoctor);
 router.get('/doctors', doctorController.getAllDoctors);
@@ -30,7 +30,7 @@ router.patch('/doctors/:id/toggle-status', doctorController.toggleDoctorStatus);
 
 
 //User management
-const userController = container.get(UserController);
+const userController = container.get(AdminUserController);
 
 router.get('/users', userController.getAllUsers);
 router.patch('/users/:id/toggle-status', userController.toggleUserStatus);

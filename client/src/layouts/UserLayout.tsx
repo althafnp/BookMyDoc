@@ -1,5 +1,3 @@
-
-import Footer from '@/components/user/Footer'
 import Navbar from '@/components/user/Navbar'
 import { Outlet } from 'react-router-dom'
 
@@ -14,7 +12,6 @@ const UserLayout = () => {
                 <Outlet />
             </main>
 
-            <Footer />
         </div>
     )
 }

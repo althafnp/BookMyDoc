@@ -29,9 +29,11 @@ export const TYPES = {
     ISendVerificationEmailUseCase: Symbol.for("ISendVerificationEmailUseCase"),
     IForgotUserPasswordUseCase: Symbol.for("IForgotUserPasswordUseCase"),
     IResetUserPasswordUseCase: Symbol.for("IResetUserPasswordUseCase"),
-
-
     IRefreshTokenUseCase: Symbol.for("IRefreshTokenUseCase"),
+
+    //profile
+    IGetProfileUseCase: Symbol.for("IGetProfileUseCase"),
+    IUpdateProfileUseCase: Symbol.for("IUpdateProfileUseCase"),
 
     // ADMIN USECASES
     // auth

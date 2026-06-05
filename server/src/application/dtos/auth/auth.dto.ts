@@ -42,7 +42,7 @@ export interface RefreshTokenResponseDTO {
         name?: string;
         email: string;
         role: string;
-        profileImage?: string
+        profileImage?: string | null;
     },
 }
 

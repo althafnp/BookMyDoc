@@ -5,7 +5,7 @@ export interface UserInfo {
     name?: string;
     email: string;
     role: Role;
-    profileImage?: string
+    profileImage?: string | null;
 }
 
 export interface IUserLookupService {

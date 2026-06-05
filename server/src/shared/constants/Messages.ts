@@ -13,6 +13,8 @@ export const AUTH_ERRORS = {
     INVALID_GOOGLE_TOKEN: "Invalid Google token",
     INVALID_OR_EXPIRED_TOKEN: "Invalid or expired verification token",
     ACCESS_TOKEN_MISSING: "Access token is missing",
+    INVALID_ACCESS_TOKEN: "Invalid access token",
+    TOKEN_EXPIRED: "Expired access token",
     REFRESH_TOKEN_MISSING: "Refresh token is missing, Login again",
     INVALID_REFRESH_TOKEN: "Invalid refresh token",
     PERMISSION_NOT_ACCESSIBLE: "You do not have permission to access this resource",

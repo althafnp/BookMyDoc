@@ -56,7 +56,7 @@ const Footer = () => {
     ];
 
     return (
-        <footer className="bg-background border-t border-muted-foreground transition-colors duration-300">
+        <footer className="bg-background transition-colors duration-300">
 
             {/* Main Footer Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

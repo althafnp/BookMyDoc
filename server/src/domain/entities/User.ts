@@ -11,7 +11,7 @@ export class User {
         public status: Status = "ACTIVE",
         public emailVerified: boolean = false,
         public googleId?: string,                   
-        public profileImage?: string
+        public profileImage?: string | null
     ) { }
 
     // -------------------------

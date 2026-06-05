@@ -9,6 +9,7 @@ import { IPasswordService } from "../../interfaces/IPasswordService";
 import { UserResponseMapper } from "../../mappers/user/UserResponseMapper";
 import { ILoginUserUseCase } from "../../ports/auth/ILoginUserUseCase";
 import { TYPES } from "../../../di/types";
+import { IAppConfig } from "../../interfaces/IAppConfig";
 
 @injectable()
 export class LoginUserUseCase implements ILoginUserUseCase {
@@ -16,7 +17,8 @@ export class LoginUserUseCase implements ILoginUserUseCase {
         @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
         @inject(TYPES.IAuthTokenService) private _authTokenService: IAuthTokenService,
         @inject(TYPES.IPasswordService) private _passwordService: IPasswordService,
-        @inject(TYPES.ILogger) private _logger: ILogger
+        @inject(TYPES.ILogger) private _logger: ILogger,
+        @inject(TYPES.IAppConfig) private _appConfig: IAppConfig,
     ) { }
 
     async execute(dto: LoginUserRequestDTO): Promise<LoginUserResponseDTO> {
@@ -54,7 +56,7 @@ export class LoginUserUseCase implements ILoginUserUseCase {
         this._logger.info(LOG_MESSAGES.USER_LOGGED_IN, { user });
 
         return {
-            user: UserResponseMapper.toDTO(user),
+            user: UserResponseMapper.toDTO(user, this._appConfig),
             accessToken,
             refreshToken
         };

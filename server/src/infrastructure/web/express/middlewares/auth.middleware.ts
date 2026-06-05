@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 import { Role } from "../../../../domain/enums/Auth";
 import { IAuthTokenService } from "../../../../application/interfaces/IAuthTokenService";
 import { ForbiddenError, UnauthorizedError } from "../../../../shared/errors/HttpError";
@@ -31,6 +32,13 @@ export const authenticate = (allowedRoles: Role[]) => (req: Request, res: Respon
 
         next();
     } catch (err) {
+        if (err instanceof jwt.JsonWebTokenError) {
+            return next(new UnauthorizedError(AUTH_ERRORS.INVALID_ACCESS_TOKEN));
+        }
+
+        if (err instanceof jwt.TokenExpiredError) {
+            return next(new UnauthorizedError(AUTH_ERRORS.TOKEN_EXPIRED));
+        }
         next(err);
     }
 };

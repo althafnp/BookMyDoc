@@ -34,7 +34,7 @@ const Login = () => {
                 setAccessToken(response.data.accessToken);
                 dispatch(setUser(response.data.user));
 
-                localStorage.setItem('auth:hadSesion', 'true');
+                localStorage.setItem('auth:hadSession', 'true');
 
                 toast.success(response.message);
 

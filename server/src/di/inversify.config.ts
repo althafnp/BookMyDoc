@@ -95,7 +95,7 @@ import { UpdateCategoryUseCase } from "../application/use-cases/admin/category/u
 import { IToggleCategoryStatusUseCase } from "../application/ports/admin/category/IToggleCategoryStatusUseCase";
 import { ToggleCategoryStatusUseCase } from "../application/use-cases/admin/category/toggle-category-status.usecase";
 
-import { CategoryController } from "../interface-adapters/controllers/CategoryController";
+import { AdminCategoryController } from "../interface-adapters/controllers/admin/AdminCategoryController";
 
 import { IFileStorageService } from "../application/interfaces/IFileStorageService";
 import { S3FileStorageService } from "../infrastructure/services/storage/S3FileStorageService";
@@ -106,7 +106,7 @@ import { MongoDoctorAvailbilityRepository } from "../infrastructure/database/mon
 import { ICreateDoctorUseCase } from "../application/ports/admin/doctor/ICreateDoctorUseCase";
 import { CreateDoctorUseCase } from "../application/use-cases/admin/doctor/create-doctor.usecase";
 
-import { DoctorController } from "../interface-adapters/controllers/DoctorController";
+import { AdminDoctorController } from "../interface-adapters/controllers/admin/AdminDoctorController";
 
 import { IUpdateDoctorUseCase } from "../application/ports/admin/doctor/IUpdateDoctorUseCase";
 import { UpdateDoctorUseCase } from "../application/use-cases/admin/doctor/update-doctor.usecase";
@@ -120,10 +120,17 @@ import { GetAllDoctorsUseCase } from "../application/use-cases/admin/doctor/get-
 import { IGetAllUsersUseCase } from "../application/ports/admin/user/IGetAllUsersUseCase";
 import { GetAllUsersUseCase } from "../application/use-cases/admin/user/get-all-users.usecase";
 
-import { UserController } from "../interface-adapters/controllers/UserController";
+import { AdminUserController } from "../interface-adapters/controllers/admin/AdminUserController";
 
 import { IToggleUserStatusUseCase } from "../application/ports/admin/user/IToggleUserStatusUseCase";
 import { ToggleUserStatusUseCase } from "../application/use-cases/admin/user/toggle-user-status.usecase";
+
+import { IGetProfileUseCase } from "../application/ports/user/profile/IGetProfileUseCase";
+import { GetProfileUseCase } from "../application/use-cases/user/profile/get-profile.usecase";
+
+import { UserProfileController } from "../interface-adapters/controllers/user/UserProfileController";
+import { IUpdateProfileUseCase } from "../application/ports/user/profile/IUpdateProfileUseCase";
+import { UpdateProfileUseCase } from "../application/use-cases/user/profile/update-profile.usecase";
 
 
 
@@ -190,11 +197,17 @@ container.bind<IGetAllUsersUseCase>(TYPES.IGetAllUsersUseCase).to(GetAllUsersUse
 container.bind<IToggleUserStatusUseCase>(TYPES.IToggleUserStatusUseCase).to(ToggleUserStatusUseCase);
 
 
+//User
+//profile
+container.bind<IGetProfileUseCase>(TYPES.IGetProfileUseCase).to(GetProfileUseCase);
+container.bind<IUpdateProfileUseCase>(TYPES.IUpdateProfileUseCase).to(UpdateProfileUseCase);
+
 
 //controllers
 container.bind(AuthController).toSelf();
-container.bind(CategoryController).toSelf();
-container.bind(DoctorController).toSelf();
-container.bind(UserController).toSelf()
+container.bind(AdminCategoryController).toSelf();
+container.bind(AdminDoctorController).toSelf();
+container.bind(AdminUserController).toSelf()
+container.bind(UserProfileController).toSelf()
 
 export { container };

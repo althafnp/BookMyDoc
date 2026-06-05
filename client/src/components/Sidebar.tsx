@@ -72,7 +72,7 @@ export const Sidebar = ({ role, onLogout, onCollapse }: SidebarProps) => {
             {/* Top Part - Logo & App Name */}
             <div className="flex items-center justify-between p-6 border-b border-sidebar-border">
                 <div className="flex items-center gap-3 overflow-hidden">
-                    <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                    <div className="shrink-0 w-8 h-8 flex items-center justify-center">
                         <img src={Logo} alt="Logo" />
                     </div>
                     {!isCollapsed && (

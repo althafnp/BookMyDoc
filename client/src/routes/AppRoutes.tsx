@@ -23,6 +23,8 @@ import UsersPage from '@/components/user/Test'
 import Category from '@/features/admin/pages/Category'
 import Doctor from '@/features/admin/pages/Doctor'
 import User from '@/features/admin/pages/User'
+import ProfilePage from '@/features/user/pages/UserProfile'
+import ProfileLayout from '@/layouts/ProfileLayout'
 
 const AppRoutes = () => {
     return (
@@ -38,8 +40,15 @@ const AppRoutes = () => {
             <Route element={<UserProtectedRoute />}>
                 <Route element={<UserLayout />}>
                     <Route path='/doctors' element={<AllDoctors />} />
+                    
+                    <Route element={<ProfileLayout />} >
+                        <Route path='/profile' element={<ProfilePage />} />
+                    </Route>
                 </Route>
+
             </Route>
+
+
 
             {/* Auth Routes */}
             <Route element={<GuestRoutes />}>

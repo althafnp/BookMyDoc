@@ -17,5 +17,6 @@ export const env = {
     EMAIL_PASS: process.env.EMAIL_PASS!,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
     FRONTEND_URL: process.env.FRONTEND_URL!,
-    NODE_ENV: process.env.NODE_ENV
+    NODE_ENV: process.env.NODE_ENV,
+    MAX_AGE: Number(process.env.MAX_AGE || 7) * 24 * 60 * 60 * 1000
 };

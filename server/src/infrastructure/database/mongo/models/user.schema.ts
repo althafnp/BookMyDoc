@@ -8,7 +8,7 @@ export interface IUser extends Document {
     password?: string;
     providers: ("LOCAL" | "GOOGLE")[];
     googleId?: string;
-    profileImage?: string;
+    profileImage?: string | null;
     role: "USER";
     status: Status;
     emailVerified: boolean;

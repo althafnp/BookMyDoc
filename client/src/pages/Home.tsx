@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Banner, Doc1, Doc2, Doc3, Doc4 } from '../assets/index'
 import { Button } from '../components/ui/button';
+import Footer from '@/components/user/Footer';
 
 interface AnimatedSectionProps {
     children: React.ReactNode;
@@ -430,6 +431,8 @@ const HomePage = () => {
                     </div>
                 </section>
             </AnimatedSection>
+
+            <Footer />
         </div>
     );
 };

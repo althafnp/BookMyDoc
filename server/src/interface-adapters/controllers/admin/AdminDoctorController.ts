@@ -1,21 +1,21 @@
 import { inject, injectable } from "inversify";
-import { CreateDoctorRequestDTO, GetAllDoctorsRequestDTO, ToggleDoctorStatusRequestDTO, UpdateDoctorRequestDTO } from "../../application/dtos/admin/doctor.dto";
-import { ICreateDoctorUseCase } from "../../application/ports/admin/doctor/ICreateDoctorUseCase";
-import { TYPES } from "../../di/types";
-import { HttpStatus } from "../../shared/constants/HttpStatus";
-import { DOCTOR_SUCCESS } from "../../shared/constants/Messages";
-import { BadRequestError } from "../../shared/errors/HttpError";
-import { ApiResponse } from "../../shared/utils/ApiResponse";
-import { asyncHandler } from "../../shared/utils/asyncHandler";
-import { createDoctorSchema, doctorIdSchema, getAllDoctorsSchema, updateDoctorSchema } from "../validators/doctor.validator";
-import { parseWithZod } from "../validators/zod-error.validator";
-import { IUpdateDoctorUseCase } from "../../application/ports/admin/doctor/IUpdateDoctorUseCase";
-import { IToggleDoctorStatusUseCase } from "../../application/ports/admin/doctor/IToggleDoctorStatusUseCase";
-import { IGetAllDoctorsUseCase } from "../../application/ports/admin/doctor/IGetAllDoctorsUseCase";
+import { CreateDoctorRequestDTO, GetAllDoctorsRequestDTO, ToggleDoctorStatusRequestDTO, UpdateDoctorRequestDTO } from "../../../application/dtos/admin/doctor.dto";
+import { ICreateDoctorUseCase } from "../../../application/ports/admin/doctor/ICreateDoctorUseCase";
+import { TYPES } from "../../../di/types";
+import { HttpStatus } from "../../../shared/constants/HttpStatus";
+import { DOCTOR_SUCCESS } from "../../../shared/constants/Messages";
+import { BadRequestError } from "../../../shared/errors/HttpError";
+import { ApiResponse } from "../../../shared/utils/ApiResponse";
+import { asyncHandler } from "../../../shared/utils/asyncHandler";
+import { createDoctorSchema, doctorIdSchema, getAllDoctorsSchema, updateDoctorSchema } from "../../validators/doctor.validator";
+import { parseWithZod } from "../../validators/zod-error.validator";
+import { IUpdateDoctorUseCase } from "../../../application/ports/admin/doctor/IUpdateDoctorUseCase";
+import { IToggleDoctorStatusUseCase } from "../../../application/ports/admin/doctor/IToggleDoctorStatusUseCase";
+import { IGetAllDoctorsUseCase } from "../../../application/ports/admin/doctor/IGetAllDoctorsUseCase";
 
 
 @injectable()
-export class DoctorController {
+export class AdminDoctorController {
     constructor(
         @inject(TYPES.ICreateDoctorUseCase) private _createDoctorUseCase: ICreateDoctorUseCase,
         @inject(TYPES.IGetAllDoctorsUseCase) private _getAllDoctorsUseCase: IGetAllDoctorsUseCase,

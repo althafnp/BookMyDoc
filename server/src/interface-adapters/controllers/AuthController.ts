@@ -87,7 +87,7 @@ export class AuthController {
             httpOnly: true,
             secure: env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            maxAge: env.MAX_AGE,
         });
 
         const data = {
@@ -112,7 +112,7 @@ export class AuthController {
             httpOnly: true,
             secure: env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: env.MAX_AGE
         });
         
         const data = {
@@ -188,7 +188,7 @@ export class AuthController {
             httpOnly: true,
             secure: env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: env.MAX_AGE
         });
 
         const data = {
